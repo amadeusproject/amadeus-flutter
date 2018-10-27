@@ -7,7 +7,6 @@ import 'package:amadeus/pages/login_page.dart';
 
 class Logout {
   static void goLogin(BuildContext context) async {
-    /// TODO - Unregister device
     SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
     _sharedPreferences.remove("USER_ID_KEY_TOKEN");
 

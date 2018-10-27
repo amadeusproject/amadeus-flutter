@@ -313,7 +313,7 @@ class ChatPageState extends State<ChatPage> {
             _isLoading = false;
           });
         }
-        if(messagesLoaded.isEmpty || messagesLoaded.length < _pageSize) {
+        if(messagesLoaded == null || messagesLoaded.isEmpty || messagesLoaded.length < _pageSize) {
           _isLastPage = true;
         }
         
@@ -533,7 +533,7 @@ class ChatPageState extends State<ChatPage> {
             new SizedBox(
               width: 10.0,
             ),
-            new Text(_userTo.socialName),
+            new Text(_userTo.getDisplayName()),
           ],
         ),
         actions: _actionAppBar(),

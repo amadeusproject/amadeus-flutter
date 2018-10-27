@@ -260,7 +260,7 @@ class HomePageState extends State<HomePage> {
   Future<void> loadWidgets() async {
     /// Getting user
     if(_user != null) {
-      _tvName = new Text(_user.socialName);
+      _tvName = new Text(_user.getDisplayName());
       await checkToken();
       if(_user.imageUrl != null && _user.imageUrl.isNotEmpty) {
         String path = _token.webserverUrl + _user.imageUrl;

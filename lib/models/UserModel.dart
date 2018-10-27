@@ -68,7 +68,7 @@ class UserModel {
   set unseenMsgs(int unseenMsgs) => this._unseenMsgs = unseenMsgs;
 
   String getDisplayName() {
-    if (socialName.isEmpty) {
+    if (socialName == null || socialName.isEmpty) {
       return "$username $lastName";
     }
     return socialName;
