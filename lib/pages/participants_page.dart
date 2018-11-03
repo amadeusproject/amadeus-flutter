@@ -157,7 +157,13 @@ class ParticipantsPageState extends State<ParticipantsPage> {
           child: new Theme(
             data: Theme.of(context),
             child: new ListView.builder(
-              itemBuilder: (BuildContext context, int index) => ParticipantItem(_participants[index], _subject, _token.webserverUrl, this, homePageState),
+              itemBuilder: (BuildContext context, int index) {
+                if(!_participants[index].isStaff) {
+                  return ParticipantItem(_participants[index], _subject, _token.webserverUrl, this, homePageState);
+                } else {
+                  return new Container();
+                }
+              },
               itemCount: _participants.length,
             ),
           ),
