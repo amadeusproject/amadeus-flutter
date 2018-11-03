@@ -24,7 +24,11 @@ class TokenResponse extends GenericResponse {
     _refreshToken = jsonMap['refresh_token'];
     _accessToken = jsonMap['access_token'];
     _scope = jsonMap['scope'];
-    _expiresIn = jsonMap['expires_in'];
+    _webserverUrl = jsonMap['webserver_url'];
+    _email = jsonMap['email'];
+    _password = jsonMap['password'];
+    _expiresIn = int.parse(jsonMap['expires_in']);
+    _timeStamp = int.parse(jsonMap['time_stamp']);
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{

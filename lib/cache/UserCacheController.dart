@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:amadeus/models/UserModel.dart';
+import 'package:amadeus/services/Storage.dart';
 
 class UserCacheController {
 
   static final String _userPreferenceKey = "USER_ID_PREFERENCE_KEY";
+  static final Storage storage = new Storage();
 
   static UserModel _model;
 
@@ -22,6 +26,17 @@ class UserCacheController {
       if(sharedPreferences.toString().contains(_userPreferenceKey)) {
         String myJson = sharedPreferences.getString(_userPreferenceKey);
 
+        if(myJson.isNotEmpty) {
+          UserModel userFromJson = new UserModel.fromJson(json.decode(myJson));
+
+          if(userFromJson != null) {
+            _model = userFromJson;
+            return _model;
+          }
+        }
+      } else {
+        String myJson = await storage.readUser();
+        
         if(myJson.isNotEmpty) {
           UserModel userFromJson = new UserModel.fromJson(json.decode(myJson));
 
@@ -64,6 +79,8 @@ class UserCacheController {
 
       editor.setString(_userPreferenceKey, myJson);
 
+      storage.writeUser(myJson);
+
       _model = userLogged;      
     } catch(e) {
       print(e);
@@ -75,6 +92,8 @@ class UserCacheController {
       SharedPreferences editor = await SharedPreferences.getInstance();
 
       editor.remove(_userPreferenceKey);
+
+      storage.writeUser("");
 
       _model = null;
     } catch(e) {

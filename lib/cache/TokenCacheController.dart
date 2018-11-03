@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:amadeus/response/TokenResponse.dart';
+import 'package:amadeus/services/Storage.dart';
 
 /// Created by Vitor Martins on 24/08/18.
 
 class TokenCacheController {
   
   static final String _tokenPreferenceKey = "TOKEN_PREFERENCE_KEY";
+  static final Storage storage = new Storage();
 
   static TokenResponse _model;
 
@@ -25,6 +27,17 @@ class TokenCacheController {
 
       if(sharedPreferences.toString().contains(_tokenPreferenceKey)) {
         String myJson = sharedPreferences.getString(_tokenPreferenceKey);
+
+        if(myJson.isNotEmpty) {
+          TokenResponse tokenFromJson = TokenResponse.fromJson(myJson);
+
+          if(tokenFromJson != null) {
+            _model = tokenFromJson;
+            return _model;
+          }
+        }
+      } else {
+        String myJson = await storage.readToken();
 
         if(myJson.isNotEmpty) {
           TokenResponse tokenFromJson = TokenResponse.fromJson(myJson);
@@ -68,6 +81,8 @@ class TokenCacheController {
 
       editor.setString(_tokenPreferenceKey, myJson);
 
+      storage.writeToken(myJson);
+
       _model = token;
     } catch(e) {
       print(e);
@@ -79,6 +94,8 @@ class TokenCacheController {
       SharedPreferences editor = await SharedPreferences.getInstance();
 
       editor.remove(_tokenPreferenceKey);
+
+      storage.writeToken("");
       
       _model = null;
     } catch(e) {
