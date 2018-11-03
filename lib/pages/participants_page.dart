@@ -99,6 +99,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         if(participantsResponse.success && participantsResponse.number == 1) {
           setState(() {
             _participants = participantsResponse.data.participants;
+            _participants.sort((a, b) => a.getDisplayName().compareTo(b.getDisplayName()));
             _participants.sort((a, b) => b.unseenMsgs.compareTo(a.unseenMsgs));
           });
         } else if(participantsResponse.title != null && participantsResponse.title.isNotEmpty && participantsResponse.message != null && participantsResponse.message.isNotEmpty) {
@@ -125,6 +126,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
           if(participantsResponse.success && participantsResponse.number == 1) {
             setState(() {
               _participants = participantsResponse.data.participants;
+              _participants.sort((a, b) => a.getDisplayName().compareTo(b.getDisplayName()));
               _participants.sort((a, b) => b.unseenMsgs.compareTo(a.unseenMsgs));
             });
            } else if(participantsResponse.title != null && participantsResponse.title.isNotEmpty && participantsResponse.message != null && participantsResponse.message.isNotEmpty) {
