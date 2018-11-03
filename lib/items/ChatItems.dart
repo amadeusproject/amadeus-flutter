@@ -25,11 +25,17 @@ class DateItem extends StatelessWidget implements ListItem {
     return new Center(
       child: new Container(
         decoration: BoxDecoration(
-          borderRadius: new BorderRadius.circular(5.0),
-          color: (primaryBlue),
+          borderRadius: new BorderRadius.circular(4.0),
+          color: dateBackground,
         ),
         padding: EdgeInsets.all(5.0),
-        child: new Text(dateToShow.toUpperCase(), style: new TextStyle(color: primaryWhite),),
+        child: new Text(
+          dateToShow.toUpperCase(),
+          style: new TextStyle(
+            color: dateFontColor,
+            fontSize: 14.0,
+          ),
+        ),
       ),
     );
   }
@@ -128,13 +134,13 @@ class ChatItem extends StatelessWidget implements ListItem {
 
   Color _chooseColor() {
     if(_msg.isSelected && _msg.user.email == _user.email) {
-      return selectedMsgGreen;
+      return myMessageSelected;
     } else if (_msg.isSelected) {
-      return selectedBlue;
+      return otherMessageSelected;
     } else if (_msg.user.email == _user.email) {
-      return lighterGreen;
+      return myMessage;
     } else {
-      return lighterBlue;
+      return otherMessage;
     }
   }
 
@@ -163,7 +169,7 @@ class ChatItem extends StatelessWidget implements ListItem {
             children: <Widget>[
               new Container(
                 decoration: BoxDecoration(
-                  borderRadius: new BorderRadius.circular(5.0),
+                  borderRadius: new BorderRadius.circular(4.0),
                   color: _chooseColor(),
                 ),
                 padding: EdgeInsets.all(5.0),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:amadeus/bo/ParticipantsBO.dart';
+import 'package:amadeus/bo/PendencyBO.dart';
 import 'package:amadeus/cache/TokenCacheController.dart';
 import 'package:amadeus/cache/UserCacheController.dart';
 import 'package:amadeus/items/ParticipantItem.dart';
@@ -51,18 +52,18 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         if(_token.isTokenExpired()) {
           _token = await _token.renewToken(context);
           if(_token == null) {
-            DialogUtils.dialog(context);
+            await DialogUtils.dialog(context);
             Logout.goLogin(context);
           }
         }
       } else {
-        DialogUtils.dialog(context);
+        await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
     } else if(_token.isTokenExpired()) {
       _token = await _token.renewToken(context);
       if(_token == null) {
-        DialogUtils.dialog(context);
+        await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
     }
@@ -140,7 +141,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         print(e);
       }
     } else {
-      DialogUtils.dialog(context);
+      await DialogUtils.dialog(context);
       Logout.goLogin(context);
     }
   }

@@ -12,12 +12,12 @@ class GenericResponse {
 
   GenericResponse.fromJson(String vJson) {
     Map myJson = json.decode(vJson);
-    message = myJson['message'];
-    type = myJson['type'];
-    title = myJson['title'];
-    success = myJson['success'];
-    number = myJson['number'];
-    extra = myJson['extra'];
+    _message = myJson['message'];
+    _type = myJson['type'];
+    _title = myJson['title'];
+    _success = myJson['success'];
+    _number = myJson['number'];
+    _extra = myJson['extra'];
   }
 
   String get message => _message;

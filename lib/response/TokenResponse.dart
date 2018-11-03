@@ -27,8 +27,12 @@ class TokenResponse extends GenericResponse {
     _webserverUrl = jsonMap['webserver_url'];
     _email = jsonMap['email'];
     _password = jsonMap['password'];
-    _expiresIn = int.parse(jsonMap['expires_in']);
-    _timeStamp = int.parse(jsonMap['time_stamp']);
+    if(jsonMap.containsKey('expires_in')) {
+      _expiresIn = jsonMap['expires_in'];
+    }
+    if(jsonMap.containsKey('time_stamp')) {
+      _timeStamp = jsonMap['time_stamp'];
+    }
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -39,8 +43,8 @@ class TokenResponse extends GenericResponse {
     'webserver_url': _webserverUrl,
     'email': _email,
     'password': _password,
-    'expires_in': _expiresIn.toString(),
-    'time_stamp': _timeStamp.toString(),
+    'expires_in': _expiresIn,
+    'time_stamp': _timeStamp,
   };
 
   String get tokenType => _tokenType;

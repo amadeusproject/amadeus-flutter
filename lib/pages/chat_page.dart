@@ -161,18 +161,18 @@ class ChatPageState extends State<ChatPage> {
         if(_token.isTokenExpired()) {
           _token = await _token.renewToken(context);
           if(_token == null) {
-            DialogUtils.dialog(context);
+            await DialogUtils.dialog(context);
             Logout.goLogin(context);
           }
         }
       } else {
-        DialogUtils.dialog(context);
+        await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
     } else if(_token.isTokenExpired()) {
       _token = await _token.renewToken(context);
       if(_token == null) {
-        DialogUtils.dialog(context);
+        await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
     }
@@ -265,7 +265,7 @@ class ChatPageState extends State<ChatPage> {
         await loadChat(context, _pageSize);
       }
     } else {
-      DialogUtils.dialog(context);
+      await DialogUtils.dialog(context);
       Logout.goLogin(context);
     }
   }
@@ -594,7 +594,7 @@ class ChatPageState extends State<ChatPage> {
 
   Widget inputWidget(bool onChat, VoidCallback onSendPressed) {
     return new Container(
-      color: onChat ? lightGray : primaryBlack,
+      color: onChat ? chatBackground : primaryBlack,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -666,7 +666,7 @@ class ChatPageState extends State<ChatPage> {
         }
       },
       child: new Scaffold(
-        backgroundColor: lightGray,
+        backgroundColor: chatBackground,
         appBar: _chooseAppBar(),
         body: new Center(
           child: new Column(

@@ -56,18 +56,18 @@ class HomePageState extends State<HomePage> {
         if(_token.isTokenExpired()) {
           _token = await _token.renewToken(context);
           if(_token == null) {
-            DialogUtils.dialog(context);
+            await DialogUtils.dialog(context);
             Logout.goLogin(context);
           }
         }
       } else {
-        DialogUtils.dialog(context);
+        await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
     } else if(_token.isTokenExpired()) {
       _token = await _token.renewToken(context);
       if(_token == null) {
-        DialogUtils.dialog(context);
+        await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
     }
@@ -289,7 +289,7 @@ class HomePageState extends State<HomePage> {
         }
       }
     } else {
-      DialogUtils.dialog(context);
+      await DialogUtils.dialog(context);
       Logout.goLogin(context);
     }
   }
@@ -300,7 +300,8 @@ class HomePageState extends State<HomePage> {
       SubjectResponse subjectResponse = await SubjectBO().getSubjects(context, _user);
       return subjectResponse;
     } catch(e) {
-      DialogUtils.dialog(context, erro: e.toString());
+      await DialogUtils.dialog(context, erro: e.toString());
+      Logout.goLogin(context);
       print(e);
     }
     return null;
