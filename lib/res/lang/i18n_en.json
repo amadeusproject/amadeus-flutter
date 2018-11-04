@@ -1,13 +1,13 @@
 {
-    "promptEmail": "Email",
+    "promptEmail": "E-mail",
     "promptPassword": "Password",
-    "promptUrl": "Url",
+    "promptUrl": "URL",
     "actionSignIn": "Sign in",
     "errorInvalidEmail": "This email address is invalid",
     "errorInvalidPassword": "This password is invalid",
     "errorIncorrectPassword": "This password is incorrect",
     "errorFieldRequired": "This field is required",
-    "rememberPassword": "Remember password",
+    "rememberPassword": "Remember my password",
     "errorBoxTitle": "Something went wrong!",
     "errorBoxMsg": "An error has occurred during the processing of your request. Please, try again later.",
     "errorBoxMsgLogin": "An error has occurred during the processing of your request. Please, check your user and password or try again later.",
@@ -16,6 +16,7 @@
     "loadingSubjects": "Loading your subjects...",
     "loadingParticipants": "Loading subject participants...",
     "loadingMessages": "Loading your messages...",
+    "loadingPendencies": "Loading your pendencies...",
     "actionLogout": "Logout",
     "chatSenderHint": "Type your message...",
     "today": "Today",
@@ -30,8 +31,9 @@
     "chooserTitle": "Complete action using:",
     "positive": "Yes",
     "negative": "No",
-    "pendencyNotifyTitle": "Pendency",
+    "pendencyNotifyTitle": "Pendencies",
     "pedencyNotifyMessageStart": "You have",
     "pedencyNotifyMessageSingular": "new pendency.",
-    "pedencyNotifyMessagePlural": "new pendencies."
+    "pedencyNotifyMessagePlural": "new pendencies.",
+    "toastSendingImage": "Your image is being uploaded and will appear as soon it's processed by the server."
 }

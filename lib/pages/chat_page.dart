@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -356,6 +357,11 @@ class ChatPageState extends State<ChatPage> {
   Future<void> sendImageMessage(String text, File imageFile) async {
     MessageModel message = new MessageModel(text, _user, _subject, DateUtils.currentDate());
     await checkToken();
+    Fluttertoast.showToast(
+      msg: Translations.of(context).text('toastSendingImage'),
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
     try {
       MessageResponse messageResponse = await MessageBO().sendImageMessage(context, _userTo, message, imageFile);
 
@@ -407,13 +413,13 @@ class ChatPageState extends State<ChatPage> {
   }
 
   void _updateItems() {
-    List<MessageModel> _messagesToShow = _messageList;
+    List<MessageModel> _messagesToShow = new List.from(_messageList);
     if(_onlyMyMessages && _onlyFavMessages) {
-      _messagesToShow = _messageList.where((i) => i.isFavorite).toList().where((i) => i.user.email == _user.email).toList();
+      _messagesToShow = _messagesToShow.where((i) => i.isFavorite).toList().where((i) => i.user.email == _user.email).toList();
     } else if(_onlyFavMessages) {
-      _messagesToShow = _messageList.where((i) => i.isFavorite).toList();
+      _messagesToShow = _messagesToShow.where((i) => i.isFavorite).toList();
     } else if(_onlyMyMessages) {
-      _messagesToShow = _messageList.where((i) => i.user.email == _user.email).toList();
+      _messagesToShow = _messagesToShow.where((i) => i.user.email == _user.email).toList();
     }
     _items = new List<ListItem>();
     DateTime lastDate;
@@ -594,7 +600,7 @@ class ChatPageState extends State<ChatPage> {
 
   Widget inputWidget(bool onChat, VoidCallback onSendPressed) {
     return new Container(
-      color: onChat ? chatBackground : primaryBlack,
+      color: onChat ? backgroundColor : primaryBlack,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -666,7 +672,7 @@ class ChatPageState extends State<ChatPage> {
         }
       },
       child: new Scaffold(
-        backgroundColor: chatBackground,
+        backgroundColor: backgroundColor,
         appBar: _chooseAppBar(),
         body: new Center(
           child: new Column(

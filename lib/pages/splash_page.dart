@@ -48,13 +48,10 @@ class _SplashPageState extends State<SplashPage> {
   void loadUser() async {
     if (await UserCacheController.hasUserCache(context)) {
       UserModel user = await UserCacheController.getUserCache(context);
-      print("Get user on cache");
       if (await TokenCacheController.hasTokenCache(context)) {
-        print("Get token on cache");
         TokenResponse token = await TokenCacheController.getTokenCache(context);
 
         if (token.isTokenExpired()) {
-          print("Renew token");
           token = await token.renewToken(context);
         }
 

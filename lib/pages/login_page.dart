@@ -177,7 +177,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     final Container logoImg = Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("images/logo.png"),
+          image: AssetImage("images/logo-vertical.png"),
           fit: BoxFit.fitHeight,
         ),
       ),
@@ -197,12 +197,12 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
       keyboardType: TextInputType.url,
       autofocus: false,
       style: TextStyle(
-        color: primaryWhite,
+        color: loginFontColor,
       ),
       decoration: InputDecoration(
         labelText: Translations.of(context).text('promptUrl'),
         labelStyle: TextStyle(
-          color: primaryWhite,
+          color: loginFontColor,
         ),
       ),
     );
@@ -221,12 +221,12 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       style: TextStyle(
-        color: primaryWhite,
+        color: loginFontColor,
       ),
       decoration: InputDecoration(
         labelText: Translations.of(context).text('promptEmail'),
         labelStyle: TextStyle(
-          color: primaryWhite,
+          color: loginFontColor,
         ),
       ),
     );
@@ -243,12 +243,12 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
       autofocus: false,
       obscureText: true,
       style: TextStyle(
-        color: primaryWhite,
+        color: loginFontColor,
       ),
       decoration: InputDecoration(
         labelText: Translations.of(context).text('promptPassword'),
         labelStyle: TextStyle(
-          color: primaryWhite,
+          color: loginFontColor,
         ),
       ),
     );
@@ -259,7 +259,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
         new Theme(
           data: new ThemeData(
             toggleableActiveColor: primaryGreen,
-            unselectedWidgetColor: primaryWhite,
+            unselectedWidgetColor: loginFontColor,
           ),
           child: new Checkbox(
             value: passwordCheckboxValue,
@@ -274,16 +274,16 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
           }),
           child: new Text(
             Translations.of(context).text("rememberPassword"),
-            style: new TextStyle(color: primaryWhite),
+            style: new TextStyle(color: loginFontColor),
           ),
         ),
       ],
     );
 
     final loginBtn = new Material(
-      borderRadius: BorderRadius.circular(10.0),
-      child: MaterialButton(
-        minWidth: 100.0,
+      borderRadius: new BorderRadius.circular(4.0),
+      child: new MaterialButton(
+        minWidth: 150.0,
         height: 50.0,
         color: primaryGreen,
         onPressed: () {
@@ -291,7 +291,13 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
             _attemptLogin();
           }
         },
-        child: Text(Translations.of(context).text('actionSignIn'), style: TextStyle(color: primaryWhite, fontSize: 20.0),),
+        child: new Text(
+          Translations.of(context).text('actionSignIn'),
+          style: new TextStyle(
+            color: primaryWhite,
+            fontSize: 20.0,
+          ),
+        ),
       ),
     );
 
@@ -303,7 +309,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
             child: new Container(
               width: 80.0,
               height: 80.0,
-              child: new Image.asset("images/logo.png"),
+              child: new Image.asset("images/green-logo.png"),
             ),
             builder: (BuildContext context, Widget _widget) {
               return new Transform.rotate(
@@ -314,7 +320,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
           ),
         );
       } else {
-        EdgeInsetsGeometry padding45 = new EdgeInsets.symmetric(horizontal: 45.0);
+        EdgeInsetsGeometry horizontalPadding = new EdgeInsets.symmetric(horizontal: 20.0);
         return new Center(
           child: new Form(
             key: _formKey,
@@ -324,28 +330,39 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
                 shrinkWrap: true,
                 children: <Widget>[
                   logoImg,
-                  new SizedBox(height: 15.0),
-                  new Padding(
-                    padding: padding45,
-                    child: hostInput,
-                  ),
-                  new SizedBox(height: 15.0),
-                  new Padding(
-                    padding: padding45,
-                    child: emailInput,
-                  ),
-                  new SizedBox(height: 15.0),
-                  new Padding(
-                    padding: padding45,
-                    child: passwordInput,
-                  ),
-                  new Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30.0),
-                    child: passwordCheckbox,
-                  ),
-                  new Padding(
-                    padding: padding45,
-                    child: loginBtn,
+                  new SizedBox(height: 30.0),
+                  new Container(
+                    decoration: BoxDecoration(
+                      borderRadius: new BorderRadius.circular(4.0),
+                      color: Colors.white,
+                    ),
+                    margin: horizontalPadding,
+                    padding: new EdgeInsets.symmetric(vertical: 20.0),
+                    child: new Column(
+                      children: <Widget>[
+                        new Padding(
+                          padding: horizontalPadding,
+                          child: hostInput,
+                        ),
+                        new SizedBox(height: 20.0),
+                        new Padding(
+                          padding: horizontalPadding,
+                          child: emailInput,
+                        ),
+                        new SizedBox(height: 20.0),
+                        new Padding(
+                          padding: horizontalPadding,
+                          child: passwordInput,
+                        ),
+                        new SizedBox(height: 16.0),
+                        new Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 6.0),
+                          child: passwordCheckbox,
+                        ),
+                        new SizedBox(height: 16.0),
+                        loginBtn,
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -356,7 +373,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     }
 
     return new Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: backgroundColor,
       body: _getBody(),
     );
   }

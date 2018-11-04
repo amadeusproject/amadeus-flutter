@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:amadeus/bo/ParticipantsBO.dart';
-import 'package:amadeus/bo/PendencyBO.dart';
 import 'package:amadeus/cache/TokenCacheController.dart';
 import 'package:amadeus/cache/UserCacheController.dart';
 import 'package:amadeus/items/ParticipantItem.dart';

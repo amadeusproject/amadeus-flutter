@@ -72,4 +72,25 @@ class UserBO {
     }
     return null;
   }
+
+  Future<GenericResponse> logout(BuildContext context, UserModel user, String device) async {
+    TokenResponse token = await TokenCacheController.getTokenCache(context);
+
+    String url = "${token.webserverUrl}/api/users/logout/";
+
+    Map<String, String> data = new HashMap<String, String>();
+    data.putIfAbsent("email", () => user.email);
+    data.putIfAbsent("device", () => device);
+
+    String content = jsonEncode(data);
+
+    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+
+    if(json != null && json.trim().length > 0) {
+      print("Logout - " + json);
+
+      return GenericResponse.fromJson(json);
+    }
+    return null;
+  }
 }

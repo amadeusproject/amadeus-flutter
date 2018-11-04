@@ -15,7 +15,6 @@ class Storage {
   }
 
   Future<File> writeUser(String info) async {
-    print("writingUser");
     final file = await _localFileUserCache;
     return file.writeAsString(info);
   }
@@ -36,7 +35,6 @@ class Storage {
   }
 
   Future<File> writeToken(String info) async {
-    print("writingToken");
     final file = await _localFileTokenCache;
     return file.writeAsString(info);
   }

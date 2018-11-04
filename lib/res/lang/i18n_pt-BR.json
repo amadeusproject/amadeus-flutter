@@ -1,13 +1,13 @@
 {
-    "promptEmail": "Email",
+    "promptEmail": "E-mail",
     "promptPassword": "Senha",
-    "promptUrl": "Url",
+    "promptUrl": "URL",
     "actionSignIn": "Entrar",
     "errorInvalidEmail": "Esse endereço de email é inválido",
     "errorInvalidPassword": "Essa senha é inválida",
     "errorIncorrectPassword": "Senha incorreta",
     "errorFieldRequired": "Esse campo é obrigatório",
-    "rememberPassword": "Lembrar senha",
+    "rememberPassword": "Lembrar minha senha",
     "errorBoxTitle": "Algo deu errado!",
     "errorBoxMsg": "Ocorreu um erro durante o processamento da sua requisição. Por favor, tente novamente mais tarde.",
     "errorBoxMsgLogin": "Ocorreu um erro durante o processamento da sua requisição. Por favor, confira seu usuário e senha ou tente novamente mais tarde.",
@@ -16,6 +16,7 @@
     "loadingSubjects": "Carregando seus assuntos...",
     "loadingParticipants": "Carregando participantes do assunto...",
     "loadingMessages": "Carregando suas mensagens...",
+    "loadingPendencies": "Carregando suas pendências...",
     "actionLogout": "Sair",
     "chatSenderHint": "Escreva sua mensagem...",
     "today": "Hoje",
@@ -33,5 +34,6 @@
     "pendencyNotifyTitle": "Pendências",
     "pedencyNotifyMessageStart": "Você tem",
     "pedencyNotifyMessageSingular": "nova pendência.",
-    "pedencyNotifyMessagePlural": "novas pendências."
+    "pedencyNotifyMessagePlural": "novas pendências.",
+    "toastSendingImage": "Sua imagem está sendo enviada e aparecerá assim que for processada pelo servidor."
 }
