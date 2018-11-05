@@ -24,6 +24,7 @@ class SubjectItem extends StatelessWidget {
                 builder: (context) => new ParticipantsPage(subject: subject, homePageState: parent),
               )
             ).then((onValue) {
+              parent.refreshSubjects();
               parent.messagingService.configure(HomePage.tag);
               parent.firebaseMessaging.configure(
                 onMessage: parent.onMessageHome,
