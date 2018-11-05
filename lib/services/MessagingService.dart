@@ -98,22 +98,27 @@ class MessagingService {
     String title = notification['title'];
     String body = notification['body'];
     var data = message['data'];
-
-    var userFrom = UserModel.fromJson(json.decode(data['response'])['data']['message_sent']['user']);
-    int notificationId;
-
-    if(mapUsers.containsKey(userFrom.email)) {
-      notificationId = mapUsers[userFrom.email];
-    } else {
-      notificationId = _userId;
-      mapUsers.putIfAbsent(userFrom.email, () => _userId);
-      _userId++;
-    }
-    print(notificationId);
-    /// TODO - See what's on body when message is just a image
-    var dataStr = json.encode(data);
+    String type = data['type'];
     
-    await flutterLocalNotificationsPlugin.show(notificationId, title, body, platformChannelSpecifics, payload: dataStr);
+    if(type == "chat") {
+      var userFrom = UserModel.fromJson(json.decode(data['response'])['data']['message_sent']['user']);
+      int notificationId;
+
+      if(mapUsers.containsKey(userFrom.email)) {
+        notificationId = mapUsers[userFrom.email];
+      } else {
+        notificationId = _userId;
+        mapUsers.putIfAbsent(userFrom.email, () => _userId);
+        _userId++;
+      }
+      print(notificationId);
+      /// TODO - See what's on body when message is just a image
+      var dataStr = json.encode(data);
+      
+      await flutterLocalNotificationsPlugin.show(notificationId, title, body, platformChannelSpecifics, payload: dataStr);
+    } else if(type == "pendency") {
+      /// TODO - Pendency notification
+    }
   }
 
   void cleanNotifications(String userEmail) async {

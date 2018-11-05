@@ -21,3 +21,4 @@ const backgroundColor = Color(0xFFE5E5E5);
 const dateBackground = Color.fromRGBO(238, 238, 238, 1.0);
 const dateFontColor = Color.fromRGBO(160, 160, 160, 1.0);
 const loginFontColor = Color.fromRGBO(33, 33, 33, 1.0);
+const fontColor = Color(0xFF333333);

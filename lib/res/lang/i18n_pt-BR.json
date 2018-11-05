@@ -33,7 +33,8 @@
     "negative": "Não",
     "pendencyNotifyTitle": "Pendências",
     "pedencyNotifyMessageStart": "Você tem",
-    "pedencyNotifyMessageSingular": "nova pendência.",
-    "pedencyNotifyMessagePlural": "novas pendências.",
+    "pedencyNotifyMessageSingular": "nova pendência.\nAcesse o ambiente virtual para vê-la.",
+    "pedencyNotifyMessagePlural": "novas pendências.\nAcesse o ambiente virtual para vê-las.",
+    "emptyPendencies": "Você não possui nenhuma pendência.",
     "toastSendingImage": "Sua imagem está sendo enviada e aparecerá assim que for processada pelo servidor."
 }

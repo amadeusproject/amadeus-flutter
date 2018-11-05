@@ -33,7 +33,8 @@
     "negative": "No",
     "pendencyNotifyTitle": "Pendencies",
     "pedencyNotifyMessageStart": "You have",
-    "pedencyNotifyMessageSingular": "new pendency.",
-    "pedencyNotifyMessagePlural": "new pendencies.",
+    "pedencyNotifyMessageSingular": "new pendency.\nAccess the virtual environment to see it.",
+    "pedencyNotifyMessagePlural": "new pendencies.\nAccess the virtual environment to see them.",
+    "emptyPendencies": "You don't have any pendency.",
     "toastSendingImage": "Your image is being uploaded and will appear as soon it's processed by the server."
 }

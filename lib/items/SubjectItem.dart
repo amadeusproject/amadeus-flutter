@@ -56,17 +56,14 @@ class SubjectItem extends StatelessWidget {
         ),
       ),
     );
-    if (subject.notifications == 0) {
+    int badgeNumber = (subject.notifications ?? 0) + (subject.pendencies ?? 0);
+    if (badgeNumber == 0) {
       return [
         subjectName,
         new Icon(Icons.chevron_right),
       ];
     } else {
-      String numNot = subject.notifications.toString();
-      int numLen = numNot.length;
-      if(numLen >= 4) {
-        numNot = "999+";
-      }
+      String numNot = badgeNumber > 999 ? "999+" : badgeNumber.toString();
       return [
         subjectName,
         new Row(

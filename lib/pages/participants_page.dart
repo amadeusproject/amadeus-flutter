@@ -13,6 +13,7 @@ import 'package:amadeus/localizations.dart';
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/pages/home_page.dart';
+import 'package:amadeus/pages/pendencies_page.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/ParticipantsResponse.dart';
 import 'package:amadeus/response/TokenResponse.dart';
@@ -187,11 +188,59 @@ class ParticipantsPageState extends State<ParticipantsPage> {
     );
   }
 
+  void onPress() async {
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        settings: const RouteSettings(name: 'pendencies-page'), 
+        builder: (context) => new PendenciesPage(userTo: _user, subject: _subject),
+      ),
+    ).then((onValue) {
+      messagingService.configure(ParticipantsPage.tag);
+      firebaseMessaging.configure(
+        onMessage: onMessageParticipants,
+      );
+    });
+  }
+
+  Widget pendencyBadge() {
+    if(_subject.pendencies > 0) {
+      String qtdPendencies = _subject.pendencies > 99 ? "99+" : _subject.pendencies.toString();
+      return new Container(
+        margin: new EdgeInsets.all(8.0),
+        width: 20.0,
+        height: 20.0,
+        decoration: new BoxDecoration(
+          color: primaryRed,
+          boxShadow: null,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: new Center(
+          child: new Text(qtdPendencies, style: new TextStyle(color: Colors.white, fontSize: 10.0, fontWeight: FontWeight.bold),),
+        ),
+      );
+    }
+    return new Container(width: 0.0, height: 0.0,);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
+        actions: <Widget>[
+          new Stack(
+            alignment: Alignment.topRight,
+            children: <Widget>[
+              new Center(
+                child: new IconButton(
+                  onPressed: onPress,
+                  icon: new Icon(Icons.warning),
+                ),
+              ),
+              pendencyBadge(),
+            ],
+          ),
+        ],
       ),
       backgroundColor: primaryWhite,
       body: _contentBody(),

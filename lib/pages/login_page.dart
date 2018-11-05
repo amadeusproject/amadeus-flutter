@@ -177,12 +177,12 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     final Container logoImg = Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("images/logo-vertical.png"),
+          image: AssetImage("images/green-logo.png"),
           fit: BoxFit.fitHeight,
         ),
       ),
       child: null,
-      height: 200.0,
+      height: 150.0,
     );
 
     final TextFormField hostInput = new TextFormField(
@@ -283,6 +283,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     final loginBtn = new Material(
       borderRadius: new BorderRadius.circular(4.0),
       child: new MaterialButton(
+        /// TODO - Adjust to have same width of inputs
         minWidth: 150.0,
         height: 50.0,
         color: primaryGreen,
