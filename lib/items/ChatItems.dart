@@ -30,7 +30,7 @@ class DateItem extends StatelessWidget implements ListItem {
         ),
         padding: EdgeInsets.all(5.0),
         child: new Text(
-          dateToShow.toUpperCase(),
+          dateToShow,
           style: new TextStyle(
             color: dateFontColor,
             fontSize: 14.0,

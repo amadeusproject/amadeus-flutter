@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+
 import 'package:amadeus/localizations.dart';
 
 class DateUtils {
@@ -34,18 +37,21 @@ class DateUtils {
     return null;
   }
 
-  static String displayDate(BuildContext context, String newDate) {
+  static Future<String> displayDate(BuildContext context, String newDate) async {
     try {
       DateTime _newDate = DateTime.parse(newDate.replaceAll('T', ' '));
       DateTime _today = DateTime.now();
       DateTime _yesterday = _today.subtract(new Duration(days: 1));
 
       if(compareOnlyDate(_newDate, _today)) {
-        return Translations.of(context).text('today');
+        return Translations.of(context).text('today').toUpperCase();
       } else if(compareOnlyDate(_newDate, _yesterday)) {
-        return Translations.of(context).text('yesterday');
+        return Translations.of(context).text('yesterday').toUpperCase();
       } else {
-        return "${_newDate.day}/${_newDate.month}/${_newDate.year}";
+        Locale myLocale = Localizations.localeOf(context);
+        String locale = myLocale.languageCode == "pt-BR" ? "pt_BR" : myLocale.languageCode;
+        await initializeDateFormatting(locale, null);
+        return DateFormat.yMMMMd(locale).format(_newDate).toUpperCase();
       }
     } catch(e) {
       print(e);
@@ -55,5 +61,28 @@ class DateUtils {
 
   static bool compareOnlyDate(DateTime fstDate, DateTime sndDate) {
     return fstDate.day == sndDate.day && fstDate.month == sndDate.month && fstDate.year == sndDate.year;
+  }
+
+  static Future<String> displayPendencyDate(BuildContext context, String date) async {
+    try {
+      var dates = date.split('-');
+      DateTime _newDate = new DateTime(int.parse(dates[0]), int.parse(dates[1]), int.parse(dates[2]));
+      DateTime _today = DateTime.now();
+      DateTime _yesterday = _today.subtract(new Duration(days: 1));
+
+      if(compareOnlyDate(_newDate, _today)) {
+        return Translations.of(context).text('today').toUpperCase();
+      } else if(compareOnlyDate(_newDate, _yesterday)) {
+        return Translations.of(context).text('yesterday').toUpperCase();
+      } else {
+        Locale myLocale = Localizations.localeOf(context);
+        String locale = myLocale.languageCode == "pt-BR" ? "pt_BR" : myLocale.languageCode;
+        await initializeDateFormatting(locale, null);
+        return DateFormat.yMMMMd(locale).format(_newDate).toUpperCase();
+      }
+    } catch(e) {
+      print(e);
+    }
+    return "";
   }
 }

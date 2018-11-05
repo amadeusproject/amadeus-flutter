@@ -412,7 +412,7 @@ class ChatPageState extends State<ChatPage> {
     }
   }
 
-  void _updateItems() {
+  void _updateItems() async {
     List<MessageModel> _messagesToShow = new List.from(_messageList);
     if(_onlyMyMessages && _onlyFavMessages) {
       _messagesToShow = _messagesToShow.where((i) => i.isFavorite).toList().where((i) => i.user.email == _user.email).toList();
@@ -425,11 +425,13 @@ class ChatPageState extends State<ChatPage> {
     DateTime lastDate;
     for(var i = _messagesToShow.length - 1; i >= 0; i--) {
       if(i == _messagesToShow.length - 1) {
-        _items.insert(0, DateItem(DateUtils.displayDate(context, _messagesToShow[i].createDate)));
+        String formatedDate = await DateUtils.displayDate(context, _messagesToShow[i].createDate);
+        _items.insert(0, DateItem(formatedDate));
         _items.insert(0, ChatItem(_messagesToShow[i], _user, _token, this));
         lastDate = DateUtils.toDateTime(_messagesToShow[i].createDate);
       } else if(!DateUtils.compareOnlyDate(DateUtils.toDateTime(_messagesToShow[i].createDate), lastDate)) {
-        _items.insert(0, DateItem(DateUtils.displayDate(context, _messagesToShow[i].createDate)));
+        String formatedDate = await DateUtils.displayDate(context, _messagesToShow[i].createDate);
+        _items.insert(0, DateItem(formatedDate));
         _items.insert(0, ChatItem(_messagesToShow[i], _user, _token, this));
         lastDate = DateUtils.toDateTime(_messagesToShow[i].createDate);
       } else {

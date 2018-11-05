@@ -14,7 +14,6 @@ class DateItem extends StatelessWidget implements PendencyPageItem {
 
   @override
   Widget build(BuildContext context) {
-    var date = dateToShow.split('-');
     return new Center(
       child: new Container(
         decoration: BoxDecoration(
@@ -23,7 +22,7 @@ class DateItem extends StatelessWidget implements PendencyPageItem {
         ),
         padding: EdgeInsets.all(5.0),
         child: new Text(
-          "${date[2]}/${date[1]}/${date[0]}",
+          dateToShow,
           style: new TextStyle(
             color: dateFontColor,
             fontSize: 14.0,

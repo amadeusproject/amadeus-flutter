@@ -10,6 +10,7 @@ import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/PendencyResponse.dart';
 import 'package:amadeus/response/TokenResponse.dart';
+import 'package:amadeus/utils/DateUtils.dart';
 import 'package:amadeus/utils/DialogUtils.dart';
 import 'package:amadeus/utils/LogoutUtils.dart';
 
@@ -56,10 +57,11 @@ class PendenciesPageState extends State<PendenciesPage> {
     }
   }
 
-  void _updateItems() {
+  void _updateItems() async {
     _items = new List<PendencyPageItem>();
     for(var i = _pendencies.length - 1; i >= 0; i--) {
-      _items.insert(0, DateItem(_pendencies[i].date));
+      String formatedDate = await DateUtils.displayPendencyDate(context, _pendencies[i].date);
+      _items.insert(0, DateItem(formatedDate));
       _items.insert(0, PendencyItem(_pendencies[i]));
     }
   }

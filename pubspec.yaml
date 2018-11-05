@@ -27,6 +27,7 @@ dependencies:
   fluttertoast: ^2.0.9
   image_cropper: ^0.0.8
   image_picker: ^0.4.10
+  intl: ^0.15.7
   path_provider: ^0.4.1
   photo_view: ^0.0.9
   shared_preferences: ^0.4.2
