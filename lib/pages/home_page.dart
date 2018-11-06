@@ -14,6 +14,7 @@ import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/SubjectResponse.dart';
 import 'package:amadeus/response/TokenResponse.dart';
+import 'package:amadeus/services/InstanceIDService.dart';
 import 'package:amadeus/services/MessagingService.dart';
 import 'package:amadeus/utils/DialogUtils.dart';
 import 'package:amadeus/utils/LogoutUtils.dart';
@@ -91,6 +92,11 @@ class HomePageState extends State<HomePage> {
     firebaseMessaging.configure(
       onMessage: onMessageHome,
     );
+    firebaseMessaging.onTokenRefresh.listen((token) {
+      print("Refreshed: $token");
+      InstanceIDService id = new InstanceIDService();
+      id.sendRegistrationServer(context, _user, token);
+    });
     super.initState();
   }
   @override

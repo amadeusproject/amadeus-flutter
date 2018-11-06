@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:amadeus/cache/TokenCacheController.dart';
@@ -10,6 +11,7 @@ import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/pages/home_page.dart';
 import 'package:amadeus/pages/login_page.dart';
 import 'package:amadeus/response/TokenResponse.dart';
+import 'package:amadeus/services/InstanceIDService.dart';
 
 class SplashPage extends StatefulWidget {
   static String tag = 'splash-page';
@@ -18,6 +20,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   startTime() async {
     var _duration = new Duration(seconds: 1);
@@ -54,6 +58,10 @@ class _SplashPageState extends State<SplashPage> {
         if (token.isTokenExpired()) {
           token = await token.renewToken(context);
         }
+
+        String _tokenFB = await _firebaseMessaging.getToken();
+        InstanceIDService id = new InstanceIDService();
+        await id.sendRegistrationServer(context, user, _tokenFB);
 
         Navigator.of(context).pushReplacement(
           new MaterialPageRoute(

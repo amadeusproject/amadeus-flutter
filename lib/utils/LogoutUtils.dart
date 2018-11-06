@@ -17,6 +17,7 @@ class Logout {
 
     SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
     _sharedPreferences.remove("USER_ID_KEY_TOKEN");
+    _sharedPreferences.remove("USER_TOKEN");
 
     CacheController.clearCache(context);
 
