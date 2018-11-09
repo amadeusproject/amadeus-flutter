@@ -115,7 +115,7 @@ class SubjectItem extends StatelessWidget {
     return [
       subjectName,
       iconWithBadge(
-        icon: Icon(FontAwesomeIcons.envelope, color: iconsColor,),
+        icon: Icon(FontAwesomeIcons.comments, color: iconsColor,),
         numBadge: subject.notifications,
         onPress: onPressMessage, 
         context: context

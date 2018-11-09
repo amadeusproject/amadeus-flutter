@@ -231,7 +231,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(FontAwesomeIcons.envelope, color: iconsColor,),
+            icon: new Icon(FontAwesomeIcons.comments, color: iconsColor,),
             onPressed: () {},
           ),
         ],

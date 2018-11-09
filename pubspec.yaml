@@ -55,7 +55,6 @@ flutter:
   uses-material-design: true
   assets:
     - images/logo.png
-    - images/logo-vertical.png
     - images/green-logo.png
     - images/no_image.jpg
     - lib/res/lang/i18n_pt-BR.json
