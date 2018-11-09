@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amadeus/bo/ParticipantsBO.dart';
 import 'package:amadeus/cache/TokenCacheController.dart';
@@ -226,19 +227,12 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
+        backgroundColor: subjectColor,
         title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
         actions: <Widget>[
-          new Stack(
-            alignment: Alignment.topRight,
-            children: <Widget>[
-              new Center(
-                child: new IconButton(
-                  onPressed: onPress,
-                  icon: new Icon(Icons.warning),
-                ),
-              ),
-              pendencyBadge(),
-            ],
+          new IconButton(
+            icon: new Icon(FontAwesomeIcons.envelope, color: iconsColor,),
+            onPressed: () {},
           ),
         ],
       ),

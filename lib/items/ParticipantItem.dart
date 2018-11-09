@@ -36,7 +36,7 @@ class ParticipantItem extends StatelessWidget {
             });
             if(_user.unseenMsgs > 0) {
               parent.refreshParticipants();
-              homePageState.refreshSubjects();
+              homePageState.refreshSubjects(false);
             }
           },
           child: new Container(

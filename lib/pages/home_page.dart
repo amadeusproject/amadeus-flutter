@@ -76,7 +76,7 @@ class HomePageState extends State<HomePage> {
 
   Future<dynamic> onMessageHome(Map<String, dynamic> message) async {
     messagingService.showNotification(message);
-    refreshSubjects();
+    refreshSubjects(false);
   }
 
   @override
@@ -172,8 +172,8 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> refreshSubjects() async {
-    refreshKey.currentState?.show(atTop: false);
+  Future<void> refreshSubjects(bool showLoading) async {
+    if(showLoading) refreshKey.currentState?.show(atTop: false);
 
     await checkToken();
    
@@ -190,7 +190,7 @@ class HomePageState extends State<HomePage> {
   Widget _contentHomePage() {
     if(_headers != null) {
       return new Scaffold(
-        backgroundColor: primaryBlue,
+        backgroundColor: backgroundColor,
         appBar: _chooseAppBar(),
         body: new Theme(
           data: new ThemeData(
@@ -198,16 +198,16 @@ class HomePageState extends State<HomePage> {
           ),
           child: new RefreshIndicator(
             key: refreshKey,
-            onRefresh: refreshSubjects,
+            onRefresh: () => refreshSubjects(true),
             child: new Theme(
               data: Theme.of(context),
               child: new ListView.builder(
                 itemCount: _headers.length,
                 itemBuilder: (BuildContext context, int index) {
                   if(filter == null || filter == "") {
-                    return SubjectItem(_headers[index], this);
+                    return SubjectItem(_headers[index], this, _user);
                   } else if(_headers[index].name.toLowerCase().contains(filter.toLowerCase())) {
-                    return SubjectItem(_headers[index], this);
+                    return SubjectItem(_headers[index], this, _user);
                   } else {
                     return new Container();
                   }
@@ -237,38 +237,6 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return _contentHomePage();
-  }
-      
-  @protected
-  Widget customScaffold(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: primaryBlue,
-      appBar: _chooseAppBar(),
-      body: new Theme(
-        data: new ThemeData(
-          hintColor: primaryBlue,
-        ),
-        child: new RefreshIndicator(
-          key: refreshKey,
-          onRefresh: refreshSubjects,
-          child: new Theme(
-            data: Theme.of(context),
-            child: new ListView.builder(
-              itemCount: _headers.length,
-              itemBuilder: (BuildContext context, int index) {
-                if(filter == null || filter == "") {
-                  return SubjectItem(_headers[index], this);
-                } else if(_headers[index].name.toLowerCase().contains(filter.toLowerCase())) {
-                  return SubjectItem(_headers[index], this);
-                } else {
-                  return new Container();
-                }
-              },
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   @protected

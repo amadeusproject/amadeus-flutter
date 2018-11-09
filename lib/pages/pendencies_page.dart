@@ -137,7 +137,14 @@ class PendenciesPageState extends State<PendenciesPage> {
     return new Scaffold(
       backgroundColor: backgroundColor,
       appBar: new AppBar(
-        title: new Text(Translations.of(context).text("pendencyNotifyTitle")),
+        backgroundColor: subjectColor,
+        title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
+        actions: <Widget>[
+          new IconButton(
+            icon: new Icon(Icons.warning, color: iconsColor,),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: new Center(
         child: new Column(

@@ -17,7 +17,6 @@ import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/UserResponse.dart';
 import 'package:amadeus/response/TokenResponse.dart';
 import 'package:amadeus/services/InstanceIDService.dart';
-import 'package:amadeus/services/MessagingService.dart';
 import 'package:amadeus/utils/DialogUtils.dart';
 
 class LoginPage extends StatefulWidget {
