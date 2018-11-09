@@ -10,17 +10,21 @@ class DateUtils {
     return DateTime.now().toUtc().toString().replaceAll(' ', 'T');
   }
 
-  static String toStr(DateTime date) {
-    return date.toUtc().toString().replaceAll(' ', 'T');
+  static DateTime convertTimezone(DateTime date) {
+    int offset = int.parse(DateTime.now().timeZoneName);
+    return date.add(new Duration(hours: offset));
   }
 
   static DateTime toDateTime(String date) {
-    return DateTime.parse(date.replaceAll('T', ' '));
+    DateTime dateTime = DateTime.parse(date.replaceAll('T', ' '));
+    dateTime = DateUtils.convertTimezone(dateTime);
+    return dateTime;
   }
 
   static String getHour(String date) {
     try{
       DateTime newDate = DateTime.parse(date.replaceAll('T', ' '));
+      newDate = DateUtils.convertTimezone(newDate);
       String result = "";
       if(newDate.hour < 10) {
         result += '0';
@@ -32,7 +36,7 @@ class DateUtils {
       result += "${newDate.minute}";
       return result;
     } catch(e) {
-      print(e);
+      print("getHour\n" + e.toString());
     }
     return null;
   }
@@ -40,6 +44,7 @@ class DateUtils {
   static Future<String> displayDate(BuildContext context, String newDate) async {
     try {
       DateTime _newDate = DateTime.parse(newDate.replaceAll('T', ' '));
+      _newDate = DateUtils.convertTimezone(_newDate);
       DateTime _today = DateTime.now();
       DateTime _yesterday = _today.subtract(new Duration(days: 1));
 
@@ -54,7 +59,7 @@ class DateUtils {
         return DateFormat.yMMMMd(locale).format(_newDate).toUpperCase();
       }
     } catch(e) {
-      print(e);
+      print("displayDate\n" + e.toString());
     }
     return "";
   }
@@ -81,7 +86,7 @@ class DateUtils {
         return DateFormat.yMMMMd(locale).format(_newDate).toUpperCase();
       }
     } catch(e) {
-      print(e);
+      print("displayPendencyDate\n" + e.toString());
     }
     return "";
   }

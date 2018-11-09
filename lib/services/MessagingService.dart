@@ -32,7 +32,7 @@ class MessagingService {
     } else if (page == ImagePage.tag) {
       methodToRun = onSelectNotificationImage;
     } else {
-      methodToRun = () {};
+      methodToRun = (String payload) {};
     }
     flutterLocalNotificationsPlugin.initialize(initializationSettings, selectNotification: methodToRun);
   }

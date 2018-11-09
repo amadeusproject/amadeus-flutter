@@ -17,6 +17,7 @@ import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/UserResponse.dart';
 import 'package:amadeus/response/TokenResponse.dart';
 import 'package:amadeus/services/InstanceIDService.dart';
+import 'package:amadeus/services/MessagingService.dart';
 import 'package:amadeus/utils/DialogUtils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -72,20 +73,6 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
 
     _firebaseMessaging.getToken().then((token){
       print(token);
-      _tokenFB = token;
-    });
-
-    _firebaseMessaging.configure(
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-
-    _firebaseMessaging.onTokenRefresh.listen((token) {
-      print("Refreshed: $token");
       _tokenFB = token;
     });
   }
@@ -158,6 +145,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
       DialogUtils.dialog(context, message: Translations.of(context).text("errorBoxMsgHost"));
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
+      print("_attemptLogin\n" + e.toString());
     }
     setState(() {
       initialEmail = email;

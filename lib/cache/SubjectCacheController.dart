@@ -38,7 +38,7 @@ class SubjectCacheController {
         }
       }
     } catch(e) {
-      print(e);
+      print("getSubjectCache\n" + e.toString());
     }
 
     return null;
@@ -56,7 +56,7 @@ class SubjectCacheController {
         return true;
       }
     } catch(e) {
-      print(e);
+      print("hasSubjectCache\n" + e.toString());
     }
 
     return false;
@@ -72,7 +72,7 @@ class SubjectCacheController {
 
       _model = subjects;      
     } catch(e) {
-      print(e);
+      print("setSubjectCache\n" + e.toString());
     }
   }
 
@@ -84,7 +84,7 @@ class SubjectCacheController {
 
       _model = null;
     } catch(e) {
-      print(e);
+      print("removeSubjectCache\n" + e.toString());
     }
   }
 }

@@ -108,8 +108,9 @@ class TokenResponse extends GenericResponse {
         return null;
       }
     } catch (e) {
-      DialogUtils.dialog(context, erro: e.toString());
+      await DialogUtils.dialog(context, erro: e.toString());
       Logout.goLogin(context);
+      print("renewToken\n" + e.toString());
       return null;
     }
   }

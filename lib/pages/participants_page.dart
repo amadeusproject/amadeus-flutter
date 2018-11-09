@@ -111,7 +111,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
       }
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
-      print(e);
+      print("refreshParticipants\n" + e.toString());
     }
   }
 
@@ -138,7 +138,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         }
       } catch(e) {
         DialogUtils.dialog(context, erro: e.toString());
-        print(e);
+        print("loadParticipants\n" + e.toString());
       }
     } else {
       await DialogUtils.dialog(context);

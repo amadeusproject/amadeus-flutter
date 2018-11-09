@@ -81,24 +81,33 @@ class HomePageState extends State<HomePage> {
 
   @override
   initState() {
+    super.initState();
     loadWidgets();
-    messagingService.configure(HomePage.tag);
     searching = false;
     eCtrl.addListener((){
       setState(() {
         filter = eCtrl.text;
       });
     });
+
+    messagingService.configure(HomePage.tag);
+
     firebaseMessaging.configure(
       onMessage: onMessageHome,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
     );
     firebaseMessaging.onTokenRefresh.listen((token) {
       print("Refreshed: $token");
       InstanceIDService id = new InstanceIDService();
       id.sendRegistrationServer(context, _user, token);
     });
-    super.initState();
   }
+
   @override
   void dispose() {
     eCtrl.dispose();
@@ -161,7 +170,7 @@ class HomePageState extends State<HomePage> {
         ],
       );
     }
-  } 
+  }
 
   Future<void> refreshSubjects() async {
     refreshKey.currentState?.show(atTop: false);
@@ -308,7 +317,7 @@ class HomePageState extends State<HomePage> {
     } catch(e) {
       await DialogUtils.dialog(context, erro: e.toString());
       Logout.goLogin(context);
-      print(e);
+      print("getSubjects\n" + e.toString());
     }
     return null;
   }

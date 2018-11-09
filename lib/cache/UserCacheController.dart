@@ -47,7 +47,7 @@ class UserCacheController {
         }
       }
     } catch(e) {
-      print(e);
+      print("getUserCache\n" + e.toString());
     }
 
     return null;
@@ -65,7 +65,7 @@ class UserCacheController {
         return true;
       }
     } catch(e) {
-      print(e);
+      print("hasUserCache\n" + e.toString());
     }
 
     return false;
@@ -83,7 +83,7 @@ class UserCacheController {
 
       _model = userLogged;      
     } catch(e) {
-      print(e);
+      print("setUserCache\n" + e.toString());
     }
   }
 
@@ -97,7 +97,7 @@ class UserCacheController {
 
       _model = null;
     } catch(e) {
-      print(e);
+      print("removeUserCache\n" + e.toString());
     }
   }
 }

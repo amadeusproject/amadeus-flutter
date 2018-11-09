@@ -85,7 +85,7 @@ class PendenciesPageState extends State<PendenciesPage> {
       }
     } catch (e) {
       DialogUtils.dialog(context, erro: e.toString());
-      print(e);
+      print("loadPendencies\n" + e.toString());
     }
   }
 

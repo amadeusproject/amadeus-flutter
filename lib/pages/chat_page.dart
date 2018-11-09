@@ -234,7 +234,7 @@ class ChatPageState extends State<ChatPage> {
       }
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
-      print(e);
+      print("reloadChat\n" + e.toString());
     }
   }
 
@@ -290,7 +290,7 @@ class ChatPageState extends State<ChatPage> {
       }
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
-      print(e);
+      print("loadChat\n" + e.toString());
     }
   }
   
@@ -325,7 +325,7 @@ class ChatPageState extends State<ChatPage> {
       }
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
-      print(e);
+      print("loadPage\n" + e.toString());
     }
   }
   
@@ -350,7 +350,7 @@ class ChatPageState extends State<ChatPage> {
       }
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
-      print(e);
+      print("sendMessage\n" + e.toString());
     }
   }
 
@@ -379,7 +379,7 @@ class ChatPageState extends State<ChatPage> {
       }
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
-      print(e);
+      print("sendImageMessage\n" + e.toString());
     }
   }
 
@@ -408,7 +408,7 @@ class ChatPageState extends State<ChatPage> {
       }
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
-      print(e);
+      print("favoriteMessages\n" + e.toString());
     }
   }
 

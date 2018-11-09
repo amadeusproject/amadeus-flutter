@@ -40,7 +40,7 @@ class InstanceIDService {
         }
       } catch (e) {
         DialogUtils.dialog(context, erro: e.toString());
-        print(e);
+        print("sendRegistrationServer\n" + e.toString());
       }
     }
   }

@@ -19,11 +19,11 @@ class Logout {
     _sharedPreferences.remove("USER_ID_KEY_TOKEN");
     _sharedPreferences.remove("USER_TOKEN");
 
-    CacheController.clearCache(context);
-
     if(user != null && token != null) {
       await UserBO().logout(context, user, token);
     }
+
+    CacheController.clearCache(context);
 
     var initialEmail = _sharedPreferences.get(LoginPageState.emailKey) ?? "";
     var initialHost = _sharedPreferences.get(LoginPageState.hostKey) ?? "";

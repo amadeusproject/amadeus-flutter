@@ -55,20 +55,22 @@ class UserBO {
   Future<GenericResponse> registerDevice(BuildContext context, UserModel user, String device) async {
     TokenResponse token = await TokenCacheController.getTokenCache(context);
 
-    String url = "${token.webserverUrl}/api/users/register_device/";
+    if(token != null) {
+      String url = "${token.webserverUrl}/api/users/register_device/";
 
-    Map<String, String> data = new HashMap<String, String>();
-    data.putIfAbsent("email", () => user.email);
-    data.putIfAbsent("device", () => device);
+      Map<String, String> data = new HashMap<String, String>();
+      data.putIfAbsent("email", () => user.email);
+      data.putIfAbsent("device", () => device);
 
-    String content = jsonEncode(data);
+      String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+      String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
 
-    if(json != null && json.trim().length > 0) {
-      print("registerDevice - " + json);
+      if(json != null && json.trim().length > 0) {
+        print("registerDevice - " + json);
 
-      return GenericResponse.fromJson(json);
+        return GenericResponse.fromJson(json);
+      }
     }
     return null;
   }

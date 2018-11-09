@@ -49,7 +49,7 @@ class TokenCacheController {
         }
       }
     } catch (e) {
-      print(e);
+      print("getTokenCache\n" + e.toString());
     }
 
     return null;
@@ -67,7 +67,7 @@ class TokenCacheController {
         return true;
       }
     } catch(e) {
-      print(e);
+      print("hasTokenCache\n" + e.toString());
     }
 
     return false;
@@ -85,7 +85,7 @@ class TokenCacheController {
 
       _model = token;
     } catch(e) {
-      print(e);
+      print("setTokenCache\n" + e.toString());
     }
   }
 
@@ -99,7 +99,7 @@ class TokenCacheController {
       
       _model = null;
     } catch(e) {
-      print(e);
+      print("removeTokenCache\n" + e.toString());
     }
   }
 }
