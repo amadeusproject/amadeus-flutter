@@ -24,3 +24,4 @@ const loginFontColor = Color.fromRGBO(33, 33, 33, 1.0);
 const fontColor = Color(0xFF333333);
 const iconsColor = Color(0xFF0267A4);
 const subjectColor = Color(0xFF0277BD);
+const perfilColor = Color(0xFF034F7C);

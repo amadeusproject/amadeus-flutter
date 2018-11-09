@@ -17,8 +17,9 @@ import 'package:amadeus/localizations.dart';
 import 'package:amadeus/models/MessageModel.dart';
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
-import 'package:amadeus/pages/participants_page.dart';
+import 'package:amadeus/pages/image_page.dart';
 import 'package:amadeus/pages/image_sender_page.dart';
+import 'package:amadeus/pages/participants_page.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/MessageResponse.dart';
 import 'package:amadeus/response/TokenResponse.dart';
@@ -480,6 +481,7 @@ class ChatPageState extends State<ChatPage> {
   AppBar _chooseAppBar() {
     if(isSelecting) {
       return new AppBar(
+        backgroundColor: subjectColor,
         leading: IconButton(
           icon: new Icon(Icons.close),
           onPressed: () {
@@ -532,11 +534,24 @@ class ChatPageState extends State<ChatPage> {
       );
     } else {
       return new AppBar(
+        backgroundColor: subjectColor,
         title: new Row(
           children: <Widget>[
-            new CircleAvatar(
-              backgroundColor: primaryWhite,
-              backgroundImage: _ivPhoto,
+            new GestureDetector(
+              onTap: () {
+                if(_user.imageUrl != null && _user.imageUrl.isNotEmpty) {
+                  Navigator.of(context).push(
+                    new MaterialPageRoute(
+                      settings: const RouteSettings(name: 'image-page'), 
+                      builder: (context) => new ImagePage(_userTo.imageUrl, _token.webserverUrl, title: _userTo.getDisplayName(),),
+                    )
+                  );
+                }
+              },
+              child: new CircleAvatar(
+                backgroundColor: primaryWhite,
+                backgroundImage: _ivPhoto,
+              ),
             ),
             new SizedBox(
               width: 10.0,
