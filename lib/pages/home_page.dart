@@ -40,7 +40,6 @@ class HomePageState extends State<HomePage> {
   bool searching = false;
 
   String filter;
-  Text _tvName;
   TokenResponse _token;
   var _ivPhoto;
 
@@ -139,12 +138,11 @@ class HomePageState extends State<HomePage> {
       );
     } else {
       return new AppBar(
-        title: _tvName,
         leading: new Padding(
           padding: EdgeInsets.fromLTRB(12.0, 6.0, 0.0, 6.0),
           child: new CircleAvatar(
             backgroundColor: Colors.transparent,
-            backgroundImage: _ivPhoto,
+            child: new Image.asset('images/logo.png'),
           ),
         ),
         actions: <Widget>[
@@ -155,18 +153,29 @@ class HomePageState extends State<HomePage> {
               setState(() {});
             },
           ),
-          new PopupMenuButton<Choice> (
-            onSelected: (Choice result) {
-              messagingService.cleanAll();
-              Logout.goLogin(context);
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<Choice>>[
-              new PopupMenuItem<Choice>(
-                value: Choice.logout,
-                child: new Text(Translations.of(context).text('actionLogout')),
+          new Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              new CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: _ivPhoto,
+              ),
+              new PopupMenuButton<Choice> (
+                onSelected: (Choice result) {
+                  messagingService.cleanAll();
+                  Logout.goLogin(context);
+                },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<Choice>>[
+                  new PopupMenuItem<Choice>(
+                    value: Choice.logout,
+                    child: new Text(Translations.of(context).text('actionLogout')),
+                  ),
+                ],
+                icon: new Icon(Icons.menu, color: Colors.transparent,),
               ),
             ],
           ),
+          
         ],
       );
     }
@@ -243,7 +252,6 @@ class HomePageState extends State<HomePage> {
   Future<void> loadWidgets() async {
     /// Getting user
     if(_user != null) {
-      _tvName = new Text(_user.getDisplayName());
       await checkToken();
       if(_user.imageUrl != null && _user.imageUrl.isNotEmpty) {
         String path = _token.webserverUrl + _user.imageUrl;
