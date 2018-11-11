@@ -59,17 +59,19 @@ class _SplashPageState extends State<SplashPage> {
           token = await token.renewToken(context);
         }
 
-        String _tokenFB = await _firebaseMessaging.getToken();
-        InstanceIDService id = new InstanceIDService();
-        await id.sendRegistrationServer(context, user, _tokenFB);
+        if(token != null) {
+          String _tokenFB = await _firebaseMessaging.getToken();
+          InstanceIDService id = new InstanceIDService();
+          await id.sendRegistrationServer(context, user, _tokenFB);
 
-        Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(
-            settings: const RouteSettings(name: 'home-page'),
-            builder: (context) => new HomePage(user: user, token: token),
-          ),
-        );
-        return;
+          Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(
+              settings: const RouteSettings(name: 'home-page'),
+              builder: (context) => new HomePage(user: user, token: token),
+            ),
+          );
+          return;
+        }
       }
     }
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
