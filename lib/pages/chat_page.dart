@@ -368,7 +368,7 @@ class ChatPageState extends State<ChatPage> {
     try {
       MessageResponse messageResponse = await MessageBO().sendMessage(context, _userTo, message);
 
-      _messageList.removeWhere((test) => test.createDate == message.createDate);
+      _messageList.removeWhere((test) => test.createDate == message.createDate && test.user == message.user);
 
       if(messageResponse != null && messageResponse.success && messageResponse.number == 1) {
         MessageModel sent = messageResponse.data.messageSent;
