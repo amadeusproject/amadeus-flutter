@@ -142,7 +142,8 @@ class PendenciesPageState extends State<PendenciesPage> {
         actions: <Widget>[
           new IconButton(
             icon: new Icon(Icons.warning, color: iconsColor,),
-            onPressed: () {},
+            onPressed: null,
+            disabledColor: iconsColor,
           ),
         ],
       ),

@@ -242,7 +242,8 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         actions: <Widget>[
           new IconButton(
             icon: new Icon(FontAwesomeIcons.comments, color: iconsColor,),
-            onPressed: () {},
+            onPressed: null,
+            disabledColor: iconsColor,
           ),
         ],
       ),
