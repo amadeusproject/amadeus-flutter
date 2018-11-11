@@ -83,6 +83,9 @@ class SubjectItem extends StatelessWidget {
       parent.messagingService.configure(HomePage.tag);
       parent.firebaseMessaging.configure(
         onMessage: parent.onMessageHome,
+        onResume: (Map<String, dynamic> message) async {
+          parent.refreshSubjects(true);
+        }
       );
     });
   }
@@ -97,6 +100,9 @@ class SubjectItem extends StatelessWidget {
       parent.messagingService.configure(HomePage.tag);
       parent.firebaseMessaging.configure(
         onMessage: parent.onMessageHome,
+        onResume: (Map<String, dynamic> message) async {
+          parent.refreshSubjects(true);
+        }
       );
     });
   }

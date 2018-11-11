@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -185,11 +186,18 @@ class ChatPageState extends State<ChatPage> {
     var type = data['type'].toString();
     if(type == "chat") {
       var userTalk = data['user_from'].toString();
-      print(userTalk);
       if(userTalk == _userTo.email) {
+        data = json.decode(data['response'])['data']['message_sent'];
+        MessageModel messageReceived = new MessageModel.fromJson(data);
+        _messageList.insert(0, messageReceived);
+        setState(() {
+          _updateItems();
+        });
         reloadChat();
       } else {
         messagingService.showNotification(message);
+        parent.refreshParticipants();
+        parent.homePageState.refreshSubjects(false);
       }
     }
   }
@@ -211,6 +219,24 @@ class ChatPageState extends State<ChatPage> {
 
     _firebaseMessaging.configure(
       onMessage: onMessageChat,
+      onResume: (Map<String, dynamic> message) async {
+        var data = json.decode(message['response']);
+        String type = message['type'].toString();
+        if(type == "chat") {
+          var userTalk = message['user_from'].toString();
+          if(userTalk == _userTo.email) {
+            data = data['data']['message_sent'];
+            MessageModel messageReceived = new MessageModel.fromJson(data);
+            _messageList.insert(0, messageReceived);
+            setState(() {
+              _updateItems();
+            });
+            reloadChat();
+          }
+        }
+        parent.refreshParticipants();
+        parent.homePageState.refreshSubjects(false);
+      },
     );
     messagingService = parent.messagingService;
     messagingService.configure(ChatPage.tag);
@@ -220,6 +246,7 @@ class ChatPageState extends State<ChatPage> {
 
   void reloadChat() async {
     await checkToken();
+    messagingService.cleanNotifications(_userTo.email);
     try {
       MessageResponse messageResponse = await MessageBO().getMessages(context, _user, _userTo, 1, _pageSize*_actualPage);
 
@@ -333,9 +360,15 @@ class ChatPageState extends State<ChatPage> {
   @protected
   Future<void> sendMessage(String text) async {
     MessageModel message = new MessageModel(text, _user, _subject, DateUtils.currentDate());
+    _messageList.insert(0, message);
+    setState(() {
+      _updateItems();
+    });
     await checkToken();
     try {
       MessageResponse messageResponse = await MessageBO().sendMessage(context, _userTo, message);
+
+      _messageList.removeWhere((test) => test.createDate == message.createDate);
 
       if(messageResponse != null && messageResponse.success && messageResponse.number == 1) {
         MessageModel sent = messageResponse.data.messageSent;

@@ -97,7 +97,7 @@ class HomePageState extends State<HomePage> {
         print("onLaunch: $message");
       },
       onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
+        refreshSubjects(true);
       },
     );
     firebaseMessaging.onTokenRefresh.listen((token) {

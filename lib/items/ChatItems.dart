@@ -148,13 +148,11 @@ class ChatItem extends StatelessWidget implements ListItem {
   Widget build(BuildContext context) {
     return new GestureDetector(
       onTap: () {
-        print("Tap");
         if(parent.isSelecting) {
           _setSelection(context);
         }
       },
       onLongPress: () {
-        print("LongPress");
         if(!parent.isSelecting) {
           parent.isSelecting = true;
         }

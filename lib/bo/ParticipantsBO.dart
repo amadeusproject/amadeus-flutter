@@ -28,7 +28,7 @@ class ParticipantsBO {
     String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
 
     if(json != null && json.trim().length > 0) {
-      print(json);
+      print("GetParticipants - $json");
 
       ParticipantsResponse participantsResponse = new ParticipantsResponse();
       participantsResponse.fromJson(json);

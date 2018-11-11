@@ -7,9 +7,9 @@ import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/pages/chat_page.dart';
 import 'package:amadeus/pages/home_page.dart';
-import 'package:amadeus/pages/image_page.dart';
 import 'package:amadeus/pages/participants_page.dart';
 
+/// This class was made for manager Local Notifications. It does not manage any Firebase Notification.
 
 class MessagingService {
 
@@ -29,8 +29,6 @@ class MessagingService {
       methodToRun = onSelectNotificationChat;
     } else if (page == ParticipantsPage.tag) {
       methodToRun = onSelectNotificationParticipants;
-    } else if (page == ImagePage.tag) {
-      methodToRun = onSelectNotificationImage;
     } else {
       methodToRun = (String payload) {};
     }
@@ -73,18 +71,6 @@ class MessagingService {
     /// TODO - Action when click on notification
   }
 
-  Future onSelectNotificationImage(String payload) async {
-    if (payload != null) {
-      var data = json.decode(payload);
-      data = json.decode(data['response'])['data']['message_sent'];
-      // ignore: unused_local_variable
-      var userFrom = UserModel.fromJson(data['user']);
-      // ignore: unused_local_variable
-      var subject = SubjectModel.fromJson(data['subject']);
-    }
-    /// TODO - Action when click on notification
-  }
-
   void showNotification(Map<String, dynamic> message) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
       'Channel ID', 'Channel Name', 'Channel Description',
@@ -112,12 +98,10 @@ class MessagingService {
         _userId++;
       }
       print(notificationId);
-      /// TODO - See what's on body when message is just a image
+
       var dataStr = json.encode(data);
       
       await flutterLocalNotificationsPlugin.show(notificationId, title, body, platformChannelSpecifics, payload: dataStr);
-    } else if(type == "pendency") {
-      /// TODO - Pendency notification
     }
   }
 

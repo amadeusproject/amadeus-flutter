@@ -32,6 +32,9 @@ class ParticipantItem extends StatelessWidget {
               parent.messagingService.configure(ParticipantsPage.tag);
               parent.firebaseMessaging.configure(
                 onMessage: parent.onMessageParticipants,
+                onResume: (Map<String, dynamic> message) async {
+                  parent.refreshParticipants();
+                },
               );
             });
             if(_user.unseenMsgs > 0) {

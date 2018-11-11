@@ -76,6 +76,8 @@ class ParticipantsPageState extends State<ParticipantsPage> {
     var subject = data['message_sent']['subject'];
     if(subject['slug'] == _subject.slug) {
       refreshParticipants();
+    } else {
+      homePageState.refreshSubjects(false);
     }
     messagingService.showNotification(message);
   }
@@ -85,6 +87,10 @@ class ParticipantsPageState extends State<ParticipantsPage> {
     loadParticipants();
     firebaseMessaging.configure(
       onMessage: onMessageParticipants,
+      onResume: (Map<String, dynamic> message) async {
+        refreshParticipants();
+        homePageState.refreshSubjects(false);
+      }
     );
     messagingService = homePageState.messagingService;
     messagingService.configure(ParticipantsPage.tag);
@@ -199,6 +205,10 @@ class ParticipantsPageState extends State<ParticipantsPage> {
       messagingService.configure(ParticipantsPage.tag);
       firebaseMessaging.configure(
         onMessage: onMessageParticipants,
+        onResume: (Map<String, dynamic> message) async {
+          refreshParticipants();
+          homePageState.refreshSubjects(false);
+        },
       );
     });
   }
