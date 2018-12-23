@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:amadeus/pages/image_sender_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +11,7 @@ import 'package:amadeus/localizations.dart';
 import 'package:amadeus/models/MuralModel.dart';
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
+import 'package:amadeus/pages/image_sender_page.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/GenericResponse.dart';
 import 'package:amadeus/response/MuralResponse.dart';
@@ -146,11 +146,11 @@ class MuralPageState extends State<MuralPage> {
       _items.insert(
         0,
         PostItem(
-          _posts[i],
-          _token.webserverUrl,
-          favoritePost,
-          _user,
-          _subject,
+          mural: _posts[i],
+          webserver: _token.webserverUrl,
+          favoriteCallback: favoritePost,
+          user: _user,
+          subject: _subject,
         ),
       );
     }

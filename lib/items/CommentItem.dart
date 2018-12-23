@@ -1,11 +1,13 @@
-import 'package:amadeus/localizations.dart';
-import 'package:amadeus/widgets/ClickableImage.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:amadeus/localizations.dart';
 import 'package:amadeus/models/CommentModel.dart';
 import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/utils/StringUtils.dart';
+import 'package:amadeus/widgets/ClickableImage.dart';
 
 abstract class CommentPageItem {}
 
@@ -57,7 +59,7 @@ class CommentItem extends StatelessWidget implements CommentPageItem {
             child: new CircleAvatar(
               maxRadius: 15.0,
               backgroundColor: primaryWhite,
-              backgroundImage: new NetworkImage(
+              backgroundImage: new CachedNetworkImageProvider(
                 _webserver + comment.user.imageUrl,
               ),
             ),
@@ -104,10 +106,7 @@ class CommentItem extends StatelessWidget implements CommentPageItem {
                         imageUrl: comment.imageUrl,
                         maxHeight: 200.0,
                         margin: new EdgeInsets.only(bottom: 5.0),
-                        child: new Image.network(
-                          _webserver + comment.imageUrl,
-                          fit: BoxFit.cover,
-                        ),
+                        borderRadius: new BorderRadius.circular(5.0),
                       )
                     : new Container(),
               ],

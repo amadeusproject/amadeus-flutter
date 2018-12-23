@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:amadeus/pages/image_page.dart';
 
 class ClickableImage extends StatelessWidget {
   final String webserverUrl, imageUrl;
-  final Widget child;
   final EdgeInsets margin, padding;
+  final BorderRadiusGeometry borderRadius;
   final double maxHeight;
 
   ClickableImage({
     @required this.webserverUrl,
     @required this.imageUrl,
-    @required this.child,
     this.margin,
     this.padding,
+    this.borderRadius,
     this.maxHeight,
   });
 
@@ -36,11 +38,10 @@ class ClickableImage extends StatelessWidget {
         ),
       ),
       decoration: new BoxDecoration(
+        borderRadius: borderRadius,
         image: new DecorationImage(
-          image: new NetworkImage(
-            webserverUrl + imageUrl,
-          ),
-          fit: BoxFit.cover
+          image: new CachedNetworkImageProvider(webserverUrl + imageUrl),
+          fit: BoxFit.cover,
         ),
       ),
     );

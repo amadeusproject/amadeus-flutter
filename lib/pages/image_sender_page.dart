@@ -10,13 +10,16 @@ import 'package:amadeus/bo/MessageBO.dart';
 import 'package:amadeus/bo/MuralBO.dart';
 import 'package:amadeus/cache/TokenCacheController.dart';
 import 'package:amadeus/localizations.dart';
+import 'package:amadeus/models/CommentModel.dart';
 import 'package:amadeus/models/MessageModel.dart';
 import 'package:amadeus/models/MuralModel.dart';
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/pages/chat_page.dart';
 import 'package:amadeus/pages/mural_page.dart';
+import 'package:amadeus/pages/post_page.dart';
 import 'package:amadeus/res/colors.dart';
+import 'package:amadeus/response/CommentResponse.dart';
 import 'package:amadeus/response/MessageResponse.dart';
 import 'package:amadeus/response/MuralResponse.dart';
 import 'package:amadeus/response/TokenResponse.dart';
@@ -30,9 +33,11 @@ class ImageSenderPage extends StatefulWidget {
   final File imageFile;
   final UserModel user, userTo;
   final SubjectModel subject;
+  final MuralModel post;
   final String inputPlaceholder;
   final ChatPageState chatState;
   final MuralPageState muralState;
+  final PostPageState postState;
   ImageSenderPage({
     Key key,
     @required this.imageFile,
@@ -41,6 +46,8 @@ class ImageSenderPage extends StatefulWidget {
     @required this.inputPlaceholder,
     this.chatState,
     this.muralState,
+    this.postState,
+    this.post,
     this.userTo,
   }) : super(key: key);
   @override
@@ -173,6 +180,51 @@ class ImageSenderPageState extends State<ImageSenderPage> {
     }
   }
 
+  @protected
+  Future<void> sendImageComment() async {
+    CommentModel comment = new CommentModel(
+      widget.post,
+      textCtrl.text.trimRight(),
+      widget.user,
+    );
+    await checkToken();
+    Navigator.of(context).pop();
+    Fluttertoast.showToast(
+      msg: Translations.of(context).text('toastSendingImage'),
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
+    try {
+      CommentResponse commentResponse = await MuralBO().createImageComment(
+        context,
+        comment,
+        _fileToSend,
+      );
+
+      if (commentResponse != null &&
+          commentResponse.success &&
+          commentResponse.number == 1) {
+        CommentModel comment = commentResponse.newComment;
+        widget.postState.insertCommentSent(comment);
+      } else if (commentResponse != null &&
+          commentResponse.title != null &&
+          commentResponse.title.isNotEmpty &&
+          commentResponse.message != null &&
+          commentResponse.message.isNotEmpty) {
+        DialogUtils.dialog(
+          context,
+          title: commentResponse.title,
+          message: commentResponse.message,
+        );
+      } else {
+        DialogUtils.dialog(context);
+      }
+    } catch (e) {
+      DialogUtils.dialog(context, erro: e.toString());
+      print("sendImageComment\n" + e.toString());
+    }
+  }
+
   Future<Null> _cropImage(BuildContext context) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: _imageFile.path,
@@ -198,6 +250,13 @@ class ImageSenderPageState extends State<ImageSenderPage> {
       return new InputMessage(
         textCtrl,
         sendImagePost,
+        placeholder: widget.inputPlaceholder,
+      );
+    }
+    if (widget.postState != null) {
+      return new InputMessage(
+        textCtrl,
+        sendImageComment,
         placeholder: widget.inputPlaceholder,
       );
     }

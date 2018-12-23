@@ -3,15 +3,15 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:amadeus/models/CommentModel.dart';
-import 'package:amadeus/models/MuralModel.dart';
-import 'package:amadeus/response/CommentResponse.dart';
-import 'package:amadeus/response/GenericResponse.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amadeus/cache/TokenCacheController.dart';
+import 'package:amadeus/models/CommentModel.dart';
+import 'package:amadeus/models/MuralModel.dart';
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
+import 'package:amadeus/response/CommentResponse.dart';
+import 'package:amadeus/response/GenericResponse.dart';
 import 'package:amadeus/response/MuralResponse.dart';
 import 'package:amadeus/response/TokenResponse.dart';
 import 'package:amadeus/utils/HttpUtils.dart';
@@ -113,7 +113,7 @@ class MuralBO {
     String json = await HttpUtils.postMultipart(context, url, content, "${token.tokenType} ${token.accessToken}", imageFile);
 
     if(json != null && json.trim().length > 0) {
-      print("createPost - $json");
+      print("createImagePost - $json");
 
       MuralResponse muralResponse = new MuralResponse();
       muralResponse.fromJson(json);
@@ -155,7 +155,6 @@ class MuralBO {
     String url = "${token.webserverUrl}/api/mural/create_comment/";
 
     Map<String, dynamic> data = new HashMap<String, dynamic>();
-    print(comment.user.email);
     data.putIfAbsent("email", () => comment.user.email);
     data.putIfAbsent("post_id", () => comment.post.id);
     data.putIfAbsent("message", () => comment.comment);
@@ -174,4 +173,29 @@ class MuralBO {
     }
     return null;
   }
+
+  Future<CommentResponse> createImageComment(BuildContext context, CommentModel comment, File imageFile) async {
+    TokenResponse token = await TokenCacheController.getTokenCache(context);
+
+    String url = "${token.webserverUrl}/api/mural/create_comment/";
+
+    Map<String, dynamic> data = new HashMap<String, dynamic>();
+    data.putIfAbsent("email", () => comment.user.email);
+    data.putIfAbsent("post_id", () => comment.post.id);
+    data.putIfAbsent("message", () => comment.comment);
+
+    String content = jsonEncode(data);
+
+    String json = await HttpUtils.postMultipart(context, url, content, "${token.tokenType} ${token.accessToken}", imageFile);
+
+    if(json != null && json.trim().length > 0) {
+      print("createImageComment - $json");
+
+      CommentResponse commentResponse = new CommentResponse();
+      commentResponse.fromJson(json);
+
+      return commentResponse;
+    }
+    return null;
+  }  
 }

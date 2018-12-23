@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:photo_view/photo_view.dart';
 
 import 'package:amadeus/res/colors.dart';
@@ -26,7 +27,7 @@ class ImagePage extends StatelessWidget {
       ),
       body: new Container(
         child: new PhotoViewInline(
-          imageProvider: NetworkImage(_webUrl + _imageUrl),
+          imageProvider: new CachedNetworkImageProvider(_webUrl + _imageUrl),
           minScale: PhotoViewComputedScale.contained,
           maxScale: 4.0,
           gaplessPlayback: true,

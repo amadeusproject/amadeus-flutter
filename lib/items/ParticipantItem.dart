@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/pages/chat_page.dart';
@@ -107,7 +109,9 @@ class ParticipantItem extends StatelessWidget {
       padding: EdgeInsets.only(right: 20.0),
       child: new CircleAvatar(
         backgroundColor: primaryWhite,
-        backgroundImage: new NetworkImage(_webserver + _user.imageUrl),
+        backgroundImage: new CachedNetworkImageProvider(
+          _webserver + _user.imageUrl,
+        ),
       ),
     );
 

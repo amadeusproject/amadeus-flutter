@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 import 'package:amadeus/bo/MuralBO.dart';
 import 'package:amadeus/cache/TokenCacheController.dart';
@@ -9,6 +13,7 @@ import 'package:amadeus/models/CommentModel.dart';
 import 'package:amadeus/models/MuralModel.dart';
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
+import 'package:amadeus/pages/image_sender_page.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/CommentResponse.dart';
 import 'package:amadeus/response/GenericResponse.dart';
@@ -17,6 +22,8 @@ import 'package:amadeus/utils/DialogUtils.dart';
 import 'package:amadeus/utils/LogoutUtils.dart';
 import 'package:amadeus/widgets/InputMessage.dart';
 import 'package:amadeus/widgets/Loading.dart';
+
+enum ImageChoices {gallery, camera}
 
 class PostPage extends StatefulWidget {
   static String tag = 'post-page';
@@ -41,6 +48,7 @@ class PostPageState extends State<PostPage> {
   List<CommentPageItem> _items;
   TokenResponse _token;
   TextEditingController textCtrl = new TextEditingController();
+  File _imageFile;
 
   int _actualPage = 0;
   int _pageSize = 20;
@@ -73,6 +81,73 @@ class PostPageState extends State<PostPage> {
     }
   }
 
+  Future _openDialogToChoose() async {
+    switch (await showDialog<ImageChoices>(
+      context: context,
+      builder: (BuildContext context) {
+        return new SimpleDialog(
+          title: new Text(Translations.of(context).text('imageChooserTitle')),
+          children: <Widget>[
+            new SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, ImageChoices.camera),
+              child: new Row(
+                children: <Widget>[
+                  new Icon(Icons.camera, color: darkerGray,),
+                  new Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: new Text(Translations.of(context).text('imageCameraOption')),
+                  ),
+                ],
+              ),
+            ),
+            new SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, ImageChoices.gallery),
+              child: new Row(
+                children: <Widget>[
+                  new Icon(Icons.photo, color: darkerGray,),
+                  new Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: new Text(Translations.of(context).text('imageGalleryOption')),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+    )) {
+      case ImageChoices.camera:
+        _onImageButtonPressed(ImageSource.camera);
+        break;
+      case ImageChoices.gallery:
+        _onImageButtonPressed(ImageSource.gallery);
+        break;
+    }
+  }
+
+  void _onImageButtonPressed(ImageSource source) async {
+    _imageFile = await ImagePicker.pickImage(source: source);
+    if(_imageFile != null) {
+      Navigator.of(context).push(
+        new MaterialPageRoute(
+          settings: const RouteSettings(name: 'image-sender-page'), 
+          builder: (context) {
+            return new ImageSenderPage(
+              imageFile: _imageFile,
+              user: _user,
+              subject: _subject,
+              postState: this,
+              post: _post,
+              inputPlaceholder: Translations.of(context).text('postSenderHint'),
+            );
+          }
+        )
+      ).then((onValue) {
+        _imageFile = null;
+      });
+    }
+  }
+
   void _updateItems() async {
     _items = new List<CommentPageItem>();
     if (_comments == null) return;
@@ -100,8 +175,7 @@ class PostPageState extends State<PostPage> {
 
     try {
       _isLoading = true;
-      CommentResponse commentResponse = await MuralBO()
-          .getComments(context, _user, _post, _actualPage, _pageSize);
+      CommentResponse commentResponse = await MuralBO().getComments(context, _user, _post, _actualPage, _pageSize,);
       if (commentResponse != null) {
         if (commentResponse.success && commentResponse.number == 1) {
           _actualPage += 1;
@@ -184,12 +258,23 @@ class PostPageState extends State<PostPage> {
     }
   }
 
-  Future<void> createComment() async {
-    if(textCtrl.text.trimRight().isNotEmpty) {
-      await checkToken();
-      CommentModel comment = new CommentModel(_post, textCtrl.text.trimRight(), _user);
+  void insertCommentSent(CommentModel comment) {
+    setState(() {
       _comments.insert(0, comment);
+      _updateItems();
+    });
+  }
+
+  Future<void> createComment() async {
+    if (textCtrl.text.trimRight().isNotEmpty) {
+      await checkToken();
+      CommentModel comment = new CommentModel(
+        _post,
+        textCtrl.text.trimRight(),
+        _user,
+      );
       setState(() {
+        _comments.insert(0, comment);
         _updateItems();
       });
 
@@ -197,24 +282,36 @@ class PostPageState extends State<PostPage> {
       FocusScope.of(context).requestFocus(new FocusNode());
 
       try {
-        CommentResponse commentResponse = await MuralBO().createComment(context, comment);
+        CommentResponse commentResponse = await MuralBO().createComment(
+          context,
+          comment,
+        );
 
         _comments.removeWhere((test) => test.createDate == comment.createDate && test.user == comment.user);
 
-        if(commentResponse != null && commentResponse.success && commentResponse.number == 1) {
+        if (commentResponse != null &&
+            commentResponse.success &&
+            commentResponse.number == 1) {
           CommentModel comment = commentResponse.newComment;
 
           _comments.insert(0, comment);
           setState(() {
             _updateItems();
           });
-
-        } else if(commentResponse != null && commentResponse.title != null && commentResponse.title.isNotEmpty && commentResponse.message != null && commentResponse.message.isNotEmpty) {
+        } else if (commentResponse != null &&
+            commentResponse.title != null &&
+            commentResponse.title.isNotEmpty &&
+            commentResponse.message != null &&
+            commentResponse.message.isNotEmpty) {
           _comments.removeWhere((test) => test.createDate == comment.createDate && test.user == comment.user);
           setState(() {
             _updateItems();
           });
-          DialogUtils.dialog(context, title: commentResponse.title, message: commentResponse.message);
+          DialogUtils.dialog(
+            context,
+            title: commentResponse.title,
+            message: commentResponse.message,
+          );
         } else {
           _comments.removeWhere((test) => test.createDate == comment.createDate && test.user == comment.user);
           setState(() {
@@ -222,7 +319,7 @@ class PostPageState extends State<PostPage> {
           });
           DialogUtils.dialog(context);
         }
-      } catch(e) {
+      } catch (e) {
         _comments.removeWhere((test) => test.createDate == comment.createDate && test.user == comment.user);
         setState(() {
           _updateItems();
@@ -319,11 +416,11 @@ class PostPageState extends State<PostPage> {
           children: <Widget>[
             _token != null
                 ? new PostItem(
-                    _post,
-                    _token.webserverUrl,
-                    favoritePost,
-                    _user,
-                    _subject,
+                    mural: _post,
+                    webserver: _token.webserverUrl,
+                    favoriteCallback: favoritePost,
+                    user: _user,
+                    subject: _subject,
                     showCommentBar: false,
                     clickable: false,
                   )
@@ -336,6 +433,8 @@ class PostPageState extends State<PostPage> {
               textCtrl,
               createComment,
               placeholder: Translations.of(context).text('postSenderHint'),
+              showCameraIcon: true,
+              onCameraPressed: _openDialogToChoose,
             ),
           ],
         ),

@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -279,7 +279,7 @@ class ChatPageState extends State<ChatPage> {
       await checkToken();
       String path = _token.webserverUrl + _userTo.imageUrl;
       setState(() {
-        _ivPhoto = new NetworkImage(path);
+        _ivPhoto = new CachedNetworkImageProvider(path);
       });
     } else {
       setState(() {

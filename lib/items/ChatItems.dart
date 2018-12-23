@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 import 'package:amadeus/models/MessageModel.dart';
 import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/pages/chat_page.dart';
-import 'package:amadeus/pages/image_page.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/response/TokenResponse.dart';
 import 'package:amadeus/utils/DateUtils.dart';
 import 'package:amadeus/utils/StringUtils.dart';
+import 'package:amadeus/widgets/ClickableImage.dart';
 
 abstract class ListItem {}
 
@@ -64,34 +63,17 @@ class ChatItem extends StatelessWidget implements ListItem {
 
   Widget _imageWidget(BuildContext context) {
     if(_msg.imageUrl != null && _msg.imageUrl.isNotEmpty) {
-      Stack image = new Stack(
+      return new Stack(
         alignment: Alignment.center,
         children: <Widget>[
           new CircularProgressIndicator(),
-          new FadeInImage.memoryNetwork(
-            placeholder: kTransparentImage,
-            image: _token.webserverUrl + _msg.imageUrl,
+          new ClickableImage(
+            webserverUrl: _token.webserverUrl,
+            imageUrl: _msg.imageUrl,
+            padding: new EdgeInsets.symmetric(vertical: 5.0),
+            maxHeight: 350.0,
           ),
         ],
-      );
-      return new Container(
-        padding: EdgeInsets.symmetric(vertical: 5.0),
-        child: new ConstrainedBox(
-          constraints: new BoxConstraints(
-            maxHeight: 350.0
-          ),
-          child: new GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                new MaterialPageRoute(
-                  settings: const RouteSettings(name: 'image-page'), 
-                  builder: (context) => new ImagePage(_msg.imageUrl, _token.webserverUrl),
-                )
-              );
-            },
-            child: image,
-          ),
-        ),
       );
     }
     return new Container(
