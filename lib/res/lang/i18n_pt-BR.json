@@ -17,8 +17,12 @@
     "loadingParticipants": "Carregando participantes do assunto...",
     "loadingMessages": "Carregando suas mensagens...",
     "loadingPendencies": "Carregando suas pendências...",
+    "loadingPosts": "Carregando as postagens do mural...",
+    "loadingComments": "Carregando os comentários da postagem...",
     "actionLogout": "Sair",
     "chatSenderHint": "Escreva sua mensagem...",
+    "muralSenderHint": "Postar no mural do assunto...",
+    "postSenderHint": "Digite o seu comentário...",
     "today": "Hoje",
     "yesterday": "Ontem",
     "favoriteMessages": "Favoritas",
@@ -36,5 +40,11 @@
     "pedencyNotifyMessageSingular": "nova pendência.\nAcesse o ambiente virtual para vê-la.",
     "pedencyNotifyMessagePlural": "novas pendências.\nAcesse o ambiente virtual para vê-las.",
     "emptyPendencies": "Você não possui nenhuma pendência.",
-    "toastSendingImage": "Sua imagem está sendo enviada e aparecerá assim que for processada pelo servidor."
+    "emptyPosts": "Não há nenhuma postagem no mural.",
+    "emptyComments": "Não há nenhum comentário nessa postagem.",
+    "toastSendingImage": "Sua imagem está sendo enviada e aparecerá assim que for processada pelo servidor.",
+    "firstToComment": "Seja o primeiro a comentar",
+    "comments": "Comentários",
+    "loadMorePosts": "Carregar mais postagens",
+    "loadMoreComments": "Carregar mais comentários"
 }

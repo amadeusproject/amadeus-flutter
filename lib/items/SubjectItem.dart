@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/pages/home_page.dart';
+import 'package:amadeus/pages/mural_page.dart';
 import 'package:amadeus/pages/participants_page.dart';
 import 'package:amadeus/pages/pendencies_page.dart';
 import 'package:amadeus/res/colors.dart';
@@ -107,6 +108,23 @@ class SubjectItem extends StatelessWidget {
     });
   }
 
+  void onPressMural(BuildContext context) {
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        settings: const RouteSettings(name: 'mural-page'), 
+        builder: (context) => new MuralPage(userTo: user, subject: subject),
+      ),
+    ).then((onValue) {
+      parent.messagingService.configure(HomePage.tag);
+      parent.firebaseMessaging.configure(
+        onMessage: parent.onMessageHome,
+        onResume: (Map<String, dynamic> message) async {
+          parent.refreshSubjects(true);
+        }
+      );
+    });
+  }
+
   List<Widget> _rowItem(BuildContext context) {
     final subjectName = new Expanded(
       child: new Text(
@@ -120,6 +138,12 @@ class SubjectItem extends StatelessWidget {
     );
     return [
       subjectName,
+      iconWithBadge(
+        icon: Icon(Icons.list, color: iconsColor,),
+        numBadge: 0,
+        onPress: onPressMural,
+        context: context
+      ),
       iconWithBadge(
         icon: Icon(FontAwesomeIcons.comments, color: iconsColor,),
         numBadge: subject.notifications,

@@ -17,8 +17,12 @@
     "loadingParticipants": "Loading subject participants...",
     "loadingMessages": "Loading your messages...",
     "loadingPendencies": "Loading your pendencies...",
+    "loadingPosts": "Loading mural posts...",
+    "loadingComments": "Loading post comments...",
     "actionLogout": "Logout",
     "chatSenderHint": "Type your message...",
+    "muralSenderHint": "Post on the subject's mural...",
+    "postSenderHint": "Type your comment...",
     "today": "Today",
     "yesterday": "Yesterday",
     "favoriteMessages": "Favorites",
@@ -36,5 +40,11 @@
     "pedencyNotifyMessageSingular": "new pendency.\nAccess the virtual environment to see it.",
     "pedencyNotifyMessagePlural": "new pendencies.\nAccess the virtual environment to see them.",
     "emptyPendencies": "You don't have any pendency.",
-    "toastSendingImage": "Your image is being uploaded and will appear as soon it's processed by the server."
+    "emptyPosts": "Mural doesn't have any post.",
+    "emptyComments": "This post doesn't have any comment.",
+    "toastSendingImage": "Your image is being uploaded and will appear as soon it's processed by the server.",
+    "firstToComment": "Be the first to comment",
+    "comments": "Comments",
+    "loadMorePosts": "Load more posts",
+    "loadMoreComments": "Load more comments"
 }

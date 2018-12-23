@@ -624,7 +624,7 @@ class ChatPageState extends State<ChatPage> {
             ),
             child: new Center(child: new CircularProgressIndicator(
               valueColor: new AlwaysStoppedAnimation<Color>(primaryBlue),
-            ),)
+            ),),
           ),
         ],
       );
@@ -650,7 +650,7 @@ class ChatPageState extends State<ChatPage> {
 
   Widget inputWidget(bool onChat, VoidCallback onSendPressed) {
     return new Container(
-      color: onChat ? backgroundColor : primaryBlack,
+      color: backgroundColor,
       child: new Row(
         children: <Widget>[
           new Expanded(
