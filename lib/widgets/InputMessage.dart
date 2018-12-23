@@ -16,7 +16,7 @@ class InputMessage extends StatelessWidget {
     if (!(showCameraIcon ?? false)) return new Container();
     return new IconButton(
       icon: new Icon(Icons.camera_alt),
-      color: primaryGray,
+      color: MyColors.primaryGray,
       onPressed: (onCameraPressed ?? () {}),
     );
   }
@@ -24,7 +24,7 @@ class InputMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      color: backgroundColor,
+      color: MyColors.backgroundColor,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -52,7 +52,7 @@ class InputMessage extends StatelessWidget {
                             decoration: new InputDecoration(
                               border: InputBorder.none,
                               hintText: placeholder,
-                              hintStyle: TextStyle(color: primaryGray),
+                              hintStyle: TextStyle(color: MyColors.primaryGray),
                             ),
                           ),
                         ),
@@ -68,13 +68,13 @@ class InputMessage extends StatelessWidget {
             padding: EdgeInsets.only(right: 5.0),
             child: new FloatingActionButton(
               mini: true,
-              backgroundColor: primaryGreen,
+              backgroundColor: MyColors.primaryGreen,
               shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0),
               ),
               child: new Icon(
                 Icons.send,
-                color: primaryWhite,
+                color: MyColors.primaryWhite,
               ),
               onPressed: onSendPressed,
             ),

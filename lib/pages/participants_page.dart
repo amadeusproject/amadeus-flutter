@@ -44,7 +44,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   MessagingService messagingService;
 
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey<RefreshIndicatorState>();
 
   Future<void> checkToken() async {
     if(_token == null) {
@@ -157,7 +157,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
     if(_participants != null) {
       return new Theme(
         data: new ThemeData(
-          hintColor: primaryBlue,
+          hintColor: MyColors.primaryBlue,
         ),
         child: new RefreshIndicator(
           key: refreshKey,
@@ -180,7 +180,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
     }
     return new Theme(
       data: new ThemeData(
-        hintColor: primaryBlue,
+        hintColor: MyColors.primaryBlue,
       ),
       child: new Center(
         child: new Column(
@@ -188,7 +188,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
           children: <Widget>[
             new CircularProgressIndicator(),
             new SizedBox(height: 10.0),
-            new Text(Translations.of(context).text('loadingParticipants'), style: new TextStyle(color: primaryBlue),)
+            new Text(Translations.of(context).text('loadingParticipants'), style: new TextStyle(color: MyColors.primaryBlue),)
           ],
         ),
       ),
@@ -221,7 +221,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         width: 20.0,
         height: 20.0,
         decoration: new BoxDecoration(
-          color: primaryRed,
+          color: MyColors.primaryRed,
           boxShadow: null,
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -237,17 +237,17 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        backgroundColor: subjectColor,
+        backgroundColor: MyColors.subjectColor,
         title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(FontAwesomeIcons.comments, color: iconsColor,),
+            icon: new Icon(FontAwesomeIcons.comments, color: MyColors.iconsColor,),
             onPressed: null,
-            disabledColor: iconsColor,
+            disabledColor: MyColors.iconsColor,
           ),
         ],
       ),
-      backgroundColor: primaryWhite,
+      backgroundColor: MyColors.primaryWhite,
       body: _contentBody(),
     );
   }

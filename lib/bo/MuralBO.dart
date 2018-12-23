@@ -34,9 +34,14 @@ class MuralBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("GetPosts - $json");
 
       MuralResponse muralResponse = new MuralResponse();
@@ -59,9 +64,14 @@ class MuralBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("favoritePost - $json");
 
       GenericResponse genericResponse = new GenericResponse.fromJson(json);
@@ -84,9 +94,14 @@ class MuralBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("createPost - $json");
 
       MuralResponse muralResponse = new MuralResponse();
@@ -110,9 +125,15 @@ class MuralBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.postMultipart(context, url, content, "${token.tokenType} ${token.accessToken}", imageFile);
+    String json = await HttpUtils.postMultipart(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+      imageFile,
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("createImagePost - $json");
 
       MuralResponse muralResponse = new MuralResponse();
@@ -130,15 +151,20 @@ class MuralBO {
 
     Map<String, dynamic> data = new HashMap<String, dynamic>();
     data.putIfAbsent("email", () => user.email);
-    data.putIfAbsent("post_id", () => mural.id);    
+    data.putIfAbsent("post_id", () => mural.id);
     data.putIfAbsent("page", () => page);
     data.putIfAbsent("page_size", () => pageSize);
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("getComments - $json");
 
       CommentResponse commentResponse = new CommentResponse();
@@ -161,9 +187,14 @@ class MuralBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("createComment - $json");
 
       CommentResponse commentResponse = new CommentResponse();
@@ -186,9 +217,15 @@ class MuralBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.postMultipart(context, url, content, "${token.tokenType} ${token.accessToken}", imageFile);
+    String json = await HttpUtils.postMultipart(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+      imageFile,
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("createImageComment - $json");
 
       CommentResponse commentResponse = new CommentResponse();
@@ -197,5 +234,5 @@ class MuralBO {
       return commentResponse;
     }
     return null;
-  }  
+  }
 }

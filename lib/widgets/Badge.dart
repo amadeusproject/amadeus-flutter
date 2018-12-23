@@ -17,7 +17,7 @@ class Badge extends StatelessWidget {
       width: size,
       height: size,
       decoration: new BoxDecoration(
-        color: primaryRed,
+        color: MyColors.primaryRed,
         boxShadow: null,
         borderRadius: BorderRadius.circular(size/2),
       ),

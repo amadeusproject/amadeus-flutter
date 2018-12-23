@@ -14,7 +14,6 @@ import 'package:amadeus/utils/HttpUtils.dart';
 
 class SubjectBO {
   Future<SubjectResponse> getSubjects(BuildContext context, UserModel user) async {
-
     TokenResponse token = await TokenCacheController.getTokenCache(context);
 
     String url = "${token.webserverUrl}/api/subjects/get_subjects/";
@@ -24,9 +23,14 @@ class SubjectBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("GetSubjects - $json");
 
       SubjectResponse subjectResponse = new SubjectResponse();

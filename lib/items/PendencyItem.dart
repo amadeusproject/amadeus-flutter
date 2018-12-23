@@ -18,13 +18,13 @@ class DateItem extends StatelessWidget implements PendencyPageItem {
       child: new Container(
         decoration: BoxDecoration(
           borderRadius: new BorderRadius.circular(4.0),
-          color: dateBackground,
+          color: MyColors.dateBackground,
         ),
         padding: EdgeInsets.all(5.0),
         child: new Text(
           dateToShow,
           style: new TextStyle(
-            color: dateFontColor,
+            color: MyColors.dateFontColor,
             fontSize: 14.0,
           ),
         ),
@@ -53,10 +53,10 @@ class PendencyItem extends StatelessWidget implements PendencyPageItem {
   Widget build(BuildContext context) {
     return new Container(
       alignment: Alignment.center,
-      color: myMessage,
+      color: MyColors.myMessage,
       padding: new EdgeInsets.all(10.0),
       margin: new EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 20.0),
-      child: new Text(getText(context), textAlign: TextAlign.center, style: new TextStyle(color: fontColor),),
+      child: new Text(getText(context), textAlign: TextAlign.center, style: new TextStyle(color: MyColors.fontColor),),
     );
   }
 }

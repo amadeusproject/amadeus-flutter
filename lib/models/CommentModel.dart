@@ -3,13 +3,6 @@ import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/utils/DateUtils.dart';
 
 class CommentModel {
-
-  String _comment, _createDate, _lastUpdate, _imageUrl;
-  MuralModel _post;
-  UserModel _user;
-  bool _edited;
-  int _id;
-
   CommentModel(this._post, this._comment, this._user) {
     _createDate = DateUtils.currentDate();
   }
@@ -25,29 +18,35 @@ class CommentModel {
     _edited = jsonMap['edited'];
   }
 
+  String _comment, _createDate, _lastUpdate, _imageUrl;
+  MuralModel _post;
+  UserModel _user;
+  bool _edited;
+  int _id;
+
   MuralModel get post => _post;
-  set post(MuralModel post) => this._post = post;
+  set post(MuralModel value) => this._post = value;
 
   String get comment => _comment;
-  set comment(String comment) => this._comment = comment;
+  set comment(String value) => this._comment = value;
 
   String get createDate => _createDate;
-  set createDate(String createDate) => this._createDate = createDate;
+  set createDate(String value) => this._createDate = value;
 
   String get lastUpdate => _lastUpdate;
-  set lastUpdate(String lastUpdate) => this._lastUpdate = lastUpdate;
+  set lastUpdate(String value) => this._lastUpdate = value;
 
   String get imageUrl => _imageUrl;
-  set imageUrl(String imageUrl) => this._imageUrl = imageUrl;
+  set imageUrl(String value) => this._imageUrl = value;
 
   UserModel get user => _user;
-  set user(UserModel user) => this._user = user;
+  set user(UserModel value) => this._user = value;
 
   bool get edited => _edited;
-  set edited(bool edited) => this._edited = edited;
+  set edited(bool value) => this._edited = value;
 
   int get id => _id;
-  set id(int id) => this._id = id;
+  set id(int value) => this._id = value;
 
   String getDisplayDate() {
     DateTime date = DateUtils.toDateTime(_createDate);

@@ -26,9 +26,14 @@ class PendencyBO {
     String content = jsonEncode(data);
     print(content);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("GetPendencies - " + json);
 
       PendencyResponse pendencyResponse = new PendencyResponse();

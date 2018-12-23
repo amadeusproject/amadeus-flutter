@@ -25,10 +25,10 @@ class Logout {
 
     CacheController.clearCache(context);
 
-    var initialEmail = _sharedPreferences.get(LoginPageState.emailKey) ?? "";
-    var initialHost = _sharedPreferences.get(LoginPageState.hostKey) ?? "";
-    var initialPassword = _sharedPreferences.get(LoginPageState.passwordKey) ?? "";
-    var rememberPassword = _sharedPreferences.getBool(LoginPageState.rememberPasswordKey) ?? false;
+    String initialEmail = _sharedPreferences.get(LoginPageState.emailKey) ?? "";
+    String initialHost = _sharedPreferences.get(LoginPageState.hostKey) ?? "";
+    String initialPassword = _sharedPreferences.get(LoginPageState.passwordKey) ?? "";
+    bool rememberPassword = _sharedPreferences.getBool(LoginPageState.rememberPasswordKey) ?? false;
     Navigator.of(context).pushReplacement(
       new MaterialPageRoute(
         settings: const RouteSettings(name: 'login-page'),

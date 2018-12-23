@@ -39,7 +39,7 @@ class LoadMuralItem extends StatelessWidget implements MuralPageItem {
         child: new Text(
           Translations.of(context).text('loadMorePosts'),
           style: new TextStyle(
-            color: subjectColor,
+            color: MyColors.subjectColor,
           ),
         ),
       ),
@@ -94,7 +94,7 @@ class PostItem extends StatelessWidget implements MuralPageItem {
             new Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: new CircleAvatar(
-                backgroundColor: primaryWhite,
+                backgroundColor: MyColors.primaryWhite,
                 backgroundImage: new CachedNetworkImageProvider(
                   webserver + mural.user.imageUrl,
                 ),

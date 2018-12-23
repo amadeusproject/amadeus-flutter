@@ -14,7 +14,6 @@ import 'package:amadeus/utils/HttpUtils.dart';
 
 class ParticipantsBO {
   Future<ParticipantsResponse> getParticipants(BuildContext context, UserModel user, String subjectSlug) async {
-
     TokenResponse token = await TokenCacheController.getTokenCache(context);
 
     String url = "${token.webserverUrl}/api/participants/get_participants/";
@@ -25,9 +24,14 @@ class ParticipantsBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("GetParticipants - $json");
 
       ParticipantsResponse participantsResponse = new ParticipantsResponse();

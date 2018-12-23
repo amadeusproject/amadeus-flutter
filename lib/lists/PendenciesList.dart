@@ -1,7 +1,6 @@
 import 'package:amadeus/models/PendencyModel.dart';
 
 class PendenciesList {
-
   List<PendencyModel> _pendencies;
 
   void fromJson(List listMap) {
@@ -10,5 +9,5 @@ class PendenciesList {
   }
 
   List<PendencyModel> get pendencies => _pendencies;
-  set pendencies(List<PendencyModel> pendencies) => this._pendencies = pendencies;
+  set pendencies(List<PendencyModel> value) => this._pendencies = value;
 }

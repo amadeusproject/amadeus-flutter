@@ -45,7 +45,7 @@ class ParticipantItem extends StatelessWidget {
             }
           },
           child: new Container(
-            color: primaryWhite,
+            color: MyColors.primaryWhite,
             padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +56,7 @@ class ParticipantItem extends StatelessWidget {
         ),
         new Divider(
           height: 2.0,
-          color: primaryGray,
+          color: MyColors.primaryGray,
         ),
       ],
     );
@@ -72,7 +72,7 @@ class ParticipantItem extends StatelessWidget {
         margin: EdgeInsets.only(right: 5.0),
         padding: EdgeInsets.all(5.0),
         decoration: new BoxDecoration(
-          color: primaryRed,
+          color: MyColors.primaryRed,
           boxShadow: null,
           borderRadius: BorderRadius.circular(12.5),
         ),
@@ -84,7 +84,7 @@ class ParticipantItem extends StatelessWidget {
               numNot, 
               textAlign: TextAlign.center, 
               style: TextStyle(
-                color: primaryWhite,
+                color: MyColors.primaryWhite,
                 fontWeight: FontWeight.bold,
                 fontSize: 12.0,
               ),
@@ -98,7 +98,7 @@ class ParticipantItem extends StatelessWidget {
       child: new Text(
         _user.getDisplayName(),
         style: TextStyle(
-          color: primaryBlack,
+          color: MyColors.primaryBlack,
           fontWeight: FontWeight.bold,
           fontSize: 18.0,
         ),
@@ -108,7 +108,7 @@ class ParticipantItem extends StatelessWidget {
     final userAvatarWidget = new Padding(
       padding: EdgeInsets.only(right: 20.0),
       child: new CircleAvatar(
-        backgroundColor: primaryWhite,
+        backgroundColor: MyColors.primaryWhite,
         backgroundImage: new CachedNetworkImageProvider(
           _webserver + _user.imageUrl,
         ),

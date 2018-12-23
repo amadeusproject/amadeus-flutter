@@ -1,7 +1,6 @@
 import 'package:amadeus/models/CommentModel.dart';
 
 class CommentList {
-
   List<CommentModel> _comments;
 
   void fromJson(List listMap) {
@@ -10,5 +9,5 @@ class CommentList {
   }
 
   List<CommentModel> get comments => _comments;
-  set comments(List<CommentModel> comments) => this._comments = comments;
+  set comments(List<CommentModel> value) => this._comments = value;
 }

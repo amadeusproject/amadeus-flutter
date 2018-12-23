@@ -9,6 +9,7 @@ import 'package:amadeus/bo/SubjectBO.dart';
 import 'package:amadeus/cache/SubjectCacheController.dart';
 import 'package:amadeus/cache/TokenCacheController.dart';
 import 'package:amadeus/items/SubjectItem.dart';
+import 'package:amadeus/lists/SubjectList.dart';
 import 'package:amadeus/localizations.dart';
 import 'package:amadeus/models/SubjectModel.dart';
 import 'package:amadeus/models/UserModel.dart';
@@ -48,7 +49,7 @@ class HomePageState extends State<HomePage> {
   MessagingService messagingService = new MessagingService();
 
   TextEditingController eCtrl = new TextEditingController();
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey<RefreshIndicatorState>();
 
   Future<void> checkToken() async {
     if(_token == null) {
@@ -119,9 +120,9 @@ class HomePageState extends State<HomePage> {
       return AppBar(
         title: new TextField(
           autofocus: true,
-          style: new TextStyle(color: primaryWhite),
+          style: new TextStyle(color: MyColors.primaryWhite),
           decoration: new InputDecoration(
-            fillColor: primaryWhite,
+            fillColor: MyColors.primaryWhite,
             hintText: Translations.of(context).text('searchSubject'),
           ),
           controller: eCtrl,
@@ -200,11 +201,11 @@ class HomePageState extends State<HomePage> {
   Widget _contentHomePage() {
     if(_headers != null) {
       return new Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: MyColors.backgroundColor,
         appBar: _chooseAppBar(),
         body: new Theme(
           data: new ThemeData(
-            hintColor: primaryBlue,
+            hintColor: MyColors.primaryBlue,
           ),
           child: new RefreshIndicator(
             key: refreshKey,
@@ -230,7 +231,7 @@ class HomePageState extends State<HomePage> {
     }
     return new Scaffold(
       appBar: new AppBar(),
-      backgroundColor: primaryBlue,
+      backgroundColor: MyColors.primaryBlue,
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -262,7 +263,7 @@ class HomePageState extends State<HomePage> {
       }
       /// Getting subjects
       if(await SubjectCacheController.hasSubjectCache(context)) {
-        var subjectList = await SubjectCacheController.getSubjectCache(context);
+        SubjectList subjectList = await SubjectCacheController.getSubjectCache(context);
         _headers = subjectList.subjects;
         _headers.sort((a, b) => b.notifications.compareTo(a.notifications));
         setState(() {});

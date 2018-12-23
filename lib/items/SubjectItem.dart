@@ -25,7 +25,7 @@ class SubjectItem extends StatelessWidget {
         new Container(
           decoration: BoxDecoration(
             borderRadius: new BorderRadius.circular(4.0),
-            color: subjectColor,
+            color: MyColors.subjectColor,
           ),
           margin: new EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
@@ -48,7 +48,7 @@ class SubjectItem extends StatelessWidget {
         width: 20.0,
         height: 20.0,
         decoration: new BoxDecoration(
-          color: primaryRed,
+          color: MyColors.primaryRed,
           boxShadow: null,
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -130,7 +130,7 @@ class SubjectItem extends StatelessWidget {
       child: new Text(
         subject.name.toUpperCase(),
         style: TextStyle(
-          color: primaryWhite,
+          color: MyColors.primaryWhite,
           fontWeight: FontWeight.bold,
           fontSize: 18.0,
         ),
@@ -139,19 +139,19 @@ class SubjectItem extends StatelessWidget {
     return [
       subjectName,
       iconWithBadge(
-        icon: Icon(Icons.list, color: iconsColor,),
+        icon: Icon(Icons.list, color: MyColors.iconsColor,),
         numBadge: 0,
         onPress: onPressMural,
         context: context
       ),
       iconWithBadge(
-        icon: Icon(FontAwesomeIcons.comments, color: iconsColor,),
+        icon: Icon(FontAwesomeIcons.comments, color: MyColors.iconsColor,),
         numBadge: subject.notifications,
         onPress: onPressMessage, 
         context: context
       ),
       iconWithBadge(
-        icon: Icon(Icons.warning, color: iconsColor,),
+        icon: Icon(Icons.warning, color: MyColors.iconsColor,),
         numBadge: subject.pendencies,
         onPress: onPressPendency,
         context: context

@@ -92,7 +92,7 @@ class PostPageState extends State<PostPage> {
               onPressed: () => Navigator.pop(context, ImageChoices.camera),
               child: new Row(
                 children: <Widget>[
-                  new Icon(Icons.camera, color: darkerGray,),
+                  new Icon(Icons.camera, color: MyColors.darkerGray,),
                   new Padding(
                     padding: EdgeInsets.all(5.0),
                     child: new Text(Translations.of(context).text('imageCameraOption')),
@@ -104,7 +104,7 @@ class PostPageState extends State<PostPage> {
               onPressed: () => Navigator.pop(context, ImageChoices.gallery),
               child: new Row(
                 children: <Widget>[
-                  new Icon(Icons.photo, color: darkerGray,),
+                  new Icon(Icons.photo, color: MyColors.darkerGray,),
                   new Padding(
                     padding: EdgeInsets.all(5.0),
                     child: new Text(Translations.of(context).text('imageGalleryOption')),
@@ -345,13 +345,13 @@ class PostPageState extends State<PostPage> {
             children: <Widget>[
               new Text(
                 Translations.of(context).text('emptyComments'),
-                style: new TextStyle(color: darkerGray),
+                style: new TextStyle(color: MyColors.darkerGray),
               )
             ],
           ),
         );
       }
-      var listView = new ListView.separated(
+      ListView listView = new ListView.separated(
         itemCount: _items.length,
         itemBuilder: (BuildContext context, int index) {
           var item = _items[index];
@@ -385,7 +385,7 @@ class PostPageState extends State<PostPage> {
           new SizedBox(height: 5.0),
           new Text(
             Translations.of(context).text('loadingComments'),
-            style: new TextStyle(color: darkerGray),
+            style: new TextStyle(color: MyColors.darkerGray),
           )
         ],
       ),
@@ -395,19 +395,19 @@ class PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: MyColors.backgroundColor,
       appBar: new AppBar(
-        backgroundColor: subjectColor,
+        backgroundColor: MyColors.subjectColor,
         title:
             new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
               Icons.list,
-              color: iconsColor,
+              color: MyColors.iconsColor,
             ),
             onPressed: null,
-            disabledColor: iconsColor,
+            disabledColor: MyColors.iconsColor,
           ),
         ],
       ),

@@ -24,7 +24,7 @@ class FavoriteButton extends StatelessWidget {
             angle: 0.758,
             child: new Icon(
               FontAwesomeIcons.thumbtack,
-              color: isFavorite ? thumbtackActive : thumbtackDeactive,
+              color: isFavorite ? MyColors.thumbtackActive : MyColors.thumbtackDeactive,
               size: 12.0,
             ),
           ),

@@ -28,9 +28,14 @@ class MessageBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("GetMessages - " + json);
 
       MessageResponse messageResponse = new MessageResponse();
@@ -55,9 +60,14 @@ class MessageBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("SendMessage - " + json);
 
       MessageResponse messageResponse = new MessageResponse();
@@ -82,9 +92,15 @@ class MessageBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.postMultipart(context, url, content, "${token.tokenType} ${token.accessToken}", imageFile);
+    String json = await HttpUtils.postMultipart(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+      imageFile,
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("SendImageMessage - " + json);
 
       MessageResponse messageResponse = new MessageResponse();
@@ -105,15 +121,20 @@ class MessageBO {
     data.putIfAbsent("list_size", () => messages.length.toString());
     data.putIfAbsent("favor", () => favor.toString());
 
-    for(int i = 0; i < messages.length; i++) {
+    for (int i = 0; i < messages.length; i++) {
       data.putIfAbsent(i.toString(), () => messages.elementAt(i).id.toString());
     }
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("FavoriteMessages - " + json);
 
       MessageResponse messageResponse = new MessageResponse();

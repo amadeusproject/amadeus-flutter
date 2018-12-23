@@ -9,7 +9,6 @@ import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/services/Storage.dart';
 
 class UserCacheController {
-
   static final String _userPreferenceKey = "USER_ID_PREFERENCE_KEY";
   static final Storage storage = new Storage();
 
@@ -17,36 +16,36 @@ class UserCacheController {
 
   static Future<UserModel> getUserCache(BuildContext context) async {
     try {
-      if(_model != null) {
+      if (_model != null) {
         return _model;
       }
 
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-      if(sharedPreferences.toString().contains(_userPreferenceKey)) {
+      if (sharedPreferences.toString().contains(_userPreferenceKey)) {
         String myJson = sharedPreferences.getString(_userPreferenceKey);
 
-        if(myJson.isNotEmpty) {
+        if (myJson.isNotEmpty) {
           UserModel userFromJson = new UserModel.fromJson(json.decode(myJson));
 
-          if(userFromJson != null) {
+          if (userFromJson != null) {
             _model = userFromJson;
             return _model;
           }
         }
       } else {
         String myJson = await storage.readUser();
-        
-        if(myJson.isNotEmpty) {
+
+        if (myJson.isNotEmpty) {
           UserModel userFromJson = new UserModel.fromJson(json.decode(myJson));
 
-          if(userFromJson != null) {
+          if (userFromJson != null) {
             _model = userFromJson;
             return _model;
           }
         }
       }
-    } catch(e) {
+    } catch (e) {
       print("getUserCache\n" + e.toString());
     }
 
@@ -55,16 +54,16 @@ class UserCacheController {
 
   static Future<bool> hasUserCache(BuildContext context) async {
     try {
-      if(_model != null) {
+      if (_model != null) {
         return true;
       }
 
       UserModel user = await getUserCache(context);
 
-      if(user != null) {
+      if (user != null) {
         return true;
       }
-    } catch(e) {
+    } catch (e) {
       print("hasUserCache\n" + e.toString());
     }
 
@@ -81,8 +80,8 @@ class UserCacheController {
 
       storage.writeUser(myJson);
 
-      _model = userLogged;      
-    } catch(e) {
+      _model = userLogged;
+    } catch (e) {
       print("setUserCache\n" + e.toString());
     }
   }
@@ -96,7 +95,7 @@ class UserCacheController {
       storage.writeUser("");
 
       _model = null;
-    } catch(e) {
+    } catch (e) {
       print("removeUserCache\n" + e.toString());
     }
   }

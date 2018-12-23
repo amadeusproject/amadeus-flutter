@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   startTime() async {
-    var _duration = new Duration(seconds: 1);
+    Duration _duration = new Duration(seconds: 1);
     return new Timer(_duration, loadUser);
   }
 
@@ -75,10 +75,10 @@ class _SplashPageState extends State<SplashPage> {
       }
     }
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var initialEmail = sharedPreferences.get(LoginPageState.emailKey) ?? "";
-    var initialHost = sharedPreferences.get(LoginPageState.hostKey) ?? "";
-    var initialPassword = sharedPreferences.get(LoginPageState.passwordKey) ?? "";
-    var rememberPassword = sharedPreferences.getBool(LoginPageState.rememberPasswordKey) ?? false;
+    String initialEmail = sharedPreferences.get(LoginPageState.emailKey) ?? "";
+    String initialHost = sharedPreferences.get(LoginPageState.hostKey) ?? "";
+    String initialPassword = sharedPreferences.get(LoginPageState.passwordKey) ?? "";
+    bool rememberPassword = sharedPreferences.getBool(LoginPageState.rememberPasswordKey) ?? false;
     Navigator.of(context).pushReplacement(
       new MaterialPageRoute(
         settings: const RouteSettings(name: 'login-page'),

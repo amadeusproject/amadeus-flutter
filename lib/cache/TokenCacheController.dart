@@ -11,7 +11,6 @@ import 'package:amadeus/services/Storage.dart';
 /// Created by Vitor Martins on 24/08/18.
 
 class TokenCacheController {
-  
   static final String _tokenPreferenceKey = "TOKEN_PREFERENCE_KEY";
   static final Storage storage = new Storage();
 
@@ -22,16 +21,16 @@ class TokenCacheController {
       if (_model != null) {
         return _model;
       }
-      
+
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-      if(sharedPreferences.toString().contains(_tokenPreferenceKey)) {
+      if (sharedPreferences.toString().contains(_tokenPreferenceKey)) {
         String myJson = sharedPreferences.getString(_tokenPreferenceKey);
 
-        if(myJson.isNotEmpty) {
+        if (myJson.isNotEmpty) {
           TokenResponse tokenFromJson = TokenResponse.fromJson(myJson);
 
-          if(tokenFromJson != null) {
+          if (tokenFromJson != null) {
             _model = tokenFromJson;
             return _model;
           }
@@ -39,10 +38,10 @@ class TokenCacheController {
       } else {
         String myJson = await storage.readToken();
 
-        if(myJson.isNotEmpty) {
+        if (myJson.isNotEmpty) {
           TokenResponse tokenFromJson = TokenResponse.fromJson(myJson);
 
-          if(tokenFromJson != null) {
+          if (tokenFromJson != null) {
             _model = tokenFromJson;
             return _model;
           }
@@ -63,10 +62,10 @@ class TokenCacheController {
 
       TokenResponse token = await getTokenCache(context);
 
-      if(token != null) {
+      if (token != null) {
         return true;
       }
-    } catch(e) {
+    } catch (e) {
       print("hasTokenCache\n" + e.toString());
     }
 
@@ -84,7 +83,7 @@ class TokenCacheController {
       storage.writeToken(myJson);
 
       _model = token;
-    } catch(e) {
+    } catch (e) {
       print("setTokenCache\n" + e.toString());
     }
   }
@@ -96,9 +95,9 @@ class TokenCacheController {
       editor.remove(_tokenPreferenceKey);
 
       storage.writeToken("");
-      
+
       _model = null;
-    } catch(e) {
+    } catch (e) {
       print("removeTokenCache\n" + e.toString());
     }
   }

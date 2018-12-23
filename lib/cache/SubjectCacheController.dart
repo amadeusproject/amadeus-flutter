@@ -9,7 +9,6 @@ import 'package:amadeus/response/SubjectResponse.dart';
 /// Created by Vitor Martins on 25/08/2018.
 
 class SubjectCacheController {
-
   static final String _subjectPreferenceKey = "SUBJECT_PREFERENCES_KEY";
 
   static SubjectList _model;
@@ -22,22 +21,22 @@ class SubjectCacheController {
 
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-      if(sharedPreferences.toString().contains(_subjectPreferenceKey)) {
+      if (sharedPreferences.toString().contains(_subjectPreferenceKey)) {
         String myJson = sharedPreferences.getString(_subjectPreferenceKey);
 
-        if(myJson.isNotEmpty) {
+        if (myJson.isNotEmpty) {
           SubjectResponse subjectResponse = new SubjectResponse();
           subjectResponse.fromJson(json.decode(myJson));
 
           SubjectList subjectList = subjectResponse.data;
 
-          if(subjectList != null) {
+          if (subjectList != null) {
             _model = subjectList;
             return _model;
           }
         }
       }
-    } catch(e) {
+    } catch (e) {
       print("getSubjectCache\n" + e.toString());
     }
 
@@ -46,16 +45,16 @@ class SubjectCacheController {
 
   static Future<bool> hasSubjectCache(BuildContext context) async {
     try {
-      if(_model != null) {
+      if (_model != null) {
         return true;
       }
 
       SubjectList subjects = await getSubjectCache(context);
 
-      if(subjects != null) {
+      if (subjects != null) {
         return true;
       }
-    } catch(e) {
+    } catch (e) {
       print("hasSubjectCache\n" + e.toString());
     }
 
@@ -70,8 +69,8 @@ class SubjectCacheController {
 
       editor.setString(_subjectPreferenceKey, myJson);
 
-      _model = subjects;      
-    } catch(e) {
+      _model = subjects;
+    } catch (e) {
       print("setSubjectCache\n" + e.toString());
     }
   }
@@ -83,7 +82,7 @@ class SubjectCacheController {
       editor.remove(_subjectPreferenceKey);
 
       _model = null;
-    } catch(e) {
+    } catch (e) {
       print("removeSubjectCache\n" + e.toString());
     }
   }

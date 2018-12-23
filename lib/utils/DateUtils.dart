@@ -72,7 +72,7 @@ class DateUtils {
 
   static Future<String> displayPendencyDate(BuildContext context, String date) async {
     try {
-      var dates = date.split('-');
+      List<String> dates = date.split('-');
       DateTime _newDate = new DateTime(int.parse(dates[0]), int.parse(dates[1]), int.parse(dates[2]));
       DateTime _today = DateTime.now();
       DateTime _yesterday = _today.subtract(new Duration(days: 1));

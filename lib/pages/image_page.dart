@@ -16,12 +16,12 @@ class ImagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        backgroundColor: subjectColor,
+        backgroundColor: MyColors.subjectColor,
         title: new Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             new Text(title != null ? title : ""),
-            new Text(title != null ? " (PERFIL)" : "", style: new TextStyle(color: perfilColor, fontSize: 14.0)),
+            new Text(title != null ? " (PERFIL)" : "", style: new TextStyle(color: MyColors.perfilColor, fontSize: 14.0)),
           ],
         ),
       ),
@@ -31,7 +31,7 @@ class ImagePage extends StatelessWidget {
           minScale: PhotoViewComputedScale.contained,
           maxScale: 4.0,
           gaplessPlayback: true,
-          backgroundColor: backgroundColor,
+          backgroundColor: MyColors.backgroundColor,
         ),
       ),
     );

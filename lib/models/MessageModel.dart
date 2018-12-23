@@ -4,13 +4,6 @@ import 'package:amadeus/models/UserModel.dart';
 /// Created by Vitor Martins on 23/08/18.
 
 class MessageModel {
-
-  String _text, _imageUrl, _createDate;
-  UserModel _user;
-  SubjectModel _subject;
-  bool _isFavorite, _isSelected = false;
-  int _id;
-
   MessageModel(String text, UserModel user, SubjectModel subject, String createDate) {
     this._text = text;
     this._user = user;
@@ -31,6 +24,12 @@ class MessageModel {
     _id = jsonMap['id'];
   }
 
+  String _text, _imageUrl, _createDate;
+  UserModel _user;
+  SubjectModel _subject;
+  bool _isFavorite, _isSelected = false;
+  int _id;
+
   Map<String, dynamic> toJson() => <String, dynamic>{
     'text': _text,
     'image_url': _imageUrl,
@@ -42,26 +41,26 @@ class MessageModel {
   };
 
   String get text => _text;
-  set text(String text) => this._text = text;
+  set text(String value) => this._text = value;
 
   String get imageUrl => _imageUrl;
-  set imageUrl(String imageUrl) => this._imageUrl = imageUrl;
+  set imageUrl(String value) => this._imageUrl = value;
 
   String get createDate => _createDate;
-  set createDate(String createDate) => this._createDate = createDate;
+  set createDate(String value) => this._createDate = value;
 
   UserModel get user => _user;
-  set user(UserModel user) => this._user = user;
+  set user(UserModel value) => this._user = value;
 
   SubjectModel get subject => _subject;
-  set subject(SubjectModel subject) => this._subject = subject;
+  set subject(SubjectModel value) => this._subject = value;
 
   bool get isFavorite => _isFavorite;
-  set isFavorite(bool isFavorite) => this._isFavorite = isFavorite;
+  set isFavorite(bool value) => this._isFavorite = value;
 
   bool get isSelected => _isSelected;
-  set isSelected(bool isSelected) => this._isSelected = isSelected;
+  set isSelected(bool value) => this._isSelected = value;
 
   int get id => _id;
-  set id(int id) => this._id = id;
+  set id(int value) => this._id = value;
 }

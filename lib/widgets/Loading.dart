@@ -7,7 +7,7 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Theme(
       data: new ThemeData(
-        accentColor: subjectColor,
+        accentColor: MyColors.subjectColor,
       ),
       child: new Stack(
         alignment: Alignment.center,

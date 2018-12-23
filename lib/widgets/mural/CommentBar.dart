@@ -49,7 +49,7 @@ class CommentBar extends StatelessWidget {
         alignment: Alignment.center,
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.circular(5.0),
-          color: muralCommentsBackground,
+          color: MyColors.muralCommentsBackground,
         ),
         child: getCommentBar(context),
       ),

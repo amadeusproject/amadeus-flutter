@@ -25,13 +25,13 @@ class DateItem extends StatelessWidget implements ListItem {
       child: new Container(
         decoration: BoxDecoration(
           borderRadius: new BorderRadius.circular(4.0),
-          color: dateBackground,
+          color: MyColors.dateBackground,
         ),
         padding: EdgeInsets.all(5.0),
         child: new Text(
           dateToShow,
           style: new TextStyle(
-            color: dateFontColor,
+            color: MyColors.dateFontColor,
             fontSize: 14.0,
           ),
         ),
@@ -87,7 +87,7 @@ class ChatItem extends StatelessWidget implements ListItem {
       DateUtils.getHour(_msg.createDate),
       style: new TextStyle(
         fontSize: 10.0,
-        color: darkerGray,
+        color: MyColors.darkerGray,
       ),
       textAlign: TextAlign.right,
     );
@@ -99,7 +99,7 @@ class ChatItem extends StatelessWidget implements ListItem {
           _text,
           new SizedBox(width: 5.0),
           new Icon(FontAwesomeIcons.thumbtack,
-            color: darkerGray,
+            color: MyColors.darkerGray,
             size: 10.0,
           ),
         ],
@@ -116,13 +116,13 @@ class ChatItem extends StatelessWidget implements ListItem {
 
   Color _chooseColor() {
     if(_msg.isSelected && _msg.user.email == _user.email) {
-      return myMessageSelected;
+      return MyColors.myMessageSelected;
     } else if (_msg.isSelected) {
-      return otherMessageSelected;
+      return MyColors.otherMessageSelected;
     } else if (_msg.user.email == _user.email) {
-      return myMessage;
+      return MyColors.myMessage;
     } else {
-      return otherMessage;
+      return MyColors.otherMessage;
     }
   }
 
@@ -141,7 +141,7 @@ class ChatItem extends StatelessWidget implements ListItem {
         _setSelection(context);
       },
       child: new Container(
-        color: _msg.isSelected ? selectedBlue : Colors.transparent,
+        color: _msg.isSelected ? MyColors.selectedBlue : Colors.transparent,
         child: new Padding(
           padding: EdgeInsets.all(5.0),
           child: new Column(

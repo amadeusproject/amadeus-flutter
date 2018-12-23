@@ -27,11 +27,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: colorPrimary,
-        primaryColorDark: colorPrimaryDark,
-        accentColor: colorAccent,
-        hintColor: primaryWhite,
-        iconTheme: IconThemeData(color: primaryWhite,),
+        primaryColor: MyColors.colorPrimary,
+        primaryColorDark: MyColors.colorPrimaryDark,
+        accentColor: MyColors.colorAccent,
+        hintColor: MyColors.primaryWhite,
+        iconTheme: IconThemeData(color: MyColors.primaryWhite,),
       ),
       title: 'Amadeus LMS',
       home: SplashPage(),

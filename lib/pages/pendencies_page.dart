@@ -59,7 +59,7 @@ class PendenciesPageState extends State<PendenciesPage> {
 
   void _updateItems() async {
     _items = new List<PendencyPageItem>();
-    for(var i = _pendencies.length - 1; i >= 0; i--) {
+    for(int i = _pendencies.length - 1; i >= 0; i--) {
       String formatedDate = await DateUtils.displayPendencyDate(context, _pendencies[i].date);
       _items.insert(0, DateItem(formatedDate));
       _items.insert(0, PendencyItem(_pendencies[i]));
@@ -102,7 +102,7 @@ class PendenciesPageState extends State<PendenciesPage> {
           child: new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Text(Translations.of(context).text('emptyPendencies'), style: new TextStyle(color: darkerGray),)
+              new Text(Translations.of(context).text('emptyPendencies'), style: new TextStyle(color: MyColors.darkerGray),)
             ],
           ),
         );
@@ -126,7 +126,7 @@ class PendenciesPageState extends State<PendenciesPage> {
         children: <Widget>[
           new CircularProgressIndicator(),
           new SizedBox(height: 5.0),
-          new Text(Translations.of(context).text('loadingPendencies'), style: new TextStyle(color: darkerGray),)
+          new Text(Translations.of(context).text('loadingPendencies'), style: new TextStyle(color: MyColors.darkerGray),)
         ],
       ),
     );
@@ -135,15 +135,15 @@ class PendenciesPageState extends State<PendenciesPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: MyColors.backgroundColor,
       appBar: new AppBar(
-        backgroundColor: subjectColor,
+        backgroundColor: MyColors.subjectColor,
         title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(Icons.warning, color: iconsColor,),
+            icon: new Icon(Icons.warning, color: MyColors.iconsColor,),
             onPressed: null,
-            disabledColor: iconsColor,
+            disabledColor: MyColors.iconsColor,
           ),
         ],
       ),

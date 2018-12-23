@@ -101,7 +101,7 @@ class ChatPageState extends State<ChatPage> {
               onPressed: () => Navigator.pop(context, ImageChoices.camera),
               child: new Row(
                 children: <Widget>[
-                  new Icon(Icons.camera, color: darkerGray,),
+                  new Icon(Icons.camera, color: MyColors.darkerGray,),
                   new Padding(
                     padding: EdgeInsets.all(5.0),
                     child: new Text(Translations.of(context).text('imageCameraOption')),
@@ -113,7 +113,7 @@ class ChatPageState extends State<ChatPage> {
               onPressed: () => Navigator.pop(context, ImageChoices.gallery),
               child: new Row(
                 children: <Widget>[
-                  new Icon(Icons.photo, color: darkerGray,),
+                  new Icon(Icons.photo, color: MyColors.darkerGray,),
                   new Padding(
                     padding: EdgeInsets.all(5.0),
                     child: new Text(Translations.of(context).text('imageGalleryOption')),
@@ -492,7 +492,7 @@ class ChatPageState extends State<ChatPage> {
   AppBar _chooseAppBar() {
     if(isSelecting) {
       return new AppBar(
-        backgroundColor: subjectColor,
+        backgroundColor: MyColors.subjectColor,
         leading: IconButton(
           icon: new Icon(Icons.close),
           onPressed: () {
@@ -545,7 +545,7 @@ class ChatPageState extends State<ChatPage> {
       );
     } else {
       return new AppBar(
-        backgroundColor: subjectColor,
+        backgroundColor: MyColors.subjectColor,
         title: new Row(
           children: <Widget>[
             new GestureDetector(
@@ -560,7 +560,7 @@ class ChatPageState extends State<ChatPage> {
                 }
               },
               child: new CircleAvatar(
-                backgroundColor: primaryWhite,
+                backgroundColor: MyColors.primaryWhite,
                 backgroundImage: _ivPhoto,
               ),
             ),
@@ -598,10 +598,10 @@ class ChatPageState extends State<ChatPage> {
             alignment: Alignment.topCenter,
             decoration: new BoxDecoration(
               shape: BoxShape.circle,
-              color: white70Transparency,
+              color: MyColors.white70Transparency,
             ),
             child: new Center(child: new CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(primaryBlue),
+              valueColor: new AlwaysStoppedAnimation<Color>(MyColors.primaryBlue),
             ),),
           ),
         ],
@@ -613,7 +613,7 @@ class ChatPageState extends State<ChatPage> {
         children: <Widget>[
           new CircularProgressIndicator(),
           new SizedBox(height: 5.0),
-          new Text(Translations.of(context).text('loadingMessages'), style: new TextStyle(color: darkerGray),)
+          new Text(Translations.of(context).text('loadingMessages'), style: new TextStyle(color: MyColors.darkerGray),)
         ],
       ),
     );
@@ -643,7 +643,7 @@ class ChatPageState extends State<ChatPage> {
         }
       },
       child: new Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: MyColors.backgroundColor,
         appBar: _chooseAppBar(),
         body: new Center(
           child: new Column(

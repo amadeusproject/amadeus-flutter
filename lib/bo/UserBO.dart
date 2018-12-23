@@ -15,7 +15,6 @@ import 'package:amadeus/utils/HttpUtils.dart';
 
 class UserBO {
   Future<UserResponse> login(BuildContext context, String host, String email, String password) async {
-
     String url = "$host/api/token";
 
     Map<String, String> data = new HashMap<String, String>();
@@ -26,12 +25,12 @@ class UserBO {
 
     String json = await HttpUtils.post(context, url, content, "");
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print(json);
 
       TokenResponse token = new TokenResponse.fromJson(json);
 
-      if(token != null) {
+      if (token != null) {
         token.setData(email, password);
         token.setTimeStamp();
         token.webserverUrl = host;
@@ -40,9 +39,14 @@ class UserBO {
 
         url = "$host/api/users/login/";
 
-        json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+        json = await HttpUtils.post(
+          context,
+          url,
+          content,
+          "${token.tokenType} ${token.accessToken}",
+        );
 
-        if(json != null && json.trim().length > 0) {
+        if (json != null && json.trim().length > 0) {
           print("login - " + json);
 
           return UserResponse.fromJson(json);
@@ -55,7 +59,7 @@ class UserBO {
   Future<GenericResponse> registerDevice(BuildContext context, UserModel user, String device) async {
     TokenResponse token = await TokenCacheController.getTokenCache(context);
 
-    if(token != null) {
+    if (token != null) {
       String url = "${token.webserverUrl}/api/users/register_device/";
 
       Map<String, String> data = new HashMap<String, String>();
@@ -64,9 +68,14 @@ class UserBO {
 
       String content = jsonEncode(data);
 
-      String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+      String json = await HttpUtils.post(
+        context,
+        url,
+        content,
+        "${token.tokenType} ${token.accessToken}",
+      );
 
-      if(json != null && json.trim().length > 0) {
+      if (json != null && json.trim().length > 0) {
         print("registerDevice - " + json);
 
         return GenericResponse.fromJson(json);
@@ -86,9 +95,14 @@ class UserBO {
 
     String content = jsonEncode(data);
 
-    String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+    String json = await HttpUtils.post(
+      context,
+      url,
+      content,
+      "${token.tokenType} ${token.accessToken}",
+    );
 
-    if(json != null && json.trim().length > 0) {
+    if (json != null && json.trim().length > 0) {
       print("Logout - " + json);
 
       return GenericResponse.fromJson(json);

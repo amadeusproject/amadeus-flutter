@@ -229,7 +229,7 @@ class ImageSenderPageState extends State<ImageSenderPage> {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: _imageFile.path,
       toolbarTitle: Translations.of(context).text("cropDialogTitle"),
-      toolbarColor: subjectColor,
+      toolbarColor: MyColors.subjectColor,
     );
     if (croppedFile != null) {
       setState(() {
@@ -279,9 +279,9 @@ class ImageSenderPageState extends State<ImageSenderPage> {
             onPressed: () => _cropImage(context),
           ),
         ],
-        backgroundColor: subjectColor,
+        backgroundColor: MyColors.subjectColor,
       ),
-      backgroundColor: backgroundColor,
+      backgroundColor: MyColors.backgroundColor,
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

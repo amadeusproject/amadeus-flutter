@@ -30,7 +30,7 @@ class LoadPostItem extends StatelessWidget implements CommentPageItem {
         child: new Text(
           Translations.of(context).text('loadMoreComments'),
           style: new TextStyle(
-            color: subjectColor,
+            color: MyColors.subjectColor,
           ),
         ),
       ),
@@ -58,7 +58,7 @@ class CommentItem extends StatelessWidget implements CommentPageItem {
             padding: EdgeInsets.only(right: 10.0),
             child: new CircleAvatar(
               maxRadius: 15.0,
-              backgroundColor: primaryWhite,
+              backgroundColor: MyColors.primaryWhite,
               backgroundImage: new CachedNetworkImageProvider(
                 _webserver + comment.user.imageUrl,
               ),

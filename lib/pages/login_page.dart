@@ -184,12 +184,12 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
       keyboardType: TextInputType.url,
       autofocus: false,
       style: TextStyle(
-        color: loginFontColor,
+        color: MyColors.loginFontColor,
       ),
       decoration: InputDecoration(
         labelText: Translations.of(context).text('promptUrl'),
         labelStyle: TextStyle(
-          color: loginFontColor,
+          color: MyColors.loginFontColor,
         ),
       ),
     );
@@ -208,12 +208,12 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       style: TextStyle(
-        color: loginFontColor,
+        color: MyColors.loginFontColor,
       ),
       decoration: InputDecoration(
         labelText: Translations.of(context).text('promptEmail'),
         labelStyle: TextStyle(
-          color: loginFontColor,
+          color: MyColors.loginFontColor,
         ),
       ),
     );
@@ -230,23 +230,23 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
       autofocus: false,
       obscureText: true,
       style: TextStyle(
-        color: loginFontColor,
+        color: MyColors.loginFontColor,
       ),
       decoration: InputDecoration(
         labelText: Translations.of(context).text('promptPassword'),
         labelStyle: TextStyle(
-          color: loginFontColor,
+          color: MyColors.loginFontColor,
         ),
       ),
     );
 
-    var passwordCheckbox = new Row(
+    Row passwordCheckbox = new Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         new Theme(
           data: new ThemeData(
-            toggleableActiveColor: primaryGreen,
-            unselectedWidgetColor: loginFontColor,
+            toggleableActiveColor: MyColors.primaryGreen,
+            unselectedWidgetColor: MyColors.loginFontColor,
           ),
           child: new Checkbox(
             value: passwordCheckboxValue,
@@ -261,29 +261,31 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
           }),
           child: new Text(
             Translations.of(context).text("rememberPassword"),
-            style: new TextStyle(color: loginFontColor),
+            style: new TextStyle(color: MyColors.loginFontColor),
           ),
         ),
       ],
     );
 
-    final loginBtn = new Material(
-      borderRadius: new BorderRadius.circular(4.0),
-      child: new MaterialButton(
-        /// TODO - Adjust to have same width of inputs
-        minWidth: 150.0,
-        height: 50.0,
-        color: primaryGreen,
-        onPressed: () {
-          if(_formKey.currentState.validate()) {
-            _attemptLogin();
-          }
-        },
-        child: new Text(
-          Translations.of(context).text('actionSignIn'),
-          style: new TextStyle(
-            color: primaryWhite,
-            fontSize: 20.0,
+    final loginBtn = new SizedBox(
+      width: double.infinity,
+      child: new Material(
+        borderRadius: new BorderRadius.circular(4.0),
+        child: new MaterialButton(
+          minWidth: 150.0,
+          height: 50.0,
+          color: MyColors.primaryGreen,
+          onPressed: () {
+            if(_formKey.currentState.validate()) {
+              _attemptLogin();
+            }
+          },
+          child: new Text(
+            Translations.of(context).text('actionSignIn'),
+            style: new TextStyle(
+              color: MyColors.primaryWhite,
+              fontSize: 20.0,
+            ),
           ),
         ),
       ),
@@ -348,7 +350,10 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
                           child: passwordCheckbox,
                         ),
                         new SizedBox(height: 16.0),
-                        loginBtn,
+                        new Padding(
+                          padding: horizontalPadding,
+                          child: loginBtn,
+                        ),
                       ],
                     ),
                   ),
@@ -361,7 +366,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     }
 
     return new Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: MyColors.backgroundColor,
       body: _getBody(),
     );
   }

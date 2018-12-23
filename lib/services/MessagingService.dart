@@ -22,7 +22,7 @@ class MessagingService {
   int _userId = 0;
 
   void configure(String page) {
-    var methodToRun;
+    Function methodToRun;
     if(page == HomePage.tag) {
       methodToRun = onSelectNotificationHome;
     } else if (page == ChatPage.tag) {
