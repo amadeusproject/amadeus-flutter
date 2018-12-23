@@ -332,13 +332,10 @@ class PostPageState extends State<PostPage> {
             new Flexible(
               child: _contentBody(),
             ),
-            new Padding(
-              padding: new EdgeInsets.all(5.0),
-              child: new InputMessage(
-                textCtrl,
-                createComment,
-                placeholder: Translations.of(context).text('postSenderHint'),
-              ),
+            new InputMessage(
+              textCtrl,
+              createComment,
+              placeholder: Translations.of(context).text('postSenderHint'),
             ),
           ],
         ),

@@ -3,34 +3,174 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+import 'package:amadeus/bo/MessageBO.dart';
+import 'package:amadeus/bo/MuralBO.dart';
+import 'package:amadeus/cache/TokenCacheController.dart';
 import 'package:amadeus/localizations.dart';
+import 'package:amadeus/models/MessageModel.dart';
+import 'package:amadeus/models/MuralModel.dart';
+import 'package:amadeus/models/SubjectModel.dart';
+import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/pages/chat_page.dart';
+import 'package:amadeus/pages/mural_page.dart';
 import 'package:amadeus/res/colors.dart';
+import 'package:amadeus/response/MessageResponse.dart';
+import 'package:amadeus/response/MuralResponse.dart';
+import 'package:amadeus/response/TokenResponse.dart';
+import 'package:amadeus/utils/DateUtils.dart';
+import 'package:amadeus/utils/DialogUtils.dart';
+import 'package:amadeus/utils/LogoutUtils.dart';
+import 'package:amadeus/widgets/InputMessage.dart';
 
 class ImageSenderPage extends StatefulWidget {
   static String tag = 'image-sender-page';
   final File imageFile;
-  final ChatPageState parent;
-  ImageSenderPage({Key key, @required this.imageFile, @required this.parent}) : super(key: key);
+  final UserModel user, userTo;
+  final SubjectModel subject;
+  final String inputPlaceholder;
+  final ChatPageState chatState;
+  final MuralPageState muralState;
+  ImageSenderPage({
+    Key key,
+    @required this.imageFile,
+    @required this.user,
+    @required this.subject,
+    @required this.inputPlaceholder,
+    this.chatState,
+    this.muralState,
+    this.userTo,
+  }) : super(key: key);
   @override
-  ImageSenderPageState createState () => new ImageSenderPageState(imageFile, parent);
+  ImageSenderPageState createState() => new ImageSenderPageState(imageFile);
 }
 
 class ImageSenderPageState extends State<ImageSenderPage> {
-
   File _fileToSend;
   File _imageFile;
-  ChatPageState _parent;
+  TokenResponse _token;
+  TextEditingController textCtrl = new TextEditingController();
 
-  ImageSenderPageState(this._imageFile, this._parent);
+  ImageSenderPageState(this._imageFile);
 
-  void onSendPressed(BuildContext context) {
-    _fileToSend = _fileToSend == null ? _imageFile : _fileToSend;
-    _parent.sendImageMessage(_parent.textCtrl.text.trimRight(), _fileToSend);
-    _parent.textCtrl.clear();
+  Future<void> checkToken() async {
+    if (_token == null) {
+      if (await TokenCacheController.hasTokenCache(context)) {
+        _token = await TokenCacheController.getTokenCache(context);
+        if (_token.isTokenExpired()) {
+          _token = await _token.renewToken(context);
+          if (_token == null) {
+            await DialogUtils.dialog(context);
+            Logout.goLogin(context);
+          }
+        }
+      } else {
+        await DialogUtils.dialog(context);
+        Logout.goLogin(context);
+      }
+    } else if (_token.isTokenExpired()) {
+      _token = await _token.renewToken(context);
+      if (_token == null) {
+        await DialogUtils.dialog(context);
+        Logout.goLogin(context);
+      }
+    }
+  }
+
+  @protected
+  Future<void> sendImageMessage() async {
+    MessageModel message = new MessageModel(
+      textCtrl.text.trimRight(),
+      widget.user,
+      widget.subject,
+      DateUtils.currentDate(),
+    );
+    await checkToken();
     Navigator.of(context).pop();
+    Fluttertoast.showToast(
+      msg: Translations.of(context).text('toastSendingImage'),
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
+    try {
+      MessageResponse messageResponse = await MessageBO().sendImageMessage(
+        context,
+        widget.userTo,
+        message,
+        _fileToSend,
+      );
+
+      if (messageResponse != null &&
+          messageResponse.success &&
+          messageResponse.number == 1) {
+        MessageModel sent = messageResponse.data.messageSent;
+        widget.chatState.insertMessageSent(sent);
+      } else if (messageResponse != null &&
+          messageResponse.title != null &&
+          messageResponse.title.isNotEmpty &&
+          messageResponse.message != null &&
+          messageResponse.message.isNotEmpty) {
+        DialogUtils.dialog(
+          context,
+          title: messageResponse.title,
+          message: messageResponse.message,
+        );
+      } else {
+        DialogUtils.dialog(context);
+      }
+    } catch (e) {
+      DialogUtils.dialog(context, erro: e.toString());
+      print("sendImageMessage\n" + e.toString());
+    }
+  }
+
+  @protected
+  Future<void> sendImagePost() async {
+    MuralModel post = new MuralModel(
+      textCtrl.text.trimRight(),
+      "comment",
+      widget.user,
+    );
+    await checkToken();
+    Navigator.of(context).pop();
+    Fluttertoast.showToast(
+      msg: Translations.of(context).text('toastSendingImage'),
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
+    try {
+      MuralResponse muralResponse = await MuralBO().createImagePost(
+        context,
+        widget.user,
+        post,
+        widget.subject,
+        _fileToSend,
+      );
+
+      if (muralResponse != null &&
+          muralResponse.success &&
+          muralResponse.number == 1) {
+        MuralModel post = muralResponse.newPost;
+        widget.muralState.insertPostSent(post);
+      } else if (muralResponse != null &&
+          muralResponse.title != null &&
+          muralResponse.title.isNotEmpty &&
+          muralResponse.message != null &&
+          muralResponse.message.isNotEmpty) {
+        DialogUtils.dialog(
+          context,
+          title: muralResponse.title,
+          message: muralResponse.message,
+        );
+      } else {
+        DialogUtils.dialog(context);
+      }
+    } catch (e) {
+      DialogUtils.dialog(context, erro: e.toString());
+      print("sendImagePost\n" + e.toString());
+    }
   }
 
   Future<Null> _cropImage(BuildContext context) async {
@@ -39,11 +179,29 @@ class ImageSenderPageState extends State<ImageSenderPage> {
       toolbarTitle: Translations.of(context).text("cropDialogTitle"),
       toolbarColor: subjectColor,
     );
-    if(croppedFile != null) {
+    if (croppedFile != null) {
       setState(() {
         _fileToSend = croppedFile;
       });
     }
+  }
+
+  Widget getInputWidget() {
+    if (widget.chatState != null) {
+      return new InputMessage(
+        textCtrl,
+        sendImageMessage,
+        placeholder: widget.inputPlaceholder,
+      );
+    }
+    if (widget.muralState != null) {
+      return new InputMessage(
+        textCtrl,
+        sendImagePost,
+        placeholder: widget.inputPlaceholder,
+      );
+    }
+    return new Container();
   }
 
   @override
@@ -67,13 +225,16 @@ class ImageSenderPageState extends State<ImageSenderPage> {
       backgroundColor: backgroundColor,
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           new Expanded(
             child: new Container(
-              child: (_fileToSend != null) ? new Image.file(_fileToSend) : new Text("Something went wrong"),
+              child: (_fileToSend != null)
+                  ? new Image.file(_fileToSend)
+                  : new Text(Translations.of(context).text('errorBoxTitle')),
             ),
           ),
-          _parent.inputWidget(false, () => onSendPressed(context)),
+          getInputWidget(),
         ],
       ),
     );

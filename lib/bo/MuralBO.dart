@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:amadeus/models/CommentModel.dart';
 import 'package:amadeus/models/MuralModel.dart';
@@ -84,6 +85,32 @@ class MuralBO {
     String content = jsonEncode(data);
 
     String json = await HttpUtils.post(context, url, content, "${token.tokenType} ${token.accessToken}");
+
+    if(json != null && json.trim().length > 0) {
+      print("createPost - $json");
+
+      MuralResponse muralResponse = new MuralResponse();
+      muralResponse.fromJson(json);
+
+      return muralResponse;
+    }
+    return null;
+  }
+
+  Future<MuralResponse> createImagePost(BuildContext context, UserModel user, MuralModel post, SubjectModel subject, File imageFile) async {
+    TokenResponse token = await TokenCacheController.getTokenCache(context);
+
+    String url = "${token.webserverUrl}/api/mural/create_post/";
+
+    Map<String, dynamic> data = new HashMap<String, dynamic>();
+    data.putIfAbsent("email", () => user.email);
+    data.putIfAbsent("message", () => post.post);
+    data.putIfAbsent("action", () => post.action);
+    data.putIfAbsent("subject", () => subject.slug);
+
+    String content = jsonEncode(data);
+
+    String json = await HttpUtils.postMultipart(context, url, content, "${token.tokenType} ${token.accessToken}", imageFile);
 
     if(json != null && json.trim().length > 0) {
       print("createPost - $json");

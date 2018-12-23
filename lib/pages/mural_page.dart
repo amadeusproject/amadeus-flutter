@@ -73,63 +73,71 @@ class MuralPageState extends State<MuralPage> {
     }
   }
 
-  // Future _openDialogToChoose() async {
-  //   switch (await showDialog<ImageChoices>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return new SimpleDialog(
-  //         title: new Text(Translations.of(context).text('imageChooserTitle')),
-  //         children: <Widget>[
-  //           new SimpleDialogOption(
-  //             onPressed: () => Navigator.pop(context, ImageChoices.camera),
-  //             child: new Row(
-  //               children: <Widget>[
-  //                 new Icon(Icons.camera, color: darkerGray,),
-  //                 new Padding(
-  //                   padding: EdgeInsets.all(5.0),
-  //                   child: new Text(Translations.of(context).text('imageCameraOption')),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           new SimpleDialogOption(
-  //             onPressed: () => Navigator.pop(context, ImageChoices.gallery),
-  //             child: new Row(
-  //               children: <Widget>[
-  //                 new Icon(Icons.photo, color: darkerGray,),
-  //                 new Padding(
-  //                   padding: EdgeInsets.all(5.0),
-  //                   child: new Text(Translations.of(context).text('imageGalleryOption')),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     }
-  //   )) {
-  //     case ImageChoices.camera:
-  //       _onImageButtonPressed(ImageSource.camera);
-  //       break;
-  //     case ImageChoices.gallery:
-  //       _onImageButtonPressed(ImageSource.gallery);
-  //       break;
-  //   }
-  // }
+  Future _openDialogToChoose() async {
+    switch (await showDialog<ImageChoices>(
+      context: context,
+      builder: (BuildContext context) {
+        return new SimpleDialog(
+          title: new Text(Translations.of(context).text('imageChooserTitle')),
+          children: <Widget>[
+            new SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, ImageChoices.camera),
+              child: new Row(
+                children: <Widget>[
+                  new Icon(Icons.camera, color: darkerGray,),
+                  new Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: new Text(Translations.of(context).text('imageCameraOption')),
+                  ),
+                ],
+              ),
+            ),
+            new SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, ImageChoices.gallery),
+              child: new Row(
+                children: <Widget>[
+                  new Icon(Icons.photo, color: darkerGray,),
+                  new Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: new Text(Translations.of(context).text('imageGalleryOption')),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+    )) {
+      case ImageChoices.camera:
+        _onImageButtonPressed(ImageSource.camera);
+        break;
+      case ImageChoices.gallery:
+        _onImageButtonPressed(ImageSource.gallery);
+        break;
+    }
+  }
 
-  // void _onImageButtonPressed(ImageSource source) async {
-  //   _imageFile = await ImagePicker.pickImage(source: source);
-  //   if(_imageFile != null) {
-  //     Navigator.of(context).push(
-  //       new MaterialPageRoute(
-  //         settings: const RouteSettings(name: 'image-sender-page'), 
-  //         builder: (context) => new ImageSenderPage(imageFile: _imageFile, parent: this),
-  //       )
-  //     ).then((onValue) {
-  //       _imageFile = null;
-  //     });
-  //   }
-  // }
+  void _onImageButtonPressed(ImageSource source) async {
+    _imageFile = await ImagePicker.pickImage(source: source);
+    if(_imageFile != null) {
+      Navigator.of(context).push(
+        new MaterialPageRoute(
+          settings: const RouteSettings(name: 'image-sender-page'), 
+          builder: (context) {
+            return new ImageSenderPage(
+              imageFile: _imageFile,
+              user: _user,
+              subject: _subject,
+              muralState: this,
+              inputPlaceholder: Translations.of(context).text('muralSenderHint'),
+            );
+          }
+        )
+      ).then((onValue) {
+        _imageFile = null;
+      });
+    }
+  }
 
   void _updateItems() async {
     _items = new List<MuralPageItem>();
@@ -244,11 +252,17 @@ class MuralPageState extends State<MuralPage> {
     }
   }
 
+  void insertPostSent(MuralModel post) {
+    _posts.insert(0, post);
+    setState(() {
+      _updateItems();
+    });
+  }
+
   Future<void> createPost() async {
     if (textCtrl.text.trimRight().isNotEmpty) {
       await checkToken();
-      MuralModel post =
-          new MuralModel(textCtrl.text.trimRight(), "comment", _user);
+      MuralModel post = new MuralModel(textCtrl.text.trimRight(), "comment", _user);
       _posts.insert(0, post);
       setState(() {
         _updateItems();
@@ -258,8 +272,7 @@ class MuralPageState extends State<MuralPage> {
       FocusScope.of(context).requestFocus(new FocusNode());
 
       try {
-        MuralResponse muralResponse =
-            await MuralBO().createPost(context, _user, post, _subject);
+        MuralResponse muralResponse = await MuralBO().createPost(context, _user, post, _subject);
 
         _posts.removeWhere((test) =>
             test.createDate == post.createDate && test.user == post.user);
@@ -392,15 +405,12 @@ class MuralPageState extends State<MuralPage> {
             new Flexible(
               child: _contentBody(),
             ),
-            new Padding(
-              padding: new EdgeInsets.all(5.0),
-              child: new InputMessage(
-                textCtrl,
-                createPost,
-                placeholder: Translations.of(context).text('muralSenderHint'),
-                showCameraIcon: true,
-                onCameraPressed: () => print(_isLastPage),
-              ),
+            new InputMessage(
+              textCtrl,
+              createPost,
+              placeholder: Translations.of(context).text('muralSenderHint'),
+              showCameraIcon: true,
+              onCameraPressed: _openDialogToChoose,
             ),
           ],
         ),

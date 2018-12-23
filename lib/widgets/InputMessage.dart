@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:amadeus/res/colors.dart';
 
 class InputMessage extends StatelessWidget {
-
-  InputMessage(this.textCtrl, this.onSendPressed, {this.showCameraIcon, this.onCameraPressed, this.placeholder = ""});
+  InputMessage(this.textCtrl, this.onSendPressed,
+      {this.showCameraIcon, this.onCameraPressed, this.placeholder = ""});
 
   final TextEditingController textCtrl;
   final bool showCameraIcon;
@@ -13,7 +13,7 @@ class InputMessage extends StatelessWidget {
   final Function onCameraPressed;
 
   Widget cameraIcon() {
-    if(!(showCameraIcon ?? false)) return new Container();
+    if (!(showCameraIcon ?? false)) return new Container();
     return new IconButton(
       icon: new Icon(Icons.camera_alt),
       color: primaryGray,
@@ -69,8 +69,13 @@ class InputMessage extends StatelessWidget {
             child: new FloatingActionButton(
               mini: true,
               backgroundColor: primaryGreen,
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-              child: new Icon(Icons.send, color: primaryWhite,),
+              shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(30.0),
+              ),
+              child: new Icon(
+                Icons.send,
+                color: primaryWhite,
+              ),
               onPressed: onSendPressed,
             ),
           ),

@@ -29,6 +29,7 @@ import 'package:amadeus/utils/DateUtils.dart';
 import 'package:amadeus/utils/DialogUtils.dart';
 import 'package:amadeus/utils/LogoutUtils.dart';
 import 'package:amadeus/utils/StringUtils.dart';
+import 'package:amadeus/widgets/InputMessage.dart';
 
 enum Commands {favMessages, myMessages}
 enum ImageChoices {gallery, camera}
@@ -89,16 +90,6 @@ class ChatPageState extends State<ChatPage> {
     });
   }
 
-  Widget _cameraIcon() {
-    return new IconButton(
-      icon: new Icon(Icons.camera_alt),
-      color: primaryGray,
-      onPressed: () {
-        _openDialogToChoose();
-      },
-    );
-  }
-
   Future _openDialogToChoose() async {
     switch (await showDialog<ImageChoices>(
       context: context,
@@ -149,7 +140,16 @@ class ChatPageState extends State<ChatPage> {
       Navigator.of(context).push(
         new MaterialPageRoute(
           settings: const RouteSettings(name: 'image-sender-page'), 
-          builder: (context) => new ImageSenderPage(imageFile: _imageFile, parent: this),
+          builder: (context) {
+            return new ImageSenderPage(
+              imageFile: _imageFile,
+              user: _user,
+              subject: _subject,
+              userTo: _userTo,
+              chatState: this,
+              inputPlaceholder: Translations.of(context).text('chatSenderHint'),
+            );
+          }
         )
       ).then((onValue) {
         _imageFile = null;
@@ -264,6 +264,13 @@ class ChatPageState extends State<ChatPage> {
       DialogUtils.dialog(context, erro: e.toString());
       print("reloadChat\n" + e.toString());
     }
+  }
+
+  void insertMessageSent(MessageModel sent) {
+    setState(() {
+      _messageList.insert(0, sent);
+      _updateItems();
+    });
   }
 
   @protected
@@ -385,35 +392,6 @@ class ChatPageState extends State<ChatPage> {
     } catch(e) {
       DialogUtils.dialog(context, erro: e.toString());
       print("sendMessage\n" + e.toString());
-    }
-  }
-
-  Future<void> sendImageMessage(String text, File imageFile) async {
-    MessageModel message = new MessageModel(text, _user, _subject, DateUtils.currentDate());
-    await checkToken();
-    Fluttertoast.showToast(
-      msg: Translations.of(context).text('toastSendingImage'),
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-    );
-    try {
-      MessageResponse messageResponse = await MessageBO().sendImageMessage(context, _userTo, message, imageFile);
-
-      if(messageResponse != null && messageResponse.success && messageResponse.number == 1) {
-        MessageModel sent = messageResponse.data.messageSent;
-
-        setState(() {
-          _messageList.insert(0, sent);
-          _updateItems();
-        });
-      } else if(messageResponse != null && messageResponse.title != null && messageResponse.title.isNotEmpty && messageResponse.message != null && messageResponse.message.isNotEmpty) {
-        DialogUtils.dialog(context, title: messageResponse.title, message: messageResponse.message);
-      } else {
-        DialogUtils.dialog(context);
-      }
-    } catch(e) {
-      DialogUtils.dialog(context, erro: e.toString());
-      print("sendImageMessage\n" + e.toString());
     }
   }
 
@@ -648,63 +626,6 @@ class ChatPageState extends State<ChatPage> {
     }
   }
 
-  Widget inputWidget(bool onChat, VoidCallback onSendPressed) {
-    return new Container(
-      color: backgroundColor,
-      child: new Row(
-        children: <Widget>[
-          new Expanded(
-            child: new Container(
-              margin: EdgeInsets.all(5.0),
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 3.0),
-              decoration: new BoxDecoration(
-                borderRadius: new BorderRadius.circular(30.0),
-                color: primaryWhite,
-              ),
-              child: new ConstrainedBox(
-                constraints: new BoxConstraints(
-                  maxHeight: 100.0,
-                ),
-                child: new Scrollbar(
-                  child: new SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    reverse: true,
-                    child: new Row(
-                      children: <Widget>[
-                        new Expanded(
-                          child: new TextField(
-                            maxLines: null,
-                            controller: textCtrl,
-                            decoration: new InputDecoration(
-                              border: InputBorder.none,
-                              hintText: Translations.of(context).text('chatSenderHint'),
-                              hintStyle: TextStyle(color: primaryGray),
-                            ),
-                          ),
-                        ),
-                        onChat ? _cameraIcon() : new Container(),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          new Padding(
-            padding: EdgeInsets.only(right: 5.0),
-            child: new FloatingActionButton(
-              mini: true,
-              backgroundColor: primaryGreen,
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-              child: new Icon(Icons.send, color: primaryWhite,),
-              onPressed: onSendPressed,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -733,7 +654,13 @@ class ChatPageState extends State<ChatPage> {
                 child: _contentBody(),
               ),
               /// MARK - Input
-              inputWidget(true, _onPressed),
+              new InputMessage(
+                  textCtrl,
+                  _onPressed,
+                  placeholder: Translations.of(context).text('chatSenderHint'),
+                  showCameraIcon: true,
+                  onCameraPressed: _openDialogToChoose,
+                ),
             ],
           ),
         ),
