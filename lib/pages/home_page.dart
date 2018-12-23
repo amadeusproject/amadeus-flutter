@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:amadeus/bo/SubjectBO.dart';
@@ -255,8 +256,7 @@ class HomePageState extends State<HomePage> {
       await checkToken();
       if(_user.imageUrl != null && _user.imageUrl.isNotEmpty) {
         String path = _token.webserverUrl + _user.imageUrl;
-        /// TODO - Store image in cache (ImageUtils)
-        _ivPhoto = new NetworkImage(path);
+        _ivPhoto = new CachedNetworkImageProvider(path);
       } else {
         _ivPhoto = new Image.asset('images/no_image.jpg');
       }
