@@ -8,11 +8,11 @@ import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/utils/StringUtils.dart';
 import 'package:amadeus/widgets/ClickableImage.dart';
+import 'package:amadeus/widgets/Loading.dart';
 
 abstract class CommentPageItem {}
 
 class LoadPostItem extends StatelessWidget implements CommentPageItem {
-
   final Function onPressed;
   final bool loading = false;
 
@@ -73,8 +73,7 @@ class CommentItem extends StatelessWidget implements CommentPageItem {
                   children: <Widget>[
                     new Text(
                       comment.user.getDisplayName().length > 25
-                          ? comment.user.getDisplayName().substring(0, 25) +
-                              "..."
+                          ? "${comment.user.getDisplayName().substring(0, 25)}..."
                           : comment.user.getDisplayName(),
                       style: new TextStyle(fontSize: 12.0),
                     ),
@@ -101,12 +100,20 @@ class CommentItem extends StatelessWidget implements CommentPageItem {
                   ),
                 ),
                 comment.imageUrl != null && comment.imageUrl.isNotEmpty
-                    ? new ClickableImage(
-                        webserverUrl: _webserver,
-                        imageUrl: comment.imageUrl,
-                        maxHeight: 200.0,
-                        margin: new EdgeInsets.only(bottom: 5.0),
-                        borderRadius: new BorderRadius.circular(5.0),
+                    ? new Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          new Center(
+                            child: new Loading(),
+                          ),
+                          new ClickableImage(
+                            webserverUrl: _webserver,
+                            imageUrl: comment.imageUrl,
+                            maxHeight: 200.0,
+                            margin: new EdgeInsets.only(bottom: 5.0),
+                            borderRadius: new BorderRadius.circular(5.0),
+                          )
+                        ],
                       )
                     : new Container(),
               ],

@@ -11,6 +11,7 @@ import 'package:amadeus/pages/post_page.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/utils/StringUtils.dart';
 import 'package:amadeus/widgets/ClickableImage.dart';
+import 'package:amadeus/widgets/Loading.dart';
 import 'package:amadeus/widgets/mural/CommentBar.dart';
 import 'package:amadeus/widgets/mural/FavoriteButton.dart';
 
@@ -109,7 +110,7 @@ class PostItem extends StatelessWidget implements MuralPageItem {
                     children: <Widget>[
                       new Text(
                         mural.user.getDisplayName().length > 25
-                            ? mural.user.getDisplayName().substring(0, 25) + "..."
+                            ? "${mural.user.getDisplayName().substring(0, 25)}..."
                             : mural.user.getDisplayName(),
                         style: new TextStyle(fontSize: 12.0),
                       ),
@@ -145,12 +146,20 @@ class PostItem extends StatelessWidget implements MuralPageItem {
                     ),
                   ),
                   mural.imageUrl != null && mural.imageUrl.isNotEmpty
-                      ? new ClickableImage(
-                          webserverUrl: webserver,
-                          imageUrl: mural.imageUrl,
-                          maxHeight: 200.0,
-                          margin: new EdgeInsets.only(bottom: 5.0),
-                          borderRadius: new BorderRadius.circular(5.0),
+                      ? new Stack(
+                          alignment: Alignment.center,
+                          children: <Widget>[
+                            new Center(
+                              child: new Loading(),
+                            ),
+                            new ClickableImage(
+                              webserverUrl: webserver,
+                              imageUrl: mural.imageUrl,
+                              maxHeight: 200.0,
+                              margin: new EdgeInsets.only(bottom: 5.0),
+                              borderRadius: new BorderRadius.circular(5.0),
+                            )
+                          ],
                         )
                       : new Container(),
                   showCommentBar

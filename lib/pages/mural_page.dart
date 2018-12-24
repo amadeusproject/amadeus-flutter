@@ -253,6 +253,7 @@ class MuralPageState extends State<MuralPage> {
   }
 
   void insertPostSent(MuralModel post) {
+    if (_posts == null) _posts = new List<MuralModel>();
     _posts.insert(0, post);
     setState(() {
       _updateItems();
@@ -263,10 +264,7 @@ class MuralPageState extends State<MuralPage> {
     if (textCtrl.text.trimRight().isNotEmpty) {
       await checkToken();
       MuralModel post = new MuralModel(textCtrl.text.trimRight(), "comment", _user);
-      _posts.insert(0, post);
-      setState(() {
-        _updateItems();
-      });
+      insertPostSent(post);
 
       textCtrl.clear();
       FocusScope.of(context).requestFocus(new FocusNode());
@@ -281,7 +279,7 @@ class MuralPageState extends State<MuralPage> {
             muralResponse.success &&
             muralResponse.number == 1) {
           MuralModel post = muralResponse.newPost;
-
+          if (_posts == null) _posts = new List<MuralModel>();
           _posts.insert(0, post);
           setState(() {
             _updateItems();
@@ -406,8 +404,8 @@ class MuralPageState extends State<MuralPage> {
               child: _contentBody(),
             ),
             new InputMessage(
-              textCtrl,
-              createPost,
+              textCtrl: textCtrl,
+              onSendPressed: createPost,
               placeholder: Translations.of(context).text('muralSenderHint'),
               showCameraIcon: true,
               onCameraPressed: _openDialogToChoose,

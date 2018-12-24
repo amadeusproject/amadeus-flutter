@@ -655,8 +655,8 @@ class ChatPageState extends State<ChatPage> {
               ),
               /// MARK - Input
               new InputMessage(
-                  textCtrl,
-                  _onPressed,
+                  textCtrl: textCtrl,
+                  onSendPressed: _onPressed,
                   placeholder: Translations.of(context).text('chatSenderHint'),
                   showCameraIcon: true,
                   onCameraPressed: _openDialogToChoose,

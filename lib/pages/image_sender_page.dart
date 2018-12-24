@@ -241,22 +241,22 @@ class ImageSenderPageState extends State<ImageSenderPage> {
   Widget getInputWidget() {
     if (widget.chatState != null) {
       return new InputMessage(
-        textCtrl,
-        sendImageMessage,
+        textCtrl: textCtrl,
+        onSendPressed: sendImageMessage,
         placeholder: widget.inputPlaceholder,
       );
     }
     if (widget.muralState != null) {
       return new InputMessage(
-        textCtrl,
-        sendImagePost,
+        textCtrl: textCtrl,
+        onSendPressed: sendImagePost,
         placeholder: widget.inputPlaceholder,
       );
     }
     if (widget.postState != null) {
       return new InputMessage(
-        textCtrl,
-        sendImageComment,
+        textCtrl: textCtrl,
+        onSendPressed: sendImageComment,
         placeholder: widget.inputPlaceholder,
       );
     }

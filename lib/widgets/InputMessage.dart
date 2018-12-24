@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:amadeus/res/colors.dart';
 
 class InputMessage extends StatelessWidget {
-  InputMessage(this.textCtrl, this.onSendPressed,
-      {this.showCameraIcon, this.onCameraPressed, this.placeholder = ""});
+  InputMessage({
+    this.textCtrl,
+    this.onSendPressed,
+    this.showCameraIcon,
+    this.onCameraPressed,
+    this.placeholder = "",
+  });
 
   final TextEditingController textCtrl;
   final bool showCameraIcon;

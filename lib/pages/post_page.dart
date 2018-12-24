@@ -259,8 +259,9 @@ class PostPageState extends State<PostPage> {
   }
 
   void insertCommentSent(CommentModel comment) {
+    if (_comments == null) _comments = new List<CommentModel>();
+    _comments.insert(0, comment);
     setState(() {
-      _comments.insert(0, comment);
       _updateItems();
     });
   }
@@ -273,10 +274,7 @@ class PostPageState extends State<PostPage> {
         textCtrl.text.trimRight(),
         _user,
       );
-      setState(() {
-        _comments.insert(0, comment);
-        _updateItems();
-      });
+      insertCommentSent(comment);
 
       textCtrl.clear();
       FocusScope.of(context).requestFocus(new FocusNode());
@@ -294,6 +292,7 @@ class PostPageState extends State<PostPage> {
             commentResponse.number == 1) {
           CommentModel comment = commentResponse.newComment;
 
+          if (_comments == null) _comments = new List<CommentModel>();
           _comments.insert(0, comment);
           setState(() {
             _updateItems();
@@ -430,8 +429,8 @@ class PostPageState extends State<PostPage> {
               child: _contentBody(),
             ),
             new InputMessage(
-              textCtrl,
-              createComment,
+              textCtrl: textCtrl,
+              onSendPressed: createComment,
               placeholder: Translations.of(context).text('postSenderHint'),
               showCameraIcon: true,
               onCameraPressed: _openDialogToChoose,
