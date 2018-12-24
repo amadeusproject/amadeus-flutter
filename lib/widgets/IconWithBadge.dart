@@ -28,11 +28,14 @@ class IconWithBadge extends StatelessWidget {
               icon: icon,
             ),
           ),
-          new Badge(
-            number: number,
-            fontSize: 10.0,
-            padding: new EdgeInsets.all(5.0),
-            size: 20.0,
+          new GestureDetector(
+            onTap: () => onPressCallback(buildContext),
+            child: new Badge(
+              number: number,
+              fontSize: 10.0,
+              padding: new EdgeInsets.all(5.0),
+              size: 20.0,
+            ),
           ),
         ],
       );

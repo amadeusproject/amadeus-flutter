@@ -11,6 +11,13 @@ import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/widgets/Badge.dart';
 
 class ParticipantItem extends StatelessWidget {
+  ParticipantItem(
+    this._user,
+    this._subject,
+    this._webserver,
+    this.parent,
+    this.homePageState,
+  );
 
   final SubjectModel _subject;
   final String _webserver;
@@ -18,18 +25,20 @@ class ParticipantItem extends StatelessWidget {
   final HomePageState homePageState;
   final ParticipantsPageState parent;
 
-  ParticipantItem(this._user, this._subject, this._webserver, this.parent, this.homePageState);
-
   @override
   Widget build(BuildContext context) {
     return new Column(
-      children: <Widget> [
+      children: <Widget>[
         new GestureDetector(
           onTap: () {
             Navigator.of(context).push(
               new MaterialPageRoute(
-                settings: const RouteSettings(name: 'chat-page'), 
-                builder: (context) => new ChatPage(userTo: _user, subject: _subject, participantsPageState: parent,),
+                settings: const RouteSettings(name: 'chat-page'),
+                builder: (context) => new ChatPage(
+                      userTo: _user,
+                      subject: _subject,
+                      participantsPageState: parent,
+                    ),
               ),
             ).then((onValue) {
               parent.messagingService.configure(ParticipantsPage.tag);
@@ -40,7 +49,7 @@ class ParticipantItem extends StatelessWidget {
                 },
               );
             });
-            if(_user.unseenMsgs > 0) {
+            if (_user.unseenMsgs > 0) {
               parent.refreshParticipants();
               homePageState.refreshSubjects(false);
             }
@@ -93,7 +102,7 @@ class ParticipantItem extends StatelessWidget {
     } else {
       String numNot = _user.unseenMsgs.toString();
       int numLen = numNot.length;
-      if(numLen >= 4) {
+      if (numLen >= 4) {
         numNot = "999+";
       }
       return [
