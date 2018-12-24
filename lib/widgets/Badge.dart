@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:amadeus/res/colors.dart';
 
 class Badge extends StatelessWidget {
-  Badge(this.number, {this.size = 20.0, this.padding = const EdgeInsets.all(5.0), this.fontSize = 10.0});
+  Badge({
+    @required this.number,
+    this.size = 20.0,
+    this.padding = const EdgeInsets.all(5.0),
+    this.fontSize = 10.0,
+  });
 
   final String number;
   final EdgeInsets padding;
@@ -19,7 +24,7 @@ class Badge extends StatelessWidget {
       decoration: new BoxDecoration(
         color: MyColors.primaryRed,
         boxShadow: null,
-        borderRadius: BorderRadius.circular(size/2),
+        borderRadius: BorderRadius.circular(size / 2),
       ),
       child: new Center(
         child: new Text(

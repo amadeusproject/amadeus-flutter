@@ -13,6 +13,7 @@ class DateUtils {
   static DateTime convertTimezone(DateTime date) {
     String tz = DateTime.now().timeZoneName;
     if(tz == "GMT") return date;
+    if(tz == "EST") return date.add(new Duration(hours: -5));
     int offset = tz != null ? int.parse(tz) : 0;
     return date.add(new Duration(hours: offset));
   }

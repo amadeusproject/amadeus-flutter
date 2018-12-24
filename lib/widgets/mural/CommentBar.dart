@@ -31,7 +31,7 @@ class CommentBar extends StatelessWidget {
             style: new TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
           ),
           new Badge(
-            number,
+            number: number,
             size: 16.0,
             fontSize: 8.0,
             padding: new EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0),

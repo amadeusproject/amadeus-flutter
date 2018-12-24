@@ -8,6 +8,7 @@ import 'package:amadeus/pages/chat_page.dart';
 import 'package:amadeus/pages/home_page.dart';
 import 'package:amadeus/pages/participants_page.dart';
 import 'package:amadeus/res/colors.dart';
+import 'package:amadeus/widgets/Badge.dart';
 
 class ParticipantItem extends StatelessWidget {
 
@@ -63,37 +64,6 @@ class ParticipantItem extends StatelessWidget {
   }
 
   List<Widget> _rowItem(BuildContext context) {
-
-    Widget badge(String numNot) {
-      return new Container(
-        constraints: BoxConstraints(
-          minWidth: 25.0,
-        ),
-        margin: EdgeInsets.only(right: 5.0),
-        padding: EdgeInsets.all(5.0),
-        decoration: new BoxDecoration(
-          color: MyColors.primaryRed,
-          boxShadow: null,
-          borderRadius: BorderRadius.circular(12.5),
-        ),
-        height: 25.0,
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              numNot, 
-              textAlign: TextAlign.center, 
-              style: TextStyle(
-                color: MyColors.primaryWhite,
-                fontWeight: FontWeight.bold,
-                fontSize: 12.0,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     final userNameWidget = new Expanded(
       child: new Text(
         _user.getDisplayName(),
@@ -129,7 +99,12 @@ class ParticipantItem extends StatelessWidget {
       return [
         userAvatarWidget,
         userNameWidget,
-        badge(numNot),
+        new Badge(
+          number: numNot,
+          size: 25.0,
+          padding: new EdgeInsets.all(5.0),
+          fontSize: 12.0,
+        ),
       ];
     }
   }

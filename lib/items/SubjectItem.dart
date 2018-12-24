@@ -9,6 +9,7 @@ import 'package:amadeus/pages/mural_page.dart';
 import 'package:amadeus/pages/participants_page.dart';
 import 'package:amadeus/pages/pendencies_page.dart';
 import 'package:amadeus/res/colors.dart';
+import 'package:amadeus/widgets/IconWithBadge.dart';
 
 class SubjectItem extends StatelessWidget {
 
@@ -35,40 +36,6 @@ class SubjectItem extends StatelessWidget {
             children: _rowItem(context),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget iconWithBadge({@required Icon icon, @required int numBadge, @required Function onPress, @required BuildContext context}) {
-    Widget badge;
-    if(numBadge > 0) {
-      String qtdPendencies = numBadge > 99 ? "99+" : numBadge.toString();
-      badge = new Container(
-        margin: new EdgeInsets.all(5.0),
-        width: 20.0,
-        height: 20.0,
-        decoration: new BoxDecoration(
-          color: MyColors.primaryRed,
-          boxShadow: null,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: new Center(
-          child: new Text(qtdPendencies, style: new TextStyle(color: Colors.white, fontSize: 10.0, fontWeight: FontWeight.bold),),
-        ),
-      );
-    } else {
-      badge = new Container(width: 0.0, height: 0.0,);
-    }
-    return new Stack(
-      alignment: Alignment.topRight,
-      children: <Widget>[
-        new Center(
-          child: new IconButton(
-            onPressed: () => onPress(context),
-            icon: icon,
-          ),
-        ),
-        badge,
       ],
     );
   }
@@ -138,23 +105,23 @@ class SubjectItem extends StatelessWidget {
     );
     return [
       subjectName,
-      iconWithBadge(
+      new IconWithBadge(
         icon: Icon(Icons.list, color: MyColors.iconsColor,),
         numBadge: 0,
-        onPress: onPressMural,
-        context: context
+        onPressCallback: onPressMural,
+        buildContext: context,
       ),
-      iconWithBadge(
+      new IconWithBadge(
         icon: Icon(FontAwesomeIcons.comments, color: MyColors.iconsColor,),
         numBadge: subject.notifications,
-        onPress: onPressMessage, 
-        context: context
+        onPressCallback: onPressMessage, 
+        buildContext: context,
       ),
-      iconWithBadge(
+      new IconWithBadge(
         icon: Icon(Icons.warning, color: MyColors.iconsColor,),
         numBadge: subject.pendencies,
-        onPress: onPressPendency,
-        context: context
+        onPressCallback: onPressPendency,
+        buildContext: context,
       ),
     ];
   }
