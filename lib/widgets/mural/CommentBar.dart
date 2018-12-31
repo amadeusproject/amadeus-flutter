@@ -1,4 +1,3 @@
-import 'package:amadeus/widgets/Badge.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amadeus/localizations.dart';
@@ -10,35 +9,23 @@ class CommentBar extends StatelessWidget {
   final int comments;
 
   Widget getCommentBar(BuildContext context) {
+    String _text;
     if ((comments ?? 0) == 0) {
-      return new Padding(
-        padding: new EdgeInsets.symmetric(vertical: 2.0),
-        child: new Text(
-          Translations.of(context).text("firstToComment"),
-          style: new TextStyle(
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
+      _text = Translations.of(context).text("firstToComment");
     } else {
-      String number = comments > 9 ? "9+" : "$comments";
-      return new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Text(
-            Translations.of(context).text("comments"),
-            style: new TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
-          ),
-          new Badge(
-            number: number,
-            size: 16.0,
-            fontSize: 8.0,
-            padding: new EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0),
-          ),
-        ],
-      );
+      String number = comments > 999 ? "999+" : "$comments";
+      _text = "${Translations.of(context).text("comments")} ($number)";
     }
+    return new Padding(
+      padding: new EdgeInsets.symmetric(vertical: 2.0),
+      child: new Text(
+        _text,
+        style: new TextStyle(
+          fontSize: 14.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   @override
