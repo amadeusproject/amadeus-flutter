@@ -48,7 +48,7 @@ class CommentItem extends StatelessWidget implements CommentPageItem {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      color: Colors.white,
+      color: MyColors.muralCommentsBackground,
       padding: new EdgeInsets.all(10.0),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.start,

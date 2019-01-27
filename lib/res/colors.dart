@@ -28,5 +28,5 @@ class MyColors {
   static const perfilColor = Color(0xFF034F7C);
   static const thumbtackActive = Color(0xFFFF6559);
   static const thumbtackDeactive = Color(0xFFBDBDBD);
-  static const muralCommentsBackground = Color(0xFFEEEEEE);
+  static const muralCommentsBackground = Color(0xFFF7F7F7);
 }

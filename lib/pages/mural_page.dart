@@ -21,6 +21,7 @@ import 'package:amadeus/utils/LogoutUtils.dart';
 import 'package:amadeus/widgets/InputMessage.dart';
 import 'package:amadeus/widgets/Loading.dart';
 
+enum Commands {favPosts}
 enum ImageChoices {gallery, camera}
 
 class MuralPage extends StatefulWidget {
@@ -46,6 +47,7 @@ class MuralPageState extends State<MuralPage> {
   int _pageSize = 20;
   bool _isLastPage = false;
   bool _isLoading = false;
+  bool _onlyFavPosts = false;
 
   MuralPageState(this._user, this._subject);
 
@@ -143,16 +145,31 @@ class MuralPageState extends State<MuralPage> {
     _items = new List<MuralPageItem>();
     if (_posts == null) return;
     for (int i = _posts.length - 1; i >= 0; i--) {
-      _items.insert(
-        0,
-        PostItem(
-          mural: _posts[i],
-          webserver: _token.webserverUrl,
-          favoriteCallback: favoritePost,
-          user: _user,
-          subject: _subject,
-        ),
-      );
+      if(_onlyFavPosts) {
+        if(_posts[i].favorite) {
+           _items.insert(
+            0,
+            PostItem(
+              mural: _posts[i],
+              webserver: _token.webserverUrl,
+              favoriteCallback: favoritePost,
+              user: _user,
+              subject: _subject,
+            ),
+          );
+        }
+      } else {
+        _items.insert(
+          0,
+          PostItem(
+            mural: _posts[i],
+            webserver: _token.webserverUrl,
+            favoriteCallback: favoritePost,
+            user: _user,
+            subject: _subject,
+          ),
+        );
+      }
     }
     if (!_isLastPage) {
       _items.add(LoadMuralItem(loadPosts));
@@ -384,8 +401,7 @@ class MuralPageState extends State<MuralPage> {
       backgroundColor: MyColors.backgroundColor,
       appBar: new AppBar(
         backgroundColor: MyColors.subjectColor,
-        title:
-            new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
+        title: new Text(_subject != null ? _subject.name.toUpperCase() : "Null"),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
@@ -394,6 +410,27 @@ class MuralPageState extends State<MuralPage> {
             ),
             onPressed: null,
             disabledColor: MyColors.iconsColor,
+          ),
+          PopupMenuButton<Commands>(
+            onSelected: (Commands result) {
+              switch (result) {
+                case Commands.favPosts:
+                  setState(() {
+                    _onlyFavPosts = !_onlyFavPosts;
+                    _updateItems();
+                  });
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<Commands>>[
+                new CheckedPopupMenuItem(
+                  checked: _onlyFavPosts,
+                  value: Commands.favPosts,
+                  child: new Text(Translations.of(context).text('favoriteMessages')),
+                ),
+              ];
+            },
           ),
         ],
       ),
