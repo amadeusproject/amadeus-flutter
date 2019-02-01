@@ -43,6 +43,13 @@ class ClickableImage extends StatelessWidget {
           image: new CachedNetworkImageProvider(webserverUrl + imageUrl),
           fit: BoxFit.cover,
         ),
+        boxShadow: [
+          new BoxShadow(
+            color: Colors.grey,
+            blurRadius: 2.0,
+            spreadRadius: 2.0,
+          ),
+        ],
       ),
     );
   }

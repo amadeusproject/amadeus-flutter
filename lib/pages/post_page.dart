@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -351,6 +352,8 @@ class PostPageState extends State<PostPage> {
         );
       }
       ListView listView = new ListView.separated(
+        shrinkWrap: true,
+        reverse: true,
         itemCount: _items.length,
         itemBuilder: (BuildContext context, int index) {
           var item = _items[index];
@@ -397,8 +400,7 @@ class PostPageState extends State<PostPage> {
       backgroundColor: MyColors.backgroundColor,
       appBar: new AppBar(
         backgroundColor: MyColors.subjectColor,
-        title:
-            new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
+        title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null"),),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
