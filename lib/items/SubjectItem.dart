@@ -65,6 +65,7 @@ class SubjectItem extends StatelessWidget {
         builder: (context) => new PendenciesPage(userTo: user, subject: subject),
       ),
     ).then((onValue) {
+      parent.refreshSubjects(false);
       parent.messagingService.configure(HomePage.tag);
       parent.firebaseMessaging.configure(
         onMessage: parent.onMessageHome,
@@ -82,6 +83,7 @@ class SubjectItem extends StatelessWidget {
         builder: (context) => new MuralPage(userTo: user, subject: subject),
       ),
     ).then((onValue) {
+      parent.refreshSubjects(false);
       parent.messagingService.configure(HomePage.tag);
       parent.firebaseMessaging.configure(
         onMessage: parent.onMessageHome,
