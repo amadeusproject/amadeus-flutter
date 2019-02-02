@@ -9,19 +9,22 @@ class SubjectModel {
     _visible = jsonMap['visible'];
     _notifications = jsonMap['notifications'];
     _pendencies = jsonMap['pendencies'];
+    _muralNotifications = jsonMap['mural'];
   }
 
   String _name, _slug;
   bool _visible;
   int _notifications;
   int _pendencies;
+  int _muralNotifications;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
     'name': _name,
     'slug': _slug,
     'visible': _visible,
     'notifications': _notifications,
-    'pendencies': _pendencies
+    'pendencies': _pendencies,
+    'mural': _muralNotifications
   };
 
   String get name => _name;
@@ -38,4 +41,7 @@ class SubjectModel {
 
   int get pendencies => _pendencies;
   set pendencies(int value) => this._pendencies = value;
+
+  int get muralNotifications => _muralNotifications;
+  set muralNotifications(int value) => this._muralNotifications = value;
 }

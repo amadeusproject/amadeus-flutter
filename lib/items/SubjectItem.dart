@@ -107,7 +107,7 @@ class SubjectItem extends StatelessWidget {
       subjectName,
       new IconWithBadge(
         icon: Icon(Icons.list, color: MyColors.iconsColor,),
-        numBadge: 0,
+        numBadge: subject.muralNotifications,
         onPressCallback: onPressMural,
         buildContext: context,
       ),
