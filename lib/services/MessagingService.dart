@@ -12,18 +12,20 @@ import 'package:amadeus/pages/participants_page.dart';
 /// This class was made for manager Local Notifications. It does not manage any Firebase Notification.
 
 class MessagingService {
-
-  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-  static AndroidInitializationSettings android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      new FlutterLocalNotificationsPlugin();
+  static AndroidInitializationSettings android =
+      new AndroidInitializationSettings('@mipmap/ic_launcher');
   static IOSInitializationSettings iOS = new IOSInitializationSettings();
-  static InitializationSettings initializationSettings = new InitializationSettings(android, iOS);
+  static InitializationSettings initializationSettings =
+      new InitializationSettings(android, iOS);
 
   Map<String, int> mapUsers = new Map<String, int>();
   int _userId = 0;
 
   void configure(String page) {
     Function methodToRun;
-    if(page == HomePage.tag) {
+    if (page == HomePage.tag) {
       methodToRun = onSelectNotificationHome;
     } else if (page == ChatPage.tag) {
       methodToRun = onSelectNotificationChat;
@@ -32,7 +34,8 @@ class MessagingService {
     } else {
       methodToRun = (String payload) {};
     }
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, selectNotification: methodToRun);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: methodToRun);
   }
 
   Future onSelectNotificationHome(String payload) async {
@@ -44,6 +47,7 @@ class MessagingService {
       // ignore: unused_local_variable
       var subject = SubjectModel.fromJson(data['subject']);
     }
+
     /// TODO - Action when click on notification
   }
 
@@ -56,6 +60,7 @@ class MessagingService {
       // ignore: unused_local_variable
       var subject = SubjectModel.fromJson(data['subject']);
     }
+
     /// TODO - Action when click on notification
   }
 
@@ -68,29 +73,34 @@ class MessagingService {
       // ignore: unused_local_variable
       var subject = SubjectModel.fromJson(data['subject']);
     }
+
     /// TODO - Action when click on notification
   }
 
   void showNotification(Map<String, dynamic> message) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      'Channel ID', 'Channel Name', 'Channel Description',
+      'Channel ID',
+      'Channel Name',
+      'Channel Description',
       importance: Importance.Max,
       priority: Priority.High,
     );
     var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics = new NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
     var notification = message['notification'];
     String title = notification['title'];
     String body = notification['body'];
     var data = message['data'];
     String type = data['type'];
-    
-    if(type == "chat") {
-      var userFrom = UserModel.fromJson(json.decode(data['response'])['data']['message_sent']['user']);
+
+    if (type == "chat") {
+      var userFrom = UserModel.fromJson(
+          json.decode(data['response'])['data']['message_sent']['user']);
       int notificationId;
 
-      if(mapUsers.containsKey(userFrom.email)) {
+      if (mapUsers.containsKey(userFrom.email)) {
         notificationId = mapUsers[userFrom.email];
       } else {
         notificationId = _userId;
@@ -100,13 +110,15 @@ class MessagingService {
       print(notificationId);
 
       var dataStr = json.encode(data);
-      
-      await flutterLocalNotificationsPlugin.show(notificationId, title, body, platformChannelSpecifics, payload: dataStr);
+
+      await flutterLocalNotificationsPlugin.show(
+          notificationId, title, body, platformChannelSpecifics,
+          payload: dataStr);
     }
   }
 
   void cleanNotifications(String userEmail) async {
-    if(mapUsers.containsKey(userEmail)) {
+    if (mapUsers.containsKey(userEmail)) {
       await flutterLocalNotificationsPlugin.cancel(mapUsers[userEmail]);
     }
   }

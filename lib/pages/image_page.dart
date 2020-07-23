@@ -21,17 +21,19 @@ class ImagePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             new Text(title != null ? title : ""),
-            new Text(title != null ? " (PERFIL)" : "", style: new TextStyle(color: MyColors.perfilColor, fontSize: 14.0)),
+            new Text(title != null ? " (PERFIL)" : "",
+                style:
+                    new TextStyle(color: MyColors.perfilColor, fontSize: 14.0)),
           ],
         ),
       ),
       body: new Container(
-        child: new PhotoViewInline(
+        child: new PhotoView(
           imageProvider: new CachedNetworkImageProvider(_webUrl + _imageUrl),
           minScale: PhotoViewComputedScale.contained,
           maxScale: 4.0,
           gaplessPlayback: true,
-          backgroundColor: MyColors.backgroundColor,
+          backgroundDecoration: BoxDecoration(color: MyColors.backgroundColor),
         ),
       ),
     );

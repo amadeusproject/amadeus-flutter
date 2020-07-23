@@ -228,8 +228,10 @@ class ImageSenderPageState extends State<ImageSenderPage> {
   Future<Null> _cropImage(BuildContext context) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: _imageFile.path,
-      toolbarTitle: Translations.of(context).text("cropDialogTitle"),
-      toolbarColor: MyColors.subjectColor,
+      androidUiSettings: AndroidUiSettings(
+        toolbarTitle: Translations.of(context).text("cropDialogTitle"),
+        toolbarColor: MyColors.subjectColor,
+      ),
     );
     if (croppedFile != null) {
       setState(() {
