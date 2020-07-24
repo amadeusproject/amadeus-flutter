@@ -25,13 +25,20 @@ class LoginPage extends StatefulWidget {
   final String initialEmail;
   final String initialPassword;
   final bool rememberPassword;
-  LoginPage({Key key, this.initialHost, this.initialEmail, this.initialPassword, this.rememberPassword}) : super(key: key);
+  LoginPage(
+      {Key key,
+      this.initialHost,
+      this.initialEmail,
+      this.initialPassword,
+      this.rememberPassword})
+      : super(key: key);
   @override
-  LoginPageState createState() => new LoginPageState(initialHost, initialEmail, initialPassword, rememberPassword);
+  LoginPageState createState() => new LoginPageState(
+      initialHost, initialEmail, initialPassword, rememberPassword);
 }
 
-class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
-
+class LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   bool _loggingIn = false;
   String _tokenFB;
@@ -39,7 +46,8 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
   String password;
   String host;
 
-  LoginPageState(this.initialHost, this.initialEmail, this.initialPassword, this.passwordCheckboxValue);
+  LoginPageState(this.initialHost, this.initialEmail, this.initialPassword,
+      this.passwordCheckboxValue);
 
   static String emailKey = "EMAIL_KEY";
   static String hostKey = "HOST_KEY";
@@ -70,7 +78,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
   void firebaseCloudMessagingListeners() {
     if (Platform.isIOS) iOSPermission();
 
-    _firebaseMessaging.getToken().then((token){
+    _firebaseMessaging.getToken().then((token) {
       print(token);
       _tokenFB = token;
     });
@@ -78,9 +86,9 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
 
   void iOSPermission() {
     _firebaseMessaging.requestNotificationPermissions(
-      IosNotificationSettings(sound: true, badge: true, alert: true)
-    );
-    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
   }
@@ -92,24 +100,26 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
   }
 
   Future<void> _attemptLogin() async {
-    
     setState(() {
       _loggingIn = true;
     });
 
-    try{
-      UserResponse userResponse = await UserBO().login(context, host, email, password);
-      
-      if(userResponse != null) {
-        if(userResponse.success && userResponse.number == 1) {
+    try {
+      UserResponse userResponse =
+          await UserBO().login(context, host, email, password);
+
+      if (userResponse != null) {
+        if (userResponse.success && userResponse.number == 1) {
           UserModel user = userResponse.data;
           await UserCacheController.setUserCache(context, user);
-          TokenResponse token = await TokenCacheController.getTokenCache(context);
+          TokenResponse token =
+              await TokenCacheController.getTokenCache(context);
 
-          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
           sharedPreferences.setString(emailKey, email);
           sharedPreferences.setString(hostKey, host);
-          if(passwordCheckboxValue) {
+          if (passwordCheckboxValue) {
             sharedPreferences.setString(passwordKey, password);
           } else {
             sharedPreferences.remove(passwordKey);
@@ -121,35 +131,43 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
 
           Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-              settings: const RouteSettings(name: 'home-page'), 
+              settings: const RouteSettings(name: 'home-page'),
               builder: (context) => new HomePage(user: user, token: token),
             ),
           );
           return;
         } else {
-          if(userResponse.title != null && userResponse.title.isNotEmpty && userResponse.message != null && userResponse.message.isNotEmpty) {
-            DialogUtils.dialog(context, title: userResponse.title, message: userResponse.message);
+          if (userResponse.title != null &&
+              userResponse.title.isNotEmpty &&
+              userResponse.message != null &&
+              userResponse.message.isNotEmpty) {
+            DialogUtils.dialog(context,
+                title: userResponse.title, message: userResponse.message);
           } else {
             DialogUtils.dialog(context);
           }
         }
       } else {
-        DialogUtils.dialog(context, message: Translations.of(context).text("errorBoxMsgLogin"));
+        DialogUtils.dialog(context,
+            message: Translations.of(context).text("errorBoxMsgLogin"));
       }
     } on FormatException {
-      DialogUtils.dialog(context, message: Translations.of(context).text("errorBoxMsgHost"));
-    } on SocketException catch(_) {
-      DialogUtils.dialog(context, message: Translations.of(context).text("errorBoxMsgHost"));
-    } on TimeoutException catch(_) {
-      DialogUtils.dialog(context, message: Translations.of(context).text("errorBoxMsgHost"));
-    } catch(e) {
+      DialogUtils.dialog(context,
+          message: Translations.of(context).text("errorBoxMsgHost"));
+    } on SocketException catch (_) {
+      DialogUtils.dialog(context,
+          message: Translations.of(context).text("errorBoxMsgHost"));
+    } on TimeoutException catch (_) {
+      DialogUtils.dialog(context,
+          message: Translations.of(context).text("errorBoxMsgHost"));
+    } catch (e) {
       DialogUtils.dialog(context, erro: e.toString());
       print("_attemptLogin\n" + e.toString());
     }
     setState(() {
       initialEmail = email;
       initialHost = host;
-      if(passwordCheckboxValue) {
+      if (passwordCheckboxValue) {
         initialPassword = password;
       } else {
         initialPassword = "";
@@ -160,7 +178,6 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-
     final Container logoImg = Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -175,7 +192,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     final TextFormField hostInput = new TextFormField(
       initialValue: initialHost,
       validator: (value) {
-        if(value.isEmpty) {
+        if (value.isEmpty) {
           return Translations.of(context).text('errorFieldRequired');
         } else {
           host = value;
@@ -197,9 +214,9 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     final TextFormField emailInput = new TextFormField(
       initialValue: initialEmail,
       validator: (value) {
-        if(value.isEmpty) {
+        if (value.isEmpty) {
           return Translations.of(context).text('errorFieldRequired');
-        } else if(!value.contains('@')) {
+        } else if (!value.contains('@')) {
           return Translations.of(context).text('errorInvalidEmail');
         } else {
           email = value;
@@ -221,7 +238,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     final TextFormField passwordInput = new TextFormField(
       initialValue: initialPassword,
       validator: (value) {
-        if(value.isEmpty) {
+        if (value.isEmpty) {
           return Translations.of(context).text('errorInvalidPassword');
         } else {
           password = value;
@@ -276,7 +293,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
           height: 50.0,
           color: MyColors.primaryGreen,
           onPressed: () {
-            if(_formKey.currentState.validate()) {
+            if (_formKey.currentState.validate()) {
               _attemptLogin();
             }
           },
@@ -292,7 +309,7 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
     );
 
     Widget _getBody() {
-      if(_loggingIn) {
+      if (_loggingIn) {
         return new Center(
           child: new AnimatedBuilder(
             animation: animationController,
@@ -310,7 +327,8 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
           ),
         );
       } else {
-        EdgeInsetsGeometry horizontalPadding = new EdgeInsets.symmetric(horizontal: 20.0);
+        EdgeInsetsGeometry horizontalPadding =
+            new EdgeInsets.symmetric(horizontal: 20.0);
         return new Center(
           child: new Form(
             key: _formKey,
@@ -374,7 +392,8 @@ class LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixi
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }

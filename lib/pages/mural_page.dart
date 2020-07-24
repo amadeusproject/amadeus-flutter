@@ -21,9 +21,10 @@ import 'package:amadeus/utils/DialogUtils.dart';
 import 'package:amadeus/utils/LogoutUtils.dart';
 import 'package:amadeus/widgets/InputMessage.dart';
 import 'package:amadeus/widgets/Loading.dart';
+import 'package:amadeus/widgets/MarqueeWidget.dart';
 
-enum Commands {favPosts}
-enum ImageChoices {gallery, camera}
+enum Commands { favPosts }
+enum ImageChoices { gallery, camera }
 
 class MuralPage extends StatefulWidget {
   static String tag = 'mural-page';
@@ -43,6 +44,7 @@ class MuralPageState extends State<MuralPage> {
   TokenResponse _token;
   TextEditingController textCtrl = new TextEditingController();
   File _imageFile;
+  final ImagePicker picker = new ImagePicker();
 
   int _actualPage = 0;
   int _pageSize = 20;
@@ -78,39 +80,46 @@ class MuralPageState extends State<MuralPage> {
 
   Future _openDialogToChoose() async {
     switch (await showDialog<ImageChoices>(
-      context: context,
-      builder: (BuildContext context) {
-        return new SimpleDialog(
-          title: new Text(Translations.of(context).text('imageChooserTitle')),
-          children: <Widget>[
-            new SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, ImageChoices.camera),
-              child: new Row(
-                children: <Widget>[
-                  new Icon(Icons.camera, color: MyColors.darkerGray,),
-                  new Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: new Text(Translations.of(context).text('imageCameraOption')),
-                  ),
-                ],
+        context: context,
+        builder: (BuildContext context) {
+          return new SimpleDialog(
+            title: new Text(Translations.of(context).text('imageChooserTitle')),
+            children: <Widget>[
+              new SimpleDialogOption(
+                onPressed: () => Navigator.pop(context, ImageChoices.camera),
+                child: new Row(
+                  children: <Widget>[
+                    new Icon(
+                      Icons.camera,
+                      color: MyColors.darkerGray,
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: new Text(
+                          Translations.of(context).text('imageCameraOption')),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            new SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, ImageChoices.gallery),
-              child: new Row(
-                children: <Widget>[
-                  new Icon(Icons.photo, color: MyColors.darkerGray,),
-                  new Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: new Text(Translations.of(context).text('imageGalleryOption')),
-                  ),
-                ],
+              new SimpleDialogOption(
+                onPressed: () => Navigator.pop(context, ImageChoices.gallery),
+                child: new Row(
+                  children: <Widget>[
+                    new Icon(
+                      Icons.photo,
+                      color: MyColors.darkerGray,
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: new Text(
+                          Translations.of(context).text('imageGalleryOption')),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        );
-      }
-    )) {
+            ],
+          );
+        })) {
       case ImageChoices.camera:
         _onImageButtonPressed(ImageSource.camera);
         break;
@@ -121,22 +130,23 @@ class MuralPageState extends State<MuralPage> {
   }
 
   void _onImageButtonPressed(ImageSource source) async {
-    _imageFile = await ImagePicker.pickImage(source: source);
-    if(_imageFile != null) {
-      Navigator.of(context).push(
-        new MaterialPageRoute(
-          settings: const RouteSettings(name: 'image-sender-page'), 
-          builder: (context) {
-            return new ImageSenderPage(
-              imageFile: _imageFile,
-              user: _user,
-              subject: _subject,
-              muralState: this,
-              inputPlaceholder: Translations.of(context).text('muralSenderHint'),
-            );
-          }
-        )
-      ).then((onValue) {
+    PickedFile picked = await picker.getImage(source: source);
+    if (picked != null) {
+      _imageFile = File(picked.path);
+      Navigator.of(context)
+          .push(new MaterialPageRoute(
+              settings: const RouteSettings(name: 'image-sender-page'),
+              builder: (context) {
+                return new ImageSenderPage(
+                  imageFile: _imageFile,
+                  user: _user,
+                  subject: _subject,
+                  muralState: this,
+                  inputPlaceholder:
+                      Translations.of(context).text('muralSenderHint'),
+                );
+              }))
+          .then((onValue) {
         _imageFile = null;
       });
     }
@@ -146,9 +156,9 @@ class MuralPageState extends State<MuralPage> {
     _items = new List<MuralPageItem>();
     if (_posts == null) return;
     for (int i = _posts.length - 1; i >= 0; i--) {
-      if(_onlyFavPosts) {
-        if(_posts[i].favorite) {
-           _items.insert(
+      if (_onlyFavPosts) {
+        if (_posts[i].favorite) {
+          _items.insert(
             0,
             PostItem(
               mural: _posts[i],
@@ -281,14 +291,16 @@ class MuralPageState extends State<MuralPage> {
   Future<void> createPost() async {
     if (textCtrl.text.trimRight().isNotEmpty) {
       await checkToken();
-      MuralModel post = new MuralModel(textCtrl.text.trimRight(), "comment", _user);
+      MuralModel post =
+          new MuralModel(textCtrl.text.trimRight(), "comment", _user);
       insertPostSent(post);
 
       textCtrl.clear();
       FocusScope.of(context).requestFocus(new FocusNode());
 
       try {
-        MuralResponse muralResponse = await MuralBO().createPost(context, _user, post, _subject);
+        MuralResponse muralResponse =
+            await MuralBO().createPost(context, _user, post, _subject);
 
         _posts.removeWhere((test) =>
             test.createDate == post.createDate && test.user == post.user);
@@ -402,7 +414,11 @@ class MuralPageState extends State<MuralPage> {
       backgroundColor: MyColors.backgroundColor,
       appBar: new AppBar(
         backgroundColor: MyColors.subjectColor,
-        title: new Text(_subject != null ? _subject.name.toUpperCase() : "Null"),
+        title: MarqueeWidget(
+          direction: Axis.horizontal,
+          child:
+              new Text(_subject != null ? _subject.name.toUpperCase() : "Null"),
+        ),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
@@ -428,7 +444,8 @@ class MuralPageState extends State<MuralPage> {
                 new CheckedPopupMenuItem(
                   checked: _onlyFavPosts,
                   value: Commands.favPosts,
-                  child: new Text(Translations.of(context).text('favoriteMessages')),
+                  child: new Text(
+                      Translations.of(context).text('favoriteMessages')),
                 ),
               ];
             },

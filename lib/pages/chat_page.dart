@@ -30,22 +30,28 @@ import 'package:amadeus/utils/DialogUtils.dart';
 import 'package:amadeus/utils/LogoutUtils.dart';
 import 'package:amadeus/utils/StringUtils.dart';
 import 'package:amadeus/widgets/InputMessage.dart';
+import 'package:amadeus/widgets/MarqueeWidget.dart';
 
-enum Commands {favMessages, myMessages}
-enum ImageChoices {gallery, camera}
+enum Commands { favMessages, myMessages }
+enum ImageChoices { gallery, camera }
 
 class ChatPage extends StatefulWidget {
   static String tag = 'chat-page';
   final SubjectModel subject;
   final UserModel userTo;
   final ParticipantsPageState participantsPageState;
-  ChatPage({Key key, @required this.userTo, @required this.subject, this.participantsPageState}) : super(key: key);
+  ChatPage(
+      {Key key,
+      @required this.userTo,
+      @required this.subject,
+      this.participantsPageState})
+      : super(key: key);
   @override
-  ChatPageState createState() => new ChatPageState(userTo, subject, participantsPageState);
+  ChatPageState createState() =>
+      new ChatPageState(userTo, subject, participantsPageState);
 }
 
 class ChatPageState extends State<ChatPage> {
-
   List<ListItem> _items;
   List<MessageModel> _messageList;
   ParticipantsPageState parent;
@@ -75,13 +81,14 @@ class ChatPageState extends State<ChatPage> {
   TextEditingController textCtrl = new TextEditingController();
 
   File _imageFile;
+  final imagePicker = new ImagePicker();
 
   void updateSelectedMessages(bool increase) {
-    if(increase) {
+    if (increase) {
       messagesSelected++;
     } else {
       messagesSelected--;
-      if(messagesSelected == 0) {
+      if (messagesSelected == 0) {
         isSelecting = false;
       }
     }
@@ -92,39 +99,46 @@ class ChatPageState extends State<ChatPage> {
 
   Future _openDialogToChoose() async {
     switch (await showDialog<ImageChoices>(
-      context: context,
-      builder: (BuildContext context) {
-        return new SimpleDialog(
-          title: new Text(Translations.of(context).text('imageChooserTitle')),
-          children: <Widget>[
-            new SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, ImageChoices.camera),
-              child: new Row(
-                children: <Widget>[
-                  new Icon(Icons.camera, color: MyColors.darkerGray,),
-                  new Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: new Text(Translations.of(context).text('imageCameraOption')),
-                  ),
-                ],
+        context: context,
+        builder: (BuildContext context) {
+          return new SimpleDialog(
+            title: new Text(Translations.of(context).text('imageChooserTitle')),
+            children: <Widget>[
+              new SimpleDialogOption(
+                onPressed: () => Navigator.pop(context, ImageChoices.camera),
+                child: new Row(
+                  children: <Widget>[
+                    new Icon(
+                      Icons.camera,
+                      color: MyColors.darkerGray,
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: new Text(
+                          Translations.of(context).text('imageCameraOption')),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            new SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, ImageChoices.gallery),
-              child: new Row(
-                children: <Widget>[
-                  new Icon(Icons.photo, color: MyColors.darkerGray,),
-                  new Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: new Text(Translations.of(context).text('imageGalleryOption')),
-                  ),
-                ],
+              new SimpleDialogOption(
+                onPressed: () => Navigator.pop(context, ImageChoices.gallery),
+                child: new Row(
+                  children: <Widget>[
+                    new Icon(
+                      Icons.photo,
+                      color: MyColors.darkerGray,
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: new Text(
+                          Translations.of(context).text('imageGalleryOption')),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        );
-      }
-    )) {
+            ],
+          );
+        })) {
       case ImageChoices.camera:
         _onImageButtonPressed(ImageSource.camera);
         break;
@@ -135,35 +149,36 @@ class ChatPageState extends State<ChatPage> {
   }
 
   void _onImageButtonPressed(ImageSource source) async {
-    _imageFile = await ImagePicker.pickImage(source: source);
-    if(_imageFile != null) {
-      Navigator.of(context).push(
-        new MaterialPageRoute(
-          settings: const RouteSettings(name: 'image-sender-page'), 
-          builder: (context) {
-            return new ImageSenderPage(
-              imageFile: _imageFile,
-              user: _user,
-              subject: _subject,
-              userTo: _userTo,
-              chatState: this,
-              inputPlaceholder: Translations.of(context).text('chatSenderHint'),
-            );
-          }
-        )
-      ).then((onValue) {
+    PickedFile picked = await imagePicker.getImage(source: source);
+    if (picked != null) {
+      _imageFile = File(picked.path);
+      Navigator.of(context)
+          .push(new MaterialPageRoute(
+              settings: const RouteSettings(name: 'image-sender-page'),
+              builder: (context) {
+                return new ImageSenderPage(
+                  imageFile: _imageFile,
+                  user: _user,
+                  subject: _subject,
+                  userTo: _userTo,
+                  chatState: this,
+                  inputPlaceholder:
+                      Translations.of(context).text('chatSenderHint'),
+                );
+              }))
+          .then((onValue) {
         _imageFile = null;
       });
     }
   }
 
   Future<void> checkToken() async {
-    if(_token == null) {
-      if(await TokenCacheController.hasTokenCache(context)) {
+    if (_token == null) {
+      if (await TokenCacheController.hasTokenCache(context)) {
         _token = await TokenCacheController.getTokenCache(context);
-        if(_token.isTokenExpired()) {
+        if (_token.isTokenExpired()) {
           _token = await _token.renewToken(context);
-          if(_token == null) {
+          if (_token == null) {
             await DialogUtils.dialog(context);
             Logout.goLogin(context);
           }
@@ -172,9 +187,9 @@ class ChatPageState extends State<ChatPage> {
         await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
-    } else if(_token.isTokenExpired()) {
+    } else if (_token.isTokenExpired()) {
       _token = await _token.renewToken(context);
-      if(_token == null) {
+      if (_token == null) {
         await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
@@ -184,9 +199,9 @@ class ChatPageState extends State<ChatPage> {
   Future<dynamic> onMessageChat(Map<String, dynamic> message) async {
     var data = message['data'];
     var type = data['type'].toString();
-    if(type == "chat") {
+    if (type == "chat") {
       var userTalk = data['user_from'].toString();
-      if(userTalk == _userTo.email) {
+      if (userTalk == _userTo.email) {
         data = json.decode(data['response'])['data']['message_sent'];
         MessageModel messageReceived = new MessageModel.fromJson(data);
         _messageList.insert(0, messageReceived);
@@ -205,12 +220,14 @@ class ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     scrollController.addListener(() {
-      if(!_isLastPage && (scrollController.position.maxScrollExtent - scrollController.offset < 300.0) ) {
-        if(!_isLoading) {
+      if (!_isLastPage &&
+          (scrollController.position.maxScrollExtent - scrollController.offset <
+              300.0)) {
+        if (!_isLoading) {
           setState(() {
             _isLoading = true;
           });
-          loadPage(context, _actualPage+1);
+          loadPage(context, _actualPage + 1);
         }
       }
     });
@@ -222,9 +239,9 @@ class ChatPageState extends State<ChatPage> {
       onResume: (Map<String, dynamic> message) async {
         var data = json.decode(message['response']);
         String type = message['type'].toString();
-        if(type == "chat") {
+        if (type == "chat") {
           var userTalk = message['user_from'].toString();
-          if(userTalk == _userTo.email) {
+          if (userTalk == _userTo.email) {
             data = data['data']['message_sent'];
             MessageModel messageReceived = new MessageModel.fromJson(data);
             _messageList.insert(0, messageReceived);
@@ -248,19 +265,27 @@ class ChatPageState extends State<ChatPage> {
     await checkToken();
     messagingService.cleanNotifications(_userTo.email);
     try {
-      MessageResponse messageResponse = await MessageBO().getMessages(context, _user, _userTo, 1, _pageSize*_actualPage);
+      MessageResponse messageResponse = await MessageBO()
+          .getMessages(context, _user, _userTo, 1, _pageSize * _actualPage);
 
-      if(messageResponse != null && messageResponse.success && messageResponse.number == 1) {
+      if (messageResponse != null &&
+          messageResponse.success &&
+          messageResponse.number == 1) {
         setState(() {
           _messageList = messageResponse.data.messages;
           _updateItems();
         });
-      } else if(messageResponse != null && messageResponse.title != null && messageResponse.title.isNotEmpty && messageResponse.message != null && messageResponse.message.isNotEmpty) {
-        DialogUtils.dialog(context, title: messageResponse.title, message: messageResponse.message);
+      } else if (messageResponse != null &&
+          messageResponse.title != null &&
+          messageResponse.title.isNotEmpty &&
+          messageResponse.message != null &&
+          messageResponse.message.isNotEmpty) {
+        DialogUtils.dialog(context,
+            title: messageResponse.title, message: messageResponse.message);
       } else {
         DialogUtils.dialog(context);
       }
-    } catch(e) {
+    } catch (e) {
       DialogUtils.dialog(context, erro: e.toString());
       print("reloadChat\n" + e.toString());
     }
@@ -275,7 +300,7 @@ class ChatPageState extends State<ChatPage> {
 
   @protected
   Future<void> loadImageProfile() async {
-    if(_userTo.imageUrl != null && _userTo.imageUrl.isNotEmpty) {
+    if (_userTo.imageUrl != null && _userTo.imageUrl.isNotEmpty) {
       await checkToken();
       String path = _token.webserverUrl + _userTo.imageUrl;
       setState(() {
@@ -287,13 +312,13 @@ class ChatPageState extends State<ChatPage> {
       });
     }
   }
-  
+
   @protected
   Future<void> loadMessages() async {
-    if(await UserCacheController.hasUserCache(context)) {
+    if (await UserCacheController.hasUserCache(context)) {
       _user = await UserCacheController.getUserCache(context);
       _unseenMsgs = _userTo.unseenMsgs;
-      if(_unseenMsgs > _pageSize) {
+      if (_unseenMsgs > _pageSize) {
         int missingUnseenPages = (_userTo.unseenMsgs / _pageSize).ceil();
         int pageSize = _pageSize * missingUnseenPages;
         await loadChat(context, pageSize);
@@ -305,40 +330,51 @@ class ChatPageState extends State<ChatPage> {
       Logout.goLogin(context);
     }
   }
-  
+
   @protected
   Future<void> loadChat(BuildContext context, int vPageSize) async {
     await checkToken();
     try {
-      MessageResponse messageResponse = await MessageBO().getMessages(context, _user, _userTo, 1, vPageSize);
+      MessageResponse messageResponse =
+          await MessageBO().getMessages(context, _user, _userTo, 1, vPageSize);
 
-      if(messageResponse != null && messageResponse.success && messageResponse.number == 1) {
+      if (messageResponse != null &&
+          messageResponse.success &&
+          messageResponse.number == 1) {
         _actualPage += 1;
         setState(() {
           _messageList = messageResponse.data.messages;
           _updateItems();
         });
-      } else if(messageResponse != null && messageResponse.title != null && messageResponse.title.isNotEmpty && messageResponse.message != null && messageResponse.message.isNotEmpty) {
-        DialogUtils.dialog(context, title: messageResponse.title, message: messageResponse.message);
+      } else if (messageResponse != null &&
+          messageResponse.title != null &&
+          messageResponse.title.isNotEmpty &&
+          messageResponse.message != null &&
+          messageResponse.message.isNotEmpty) {
+        DialogUtils.dialog(context,
+            title: messageResponse.title, message: messageResponse.message);
       } else {
         DialogUtils.dialog(context);
       }
-    } catch(e) {
+    } catch (e) {
       DialogUtils.dialog(context, erro: e.toString());
       print("loadChat\n" + e.toString());
     }
   }
-  
+
   @protected
   Future<void> loadPage(BuildContext context, int vPageNumber) async {
     await checkToken();
     try {
-      MessageResponse messageResponse = await MessageBO().getMessages(context, _user, _userTo, vPageNumber, _pageSize);
+      MessageResponse messageResponse = await MessageBO()
+          .getMessages(context, _user, _userTo, vPageNumber, _pageSize);
 
-      if(messageResponse != null && messageResponse.success && messageResponse.number == 1) {
+      if (messageResponse != null &&
+          messageResponse.success &&
+          messageResponse.number == 1) {
         _actualPage += 1;
         List<MessageModel> messagesLoaded = messageResponse.data.messages;
-        if(messagesLoaded.isNotEmpty) {
+        if (messagesLoaded.isNotEmpty) {
           _messageList.addAll(messagesLoaded);
           setState(() {
             _updateItems();
@@ -349,76 +385,101 @@ class ChatPageState extends State<ChatPage> {
             _isLoading = false;
           });
         }
-        if(messagesLoaded == null || messagesLoaded.isEmpty || messagesLoaded.length < _pageSize) {
+        if (messagesLoaded == null ||
+            messagesLoaded.isEmpty ||
+            messagesLoaded.length < _pageSize) {
           _isLastPage = true;
         }
-        
-      } else if(messageResponse != null && messageResponse.title != null && messageResponse.title.isNotEmpty && messageResponse.message != null && messageResponse.message.isNotEmpty) {
-        DialogUtils.dialog(context, title: messageResponse.title, message: messageResponse.message);
+      } else if (messageResponse != null &&
+          messageResponse.title != null &&
+          messageResponse.title.isNotEmpty &&
+          messageResponse.message != null &&
+          messageResponse.message.isNotEmpty) {
+        DialogUtils.dialog(context,
+            title: messageResponse.title, message: messageResponse.message);
       } else {
         DialogUtils.dialog(context);
       }
-    } catch(e) {
+    } catch (e) {
       DialogUtils.dialog(context, erro: e.toString());
       print("loadPage\n" + e.toString());
     }
   }
-  
+
   @protected
   Future<void> sendMessage(String text) async {
-    MessageModel message = new MessageModel(text, _user, _subject, DateUtils.currentDate());
+    MessageModel message =
+        new MessageModel(text, _user, _subject, DateUtils.currentDate());
     _messageList.insert(0, message);
     setState(() {
       _updateItems();
     });
     await checkToken();
     try {
-      MessageResponse messageResponse = await MessageBO().sendMessage(context, _userTo, message);
+      MessageResponse messageResponse =
+          await MessageBO().sendMessage(context, _userTo, message);
 
-      _messageList.removeWhere((test) => test.createDate == message.createDate && test.user == message.user);
+      _messageList.removeWhere((test) =>
+          test.createDate == message.createDate && test.user == message.user);
 
-      if(messageResponse != null && messageResponse.success && messageResponse.number == 1) {
+      if (messageResponse != null &&
+          messageResponse.success &&
+          messageResponse.number == 1) {
         MessageModel sent = messageResponse.data.messageSent;
 
         setState(() {
           _messageList.insert(0, sent);
           _updateItems();
         });
-      } else if(messageResponse != null && messageResponse.title != null && messageResponse.title.isNotEmpty && messageResponse.message != null && messageResponse.message.isNotEmpty) {
-        DialogUtils.dialog(context, title: messageResponse.title, message: messageResponse.message);
+      } else if (messageResponse != null &&
+          messageResponse.title != null &&
+          messageResponse.title.isNotEmpty &&
+          messageResponse.message != null &&
+          messageResponse.message.isNotEmpty) {
+        DialogUtils.dialog(context,
+            title: messageResponse.title, message: messageResponse.message);
       } else {
         DialogUtils.dialog(context);
       }
-    } catch(e) {
+    } catch (e) {
       DialogUtils.dialog(context, erro: e.toString());
       print("sendMessage\n" + e.toString());
     }
   }
 
   @protected
-  Future<void> favoriteMessages(List<MessageModel> messages, bool setFavorite) async {
+  Future<void> favoriteMessages(
+      List<MessageModel> messages, bool setFavorite) async {
     await checkToken();
     try {
-      MessageResponse messageResponse = await MessageBO().favoriteMessages(context, _user, messages, setFavorite);
+      MessageResponse messageResponse = await MessageBO()
+          .favoriteMessages(context, _user, messages, setFavorite);
 
-      if(messageResponse != null && messageResponse.success && messageResponse.number == 1) {
+      if (messageResponse != null &&
+          messageResponse.success &&
+          messageResponse.number == 1) {
         _messageList.forEach((f) {
-          if(f.isSelected) {
+          if (f.isSelected) {
             f.isFavorite = setFavorite;
             f.isSelected = false;
           }
         });
         setState(() {
-          _updateItems();    
-          messagesSelected = 0;            
+          _updateItems();
+          messagesSelected = 0;
           isSelecting = false;
         });
-      } else if(messageResponse != null && messageResponse.title != null && messageResponse.title.isNotEmpty && messageResponse.message != null && messageResponse.message.isNotEmpty) {
-        DialogUtils.dialog(context, title: messageResponse.title, message: messageResponse.message);
+      } else if (messageResponse != null &&
+          messageResponse.title != null &&
+          messageResponse.title.isNotEmpty &&
+          messageResponse.message != null &&
+          messageResponse.message.isNotEmpty) {
+        DialogUtils.dialog(context,
+            title: messageResponse.title, message: messageResponse.message);
       } else {
         DialogUtils.dialog(context);
       }
-    } catch(e) {
+    } catch (e) {
       DialogUtils.dialog(context, erro: e.toString());
       print("favoriteMessages\n" + e.toString());
     }
@@ -426,23 +487,31 @@ class ChatPageState extends State<ChatPage> {
 
   void _updateItems() async {
     List<MessageModel> _messagesToShow = new List.from(_messageList);
-    if(_onlyMyMessages && _onlyFavMessages) {
-      _messagesToShow = _messagesToShow.where((i) => i.isFavorite).toList().where((i) => i.user.email == _user.email).toList();
-    } else if(_onlyFavMessages) {
+    if (_onlyMyMessages && _onlyFavMessages) {
+      _messagesToShow = _messagesToShow
+          .where((i) => i.isFavorite)
+          .toList()
+          .where((i) => i.user.email == _user.email)
+          .toList();
+    } else if (_onlyFavMessages) {
       _messagesToShow = _messagesToShow.where((i) => i.isFavorite).toList();
-    } else if(_onlyMyMessages) {
-      _messagesToShow = _messagesToShow.where((i) => i.user.email == _user.email).toList();
+    } else if (_onlyMyMessages) {
+      _messagesToShow =
+          _messagesToShow.where((i) => i.user.email == _user.email).toList();
     }
     _items = new List<ListItem>();
     DateTime lastDate;
-    for(var i = _messagesToShow.length - 1; i >= 0; i--) {
-      if(i == _messagesToShow.length - 1) {
-        String formatedDate = await DateUtils.displayDate(context, _messagesToShow[i].createDate);
+    for (var i = _messagesToShow.length - 1; i >= 0; i--) {
+      if (i == _messagesToShow.length - 1) {
+        String formatedDate =
+            await DateUtils.displayDate(context, _messagesToShow[i].createDate);
         _items.insert(0, DateItem(formatedDate));
         _items.insert(0, ChatItem(_messagesToShow[i], _user, _token, this));
         lastDate = DateUtils.toDateTime(_messagesToShow[i].createDate);
-      } else if(!DateUtils.compareOnlyDate(DateUtils.toDateTime(_messagesToShow[i].createDate), lastDate)) {
-        String formatedDate = await DateUtils.displayDate(context, _messagesToShow[i].createDate);
+      } else if (!DateUtils.compareOnlyDate(
+          DateUtils.toDateTime(_messagesToShow[i].createDate), lastDate)) {
+        String formatedDate =
+            await DateUtils.displayDate(context, _messagesToShow[i].createDate);
         _items.insert(0, DateItem(formatedDate));
         _items.insert(0, ChatItem(_messagesToShow[i], _user, _token, this));
         lastDate = DateUtils.toDateTime(_messagesToShow[i].createDate);
@@ -476,7 +545,8 @@ class ChatPageState extends State<ChatPage> {
             new CheckedPopupMenuItem(
               checked: _onlyFavMessages,
               value: Commands.favMessages,
-              child: new Text(Translations.of(context).text('favoriteMessages')),
+              child:
+                  new Text(Translations.of(context).text('favoriteMessages')),
             ),
             new CheckedPopupMenuItem(
               checked: _onlyMyMessages,
@@ -490,7 +560,7 @@ class ChatPageState extends State<ChatPage> {
   }
 
   AppBar _chooseAppBar() {
-    if(isSelecting) {
+    if (isSelecting) {
       return new AppBar(
         backgroundColor: MyColors.subjectColor,
         leading: IconButton(
@@ -509,16 +579,17 @@ class ChatPageState extends State<ChatPage> {
             icon: new Icon(Icons.content_copy),
             onPressed: () {
               String stringToClipboard = "";
-              _messageList.reversed.forEach((f){
-                if(f.isSelected) {
+              _messageList.reversed.forEach((f) {
+                if (f.isSelected) {
                   f.isSelected = false;
-                  stringToClipboard += "${f.user.getDisplayName()}: ${StringUtils.stripTags(f.text)}\n";
+                  stringToClipboard +=
+                      "${f.user.getDisplayName()}: ${StringUtils.stripTags(f.text)}\n";
                 }
               });
               Clipboard.setData(new ClipboardData(text: stringToClipboard));
               setState(() {
-                _updateItems();    
-                messagesSelected = 0;            
+                _updateItems();
+                messagesSelected = 0;
                 isSelecting = false;
               });
             },
@@ -530,10 +601,10 @@ class ChatPageState extends State<ChatPage> {
               int qntSelected = 0;
               var listToFavorite = new List<MessageModel>();
               _messageList.forEach((f) {
-                if(f.isSelected) {
+                if (f.isSelected) {
                   listToFavorite.add(f);
                   qntSelected++;
-                  if(f.isFavorite) {
+                  if (f.isFavorite) {
                     qntFavorites++;
                   }
                 }
@@ -550,13 +621,15 @@ class ChatPageState extends State<ChatPage> {
           children: <Widget>[
             new GestureDetector(
               onTap: () {
-                if(_user.imageUrl != null && _user.imageUrl.isNotEmpty) {
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(
-                      settings: const RouteSettings(name: 'image-page'), 
-                      builder: (context) => new ImagePage(_userTo.imageUrl, _token.webserverUrl, title: _userTo.getDisplayName(),),
-                    )
-                  );
+                if (_user.imageUrl != null && _user.imageUrl.isNotEmpty) {
+                  Navigator.of(context).push(new MaterialPageRoute(
+                    settings: const RouteSettings(name: 'image-page'),
+                    builder: (context) => new ImagePage(
+                      _userTo.imageUrl,
+                      _token.webserverUrl,
+                      title: _userTo.getDisplayName(),
+                    ),
+                  ));
                 }
               },
               child: new CircleAvatar(
@@ -564,10 +637,18 @@ class ChatPageState extends State<ChatPage> {
                 backgroundImage: _ivPhoto,
               ),
             ),
-            new SizedBox(
-              width: 10.0,
+            Container(
+              padding: EdgeInsets.only(left: 10.0),
+              child: new SizedBox(
+                width: 170.0,
+                child: MarqueeWidget(
+                  direction: Axis.horizontal,
+                  child: new Text(
+                    _userTo.getDisplayName(),
+                  ),
+                ),
+              ),
             ),
-            new Text(_userTo.getDisplayName()),
           ],
         ),
         actions: _actionAppBar(),
@@ -576,16 +657,16 @@ class ChatPageState extends State<ChatPage> {
   }
 
   Widget _contentBody() {
-    if(_items != null) {
+    if (_items != null) {
       var chatListView = new ListView.builder(
         reverse: true,
         controller: scrollController,
         itemCount: _items.length,
         itemBuilder: (BuildContext context, int index) {
           var item = _items[index];
-          if(item is DateItem) {
+          if (item is DateItem) {
             return item;
-          } else if(item is ChatItem) {
+          } else if (item is ChatItem) {
             return item;
           }
         },
@@ -593,17 +674,22 @@ class ChatPageState extends State<ChatPage> {
       return new Stack(
         children: <Widget>[
           chatListView,
-          (!_isLoading) ? new Container() : new Container(
-            height: 50.0,
-            alignment: Alignment.topCenter,
-            decoration: new BoxDecoration(
-              shape: BoxShape.circle,
-              color: MyColors.white70Transparency,
-            ),
-            child: new Center(child: new CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(MyColors.primaryBlue),
-            ),),
-          ),
+          (!_isLoading)
+              ? new Container()
+              : new Container(
+                  height: 50.0,
+                  alignment: Alignment.topCenter,
+                  decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: MyColors.white70Transparency,
+                  ),
+                  child: new Center(
+                    child: new CircularProgressIndicator(
+                      valueColor: new AlwaysStoppedAnimation<Color>(
+                          MyColors.primaryBlue),
+                    ),
+                  ),
+                ),
         ],
       );
     }
@@ -613,14 +699,17 @@ class ChatPageState extends State<ChatPage> {
         children: <Widget>[
           new CircularProgressIndicator(),
           new SizedBox(height: 5.0),
-          new Text(Translations.of(context).text('loadingMessages'), style: new TextStyle(color: MyColors.darkerGray),)
+          new Text(
+            Translations.of(context).text('loadingMessages'),
+            style: new TextStyle(color: MyColors.darkerGray),
+          )
         ],
       ),
     );
   }
 
   void _onPressed() {
-    if(textCtrl.text.trimRight().isNotEmpty) {
+    if (textCtrl.text.trimRight().isNotEmpty) {
       sendMessage(textCtrl.text.trimRight());
       textCtrl.clear();
     }
@@ -630,7 +719,7 @@ class ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return new WillPopScope(
       onWillPop: () async {
-        if(isSelecting) {
+        if (isSelecting) {
           _messageList.forEach((f) => f.isSelected = false);
           setState(() {
             _updateItems();
@@ -649,18 +738,20 @@ class ChatPageState extends State<ChatPage> {
           child: new Column(
             children: <Widget>[
               new SizedBox(height: 5.0),
+
               /// MARK - Body
               new Flexible(
                 child: _contentBody(),
               ),
+
               /// MARK - Input
               new InputMessage(
-                  textCtrl: textCtrl,
-                  onSendPressed: _onPressed,
-                  placeholder: Translations.of(context).text('chatSenderHint'),
-                  showCameraIcon: true,
-                  onCameraPressed: _openDialogToChoose,
-                ),
+                textCtrl: textCtrl,
+                onSendPressed: _onPressed,
+                placeholder: Translations.of(context).text('chatSenderHint'),
+                showCameraIcon: true,
+                onCameraPressed: _openDialogToChoose,
+              ),
             ],
           ),
         ),
