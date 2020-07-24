@@ -13,7 +13,8 @@ import 'package:amadeus/utils/HttpUtils.dart';
 /// Created by Vitor Martins on 25/08/18.
 
 class SubjectBO {
-  Future<SubjectResponse> getSubjects(BuildContext context, UserModel user) async {
+  Future<SubjectResponse> getSubjects(
+      BuildContext context, UserModel user) async {
     TokenResponse token = await TokenCacheController.getTokenCache(context);
 
     String url = "${token.webserverUrl}/api/subjects/get_subjects/";

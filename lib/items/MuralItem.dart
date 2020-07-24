@@ -11,6 +11,7 @@ import 'package:amadeus/pages/post_page.dart';
 import 'package:amadeus/res/colors.dart';
 import 'package:amadeus/utils/StringUtils.dart';
 import 'package:amadeus/widgets/ClickableImage.dart';
+import 'package:amadeus/widgets/MarqueeWidget.dart';
 import 'package:amadeus/widgets/mural/CommentBar.dart';
 import 'package:amadeus/widgets/mural/FavoriteButton.dart';
 
@@ -72,10 +73,10 @@ class PostItem extends StatelessWidget implements MuralPageItem {
       new MaterialPageRoute(
         settings: const RouteSettings(name: 'post-page'),
         builder: (context) => new PostPage(
-              userTo: user,
-              subject: subject,
-              post: mural,
-            ),
+          userTo: user,
+          subject: subject,
+          post: mural,
+        ),
       ),
     );
   }
@@ -107,11 +108,15 @@ class PostItem extends StatelessWidget implements MuralPageItem {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      new Text(
-                        mural.user.getDisplayName().length > 25
-                            ? "${mural.user.getDisplayName().substring(0, 25)}..."
-                            : mural.user.getDisplayName(),
-                        style: new TextStyle(fontSize: 12.0),
+                      new SizedBox(
+                        width: 140.0,
+                        child: MarqueeWidget(
+                          direction: Axis.horizontal,
+                          child: new Text(
+                            mural.user.getDisplayName(),
+                            style: new TextStyle(fontSize: 12.0),
+                          ),
+                        ),
                       ),
                       new Row(
                         children: <Widget>[

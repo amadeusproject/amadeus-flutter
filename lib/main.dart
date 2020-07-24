@@ -16,8 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  final routes = <String, WidgetBuilder> {
+  final routes = <String, WidgetBuilder>{
     SplashPage.tag: (context) => SplashPage(),
     LoginPage.tag: (context) => LoginPage(),
   };
@@ -31,14 +30,16 @@ class _MyAppState extends State<MyApp> {
         primaryColorDark: MyColors.colorPrimaryDark,
         accentColor: MyColors.colorAccent,
         hintColor: MyColors.primaryWhite,
-        iconTheme: IconThemeData(color: MyColors.primaryWhite,),
+        iconTheme: IconThemeData(
+          color: MyColors.primaryWhite,
+        ),
       ),
       title: 'Amadeus LMS',
       home: SplashPage(),
       routes: routes,
       localizationsDelegates: [
-        const TranslationsDelegate(),  
-        GlobalMaterialLocalizations.delegate,  
+        const TranslationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         const FallbackMaterialLocalisationsDelegate(),
       ],
@@ -46,14 +47,16 @@ class _MyAppState extends State<MyApp> {
         const Locale('en', 'US'),
         const Locale('pt-BR', 'BR'),
       ],
-      localeResolutionCallback: (Locale locale, Iterable<Locale> supportedLocales) {  
-        for (Locale supportedLocale in supportedLocales) {  
-          if (supportedLocale.languageCode == locale.languageCode || supportedLocale.countryCode == locale.countryCode) {  
-            return supportedLocale;  
-          }  
-        }  
-        return supportedLocales.first;  
-      },    
+      localeResolutionCallback:
+          (Locale locale, Iterable<Locale> supportedLocales) {
+        for (Locale supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale.languageCode ||
+              supportedLocale.countryCode == locale.countryCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
     );
   }
 }

@@ -7,17 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:async/async.dart';
 
 class HttpUtils {
-  static Future<String> post(BuildContext context, String address, String json, String token) async {
+  static Future<String> post(
+      BuildContext context, String address, String json, String token) async {
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request = await httpClient.postUrl(Uri.parse(address));
     request.headers.set('content-type', 'application/json');
-    if(token != "") {
+    if (token != "") {
       request.headers.set('Authorization', token);
     }
 
     request.add(utf8.encode(json));
 
-    HttpClientResponse response = await request.close().timeout(new Duration(seconds: 30));
+    HttpClientResponse response =
+        await request.close().timeout(new Duration(seconds: 30));
 
     Completer completer = new Completer();
     StringBuffer contents = new StringBuffer();
@@ -33,16 +35,19 @@ class HttpUtils {
     return reply;
   }
 
-  static Future<String> postMultipart(BuildContext context, String address, String json, String token, File imageFile) async {
-    var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+  static Future<String> postMultipart(BuildContext context, String address,
+      String json, String token, File imageFile) async {
+    var stream =
+        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     int length = await imageFile.length();
     Uri uri = Uri.parse(address);
 
     var request = new http.MultipartRequest("POST", uri);
 
-    var multipartFile = new http.MultipartFile('file', stream, length, filename: basename(imageFile.path));
+    var multipartFile = new http.MultipartFile('file', stream, length,
+        filename: basename(imageFile.path));
 
-    if(token.isNotEmpty) {
+    if (token.isNotEmpty) {
       request.headers.putIfAbsent('Authorization', () => token);
     }
 

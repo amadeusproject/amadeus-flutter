@@ -23,8 +23,9 @@ import 'package:amadeus/utils/DialogUtils.dart';
 import 'package:amadeus/utils/LogoutUtils.dart';
 import 'package:amadeus/widgets/InputMessage.dart';
 import 'package:amadeus/widgets/Loading.dart';
+import 'package:amadeus/widgets/MarqueeWidget.dart';
 
-enum ImageChoices {gallery, camera}
+enum ImageChoices { gallery, camera }
 
 class PostPage extends StatefulWidget {
   static String tag = 'post-page';
@@ -50,6 +51,7 @@ class PostPageState extends State<PostPage> {
   TokenResponse _token;
   TextEditingController textCtrl = new TextEditingController();
   File _imageFile;
+  final ImagePicker picker = new ImagePicker();
 
   int _actualPage = 0;
   int _pageSize = 20;
@@ -84,39 +86,46 @@ class PostPageState extends State<PostPage> {
 
   Future _openDialogToChoose() async {
     switch (await showDialog<ImageChoices>(
-      context: context,
-      builder: (BuildContext context) {
-        return new SimpleDialog(
-          title: new Text(Translations.of(context).text('imageChooserTitle')),
-          children: <Widget>[
-            new SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, ImageChoices.camera),
-              child: new Row(
-                children: <Widget>[
-                  new Icon(Icons.camera, color: MyColors.darkerGray,),
-                  new Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: new Text(Translations.of(context).text('imageCameraOption')),
-                  ),
-                ],
+        context: context,
+        builder: (BuildContext context) {
+          return new SimpleDialog(
+            title: new Text(Translations.of(context).text('imageChooserTitle')),
+            children: <Widget>[
+              new SimpleDialogOption(
+                onPressed: () => Navigator.pop(context, ImageChoices.camera),
+                child: new Row(
+                  children: <Widget>[
+                    new Icon(
+                      Icons.camera,
+                      color: MyColors.darkerGray,
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: new Text(
+                          Translations.of(context).text('imageCameraOption')),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            new SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, ImageChoices.gallery),
-              child: new Row(
-                children: <Widget>[
-                  new Icon(Icons.photo, color: MyColors.darkerGray,),
-                  new Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: new Text(Translations.of(context).text('imageGalleryOption')),
-                  ),
-                ],
+              new SimpleDialogOption(
+                onPressed: () => Navigator.pop(context, ImageChoices.gallery),
+                child: new Row(
+                  children: <Widget>[
+                    new Icon(
+                      Icons.photo,
+                      color: MyColors.darkerGray,
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: new Text(
+                          Translations.of(context).text('imageGalleryOption')),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        );
-      }
-    )) {
+            ],
+          );
+        })) {
       case ImageChoices.camera:
         _onImageButtonPressed(ImageSource.camera);
         break;
@@ -127,23 +136,24 @@ class PostPageState extends State<PostPage> {
   }
 
   void _onImageButtonPressed(ImageSource source) async {
-    _imageFile = await ImagePicker.pickImage(source: source);
-    if(_imageFile != null) {
-      Navigator.of(context).push(
-        new MaterialPageRoute(
-          settings: const RouteSettings(name: 'image-sender-page'), 
-          builder: (context) {
-            return new ImageSenderPage(
-              imageFile: _imageFile,
-              user: _user,
-              subject: _subject,
-              postState: this,
-              post: _post,
-              inputPlaceholder: Translations.of(context).text('postSenderHint'),
-            );
-          }
-        )
-      ).then((onValue) {
+    PickedFile picked = await picker.getImage(source: source);
+    if (picked != null) {
+      _imageFile = File(picked.path);
+      Navigator.of(context)
+          .push(new MaterialPageRoute(
+              settings: const RouteSettings(name: 'image-sender-page'),
+              builder: (context) {
+                return new ImageSenderPage(
+                  imageFile: _imageFile,
+                  user: _user,
+                  subject: _subject,
+                  postState: this,
+                  post: _post,
+                  inputPlaceholder:
+                      Translations.of(context).text('postSenderHint'),
+                );
+              }))
+          .then((onValue) {
         _imageFile = null;
       });
     }
@@ -176,7 +186,13 @@ class PostPageState extends State<PostPage> {
 
     try {
       _isLoading = true;
-      CommentResponse commentResponse = await MuralBO().getComments(context, _user, _post, _actualPage, _pageSize,);
+      CommentResponse commentResponse = await MuralBO().getComments(
+        context,
+        _user,
+        _post,
+        _actualPage,
+        _pageSize,
+      );
       if (commentResponse != null) {
         if (commentResponse.success && commentResponse.number == 1) {
           _actualPage += 1;
@@ -286,7 +302,8 @@ class PostPageState extends State<PostPage> {
           comment,
         );
 
-        _comments.removeWhere((test) => test.createDate == comment.createDate && test.user == comment.user);
+        _comments.removeWhere((test) =>
+            test.createDate == comment.createDate && test.user == comment.user);
 
         if (commentResponse != null &&
             commentResponse.success &&
@@ -303,7 +320,9 @@ class PostPageState extends State<PostPage> {
             commentResponse.title.isNotEmpty &&
             commentResponse.message != null &&
             commentResponse.message.isNotEmpty) {
-          _comments.removeWhere((test) => test.createDate == comment.createDate && test.user == comment.user);
+          _comments.removeWhere((test) =>
+              test.createDate == comment.createDate &&
+              test.user == comment.user);
           setState(() {
             _updateItems();
           });
@@ -313,14 +332,17 @@ class PostPageState extends State<PostPage> {
             message: commentResponse.message,
           );
         } else {
-          _comments.removeWhere((test) => test.createDate == comment.createDate && test.user == comment.user);
+          _comments.removeWhere((test) =>
+              test.createDate == comment.createDate &&
+              test.user == comment.user);
           setState(() {
             _updateItems();
           });
           DialogUtils.dialog(context);
         }
       } catch (e) {
-        _comments.removeWhere((test) => test.createDate == comment.createDate && test.user == comment.user);
+        _comments.removeWhere((test) =>
+            test.createDate == comment.createDate && test.user == comment.user);
         setState(() {
           _updateItems();
         });
@@ -400,7 +422,12 @@ class PostPageState extends State<PostPage> {
       backgroundColor: MyColors.backgroundColor,
       appBar: new AppBar(
         backgroundColor: MyColors.subjectColor,
-        title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null"),),
+        title: MarqueeWidget(
+          direction: Axis.horizontal,
+          child: new Text(
+            (_subject != null ? _subject.name.toUpperCase() : "Null"),
+          ),
+        ),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(

@@ -21,18 +21,21 @@ import 'package:amadeus/response/TokenResponse.dart';
 import 'package:amadeus/services/MessagingService.dart';
 import 'package:amadeus/utils/DialogUtils.dart';
 import 'package:amadeus/utils/LogoutUtils.dart';
+import 'package:amadeus/widgets/MarqueeWidget.dart';
 
 class ParticipantsPage extends StatefulWidget {
   static String tag = 'participants-page';
   final SubjectModel subject;
   final HomePageState homePageState;
-  ParticipantsPage({Key key, @required this.subject, @required this.homePageState}) : super(key: key);
+  ParticipantsPage(
+      {Key key, @required this.subject, @required this.homePageState})
+      : super(key: key);
   @override
-  ParticipantsPageState createState() => new ParticipantsPageState(subject, homePageState);
+  ParticipantsPageState createState() =>
+      new ParticipantsPageState(subject, homePageState);
 }
 
 class ParticipantsPageState extends State<ParticipantsPage> {
-
   List<UserModel> _participants;
   SubjectModel _subject;
   UserModel _user;
@@ -44,15 +47,16 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   MessagingService messagingService;
 
-  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState> refreshKey =
+      GlobalKey<RefreshIndicatorState>();
 
   Future<void> checkToken() async {
-    if(_token == null) {
-      if(await TokenCacheController.hasTokenCache(context)) {
+    if (_token == null) {
+      if (await TokenCacheController.hasTokenCache(context)) {
         _token = await TokenCacheController.getTokenCache(context);
-        if(_token.isTokenExpired()) {
+        if (_token.isTokenExpired()) {
           _token = await _token.renewToken(context);
-          if(_token == null) {
+          if (_token == null) {
             await DialogUtils.dialog(context);
             Logout.goLogin(context);
           }
@@ -61,9 +65,9 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
-    } else if(_token.isTokenExpired()) {
+    } else if (_token.isTokenExpired()) {
       _token = await _token.renewToken(context);
-      if(_token == null) {
+      if (_token == null) {
         await DialogUtils.dialog(context);
         Logout.goLogin(context);
       }
@@ -74,7 +78,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
     var response = message['data']['response'];
     var data = jsonDecode(response)['data'];
     var subject = data['message_sent']['subject'];
-    if(subject['slug'] == _subject.slug) {
+    if (subject['slug'] == _subject.slug) {
       refreshParticipants();
     } else {
       homePageState.refreshSubjects(false);
@@ -86,12 +90,11 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   void initState() {
     loadParticipants();
     firebaseMessaging.configure(
-      onMessage: onMessageParticipants,
-      onResume: (Map<String, dynamic> message) async {
-        refreshParticipants();
-        homePageState.refreshSubjects(false);
-      }
-    );
+        onMessage: onMessageParticipants,
+        onResume: (Map<String, dynamic> message) async {
+          refreshParticipants();
+          homePageState.refreshSubjects(false);
+        });
     messagingService = homePageState.messagingService;
     messagingService.configure(ParticipantsPage.tag);
     super.initState();
@@ -100,23 +103,31 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   Future<void> refreshParticipants() async {
     refreshKey.currentState?.show(atTop: false);
     await checkToken();
+
     /// Get participants
     try {
-      ParticipantsResponse participantsResponse = await ParticipantsBO().getParticipants(context, _user, _subject.slug);
-      if(participantsResponse != null) {
-        if(participantsResponse.success && participantsResponse.number == 1) {
+      ParticipantsResponse participantsResponse =
+          await ParticipantsBO().getParticipants(context, _user, _subject.slug);
+      if (participantsResponse != null) {
+        if (participantsResponse.success && participantsResponse.number == 1) {
           setState(() {
             _participants = participantsResponse.data.participants;
-            _participants.sort((a, b) => a.getDisplayName().compareTo(b.getDisplayName()));
+            _participants.sort(
+                (a, b) => a.getDisplayName().compareTo(b.getDisplayName()));
             _participants.sort((a, b) => b.unseenMsgs.compareTo(a.unseenMsgs));
           });
-        } else if(participantsResponse.title != null && participantsResponse.title.isNotEmpty && participantsResponse.message != null && participantsResponse.message.isNotEmpty) {
-          DialogUtils.dialog(context, title: participantsResponse.title, message: participantsResponse.message);
+        } else if (participantsResponse.title != null &&
+            participantsResponse.title.isNotEmpty &&
+            participantsResponse.message != null &&
+            participantsResponse.message.isNotEmpty) {
+          DialogUtils.dialog(context,
+              title: participantsResponse.title,
+              message: participantsResponse.message);
         }
       } else {
         DialogUtils.dialog(context);
       }
-    } catch(e) {
+    } catch (e) {
       DialogUtils.dialog(context, erro: e.toString());
       print("refreshParticipants\n" + e.toString());
     }
@@ -125,25 +136,34 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   @protected
   Future<void> loadParticipants() async {
     /// Getting user
-    if(await UserCacheController.hasUserCache(context)) {
+    if (await UserCacheController.hasUserCache(context)) {
       _user = await UserCacheController.getUserCache(context);
       await checkToken();
       try {
-        ParticipantsResponse participantsResponse = await ParticipantsBO().getParticipants(context, _user, _subject.slug);
-        if(participantsResponse != null) {
-          if(participantsResponse.success && participantsResponse.number == 1) {
+        ParticipantsResponse participantsResponse = await ParticipantsBO()
+            .getParticipants(context, _user, _subject.slug);
+        if (participantsResponse != null) {
+          if (participantsResponse.success &&
+              participantsResponse.number == 1) {
             setState(() {
               _participants = participantsResponse.data.participants;
-              _participants.sort((a, b) => a.getDisplayName().compareTo(b.getDisplayName()));
-              _participants.sort((a, b) => b.unseenMsgs.compareTo(a.unseenMsgs));
+              _participants.sort(
+                  (a, b) => a.getDisplayName().compareTo(b.getDisplayName()));
+              _participants
+                  .sort((a, b) => b.unseenMsgs.compareTo(a.unseenMsgs));
             });
-           } else if(participantsResponse.title != null && participantsResponse.title.isNotEmpty && participantsResponse.message != null && participantsResponse.message.isNotEmpty) {
-            DialogUtils.dialog(context, title: participantsResponse.title, message: participantsResponse.message);
+          } else if (participantsResponse.title != null &&
+              participantsResponse.title.isNotEmpty &&
+              participantsResponse.message != null &&
+              participantsResponse.message.isNotEmpty) {
+            DialogUtils.dialog(context,
+                title: participantsResponse.title,
+                message: participantsResponse.message);
           }
         } else {
           DialogUtils.dialog(context);
         }
-      } catch(e) {
+      } catch (e) {
         DialogUtils.dialog(context, erro: e.toString());
         print("loadParticipants\n" + e.toString());
       }
@@ -154,7 +174,7 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   }
 
   Widget _contentBody() {
-    if(_participants != null) {
+    if (_participants != null) {
       return new Theme(
         data: new ThemeData(
           hintColor: MyColors.primaryBlue,
@@ -166,8 +186,9 @@ class ParticipantsPageState extends State<ParticipantsPage> {
             data: Theme.of(context),
             child: new ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                if(!_participants[index].isStaff) {
-                  return ParticipantItem(_participants[index], _subject, _token.webserverUrl, this, homePageState);
+                if (!_participants[index].isStaff) {
+                  return ParticipantItem(_participants[index], _subject,
+                      _token.webserverUrl, this, homePageState);
                 } else {
                   return new Container();
                 }
@@ -188,7 +209,10 @@ class ParticipantsPageState extends State<ParticipantsPage> {
           children: <Widget>[
             new CircularProgressIndicator(),
             new SizedBox(height: 10.0),
-            new Text(Translations.of(context).text('loadingParticipants'), style: new TextStyle(color: MyColors.primaryBlue),)
+            new Text(
+              Translations.of(context).text('loadingParticipants'),
+              style: new TextStyle(color: MyColors.primaryBlue),
+            )
           ],
         ),
       ),
@@ -196,12 +220,15 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   }
 
   void onPress() async {
-    Navigator.of(context).push(
+    Navigator.of(context)
+        .push(
       new MaterialPageRoute(
-        settings: const RouteSettings(name: 'pendencies-page'), 
-        builder: (context) => new PendenciesPage(userTo: _user, subject: _subject),
+        settings: const RouteSettings(name: 'pendencies-page'),
+        builder: (context) =>
+            new PendenciesPage(userTo: _user, subject: _subject),
       ),
-    ).then((onValue) {
+    )
+        .then((onValue) {
       messagingService.configure(ParticipantsPage.tag);
       firebaseMessaging.configure(
         onMessage: onMessageParticipants,
@@ -214,8 +241,9 @@ class ParticipantsPageState extends State<ParticipantsPage> {
   }
 
   Widget pendencyBadge() {
-    if(_subject.pendencies > 0) {
-      String qtdPendencies = _subject.pendencies > 99 ? "99+" : _subject.pendencies.toString();
+    if (_subject.pendencies > 0) {
+      String qtdPendencies =
+          _subject.pendencies > 99 ? "99+" : _subject.pendencies.toString();
       return new Container(
         margin: new EdgeInsets.all(8.0),
         width: 20.0,
@@ -226,11 +254,20 @@ class ParticipantsPageState extends State<ParticipantsPage> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: new Center(
-          child: new Text(qtdPendencies, style: new TextStyle(color: Colors.white, fontSize: 10.0, fontWeight: FontWeight.bold),),
+          child: new Text(
+            qtdPendencies,
+            style: new TextStyle(
+                color: Colors.white,
+                fontSize: 10.0,
+                fontWeight: FontWeight.bold),
+          ),
         ),
       );
     }
-    return new Container(width: 0.0, height: 0.0,);
+    return new Container(
+      width: 0.0,
+      height: 0.0,
+    );
   }
 
   @override
@@ -238,10 +275,17 @@ class ParticipantsPageState extends State<ParticipantsPage> {
     return new Scaffold(
       appBar: new AppBar(
         backgroundColor: MyColors.subjectColor,
-        title: new Text((_subject != null ? _subject.name.toUpperCase() : "Null")),
+        title: MarqueeWidget(
+          direction: Axis.horizontal,
+          child: new Text(
+              (_subject != null ? _subject.name.toUpperCase() : "Null")),
+        ),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(FontAwesomeIcons.comments, color: MyColors.iconsColor,),
+            icon: new Icon(
+              FontAwesomeIcons.comments,
+              color: MyColors.iconsColor,
+            ),
             onPressed: null,
             disabledColor: MyColors.iconsColor,
           ),

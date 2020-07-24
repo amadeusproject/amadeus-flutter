@@ -14,7 +14,8 @@ import 'package:amadeus/utils/HttpUtils.dart';
 /// Created by Vitor Martins on 25/08/18.
 
 class UserBO {
-  Future<UserResponse> login(BuildContext context, String host, String email, String password) async {
+  Future<UserResponse> login(
+      BuildContext context, String host, String email, String password) async {
     String url = "$host/api/token";
 
     Map<String, String> data = new HashMap<String, String>();
@@ -56,7 +57,8 @@ class UserBO {
     return null;
   }
 
-  Future<GenericResponse> registerDevice(BuildContext context, UserModel user, String device) async {
+  Future<GenericResponse> registerDevice(
+      BuildContext context, UserModel user, String device) async {
     TokenResponse token = await TokenCacheController.getTokenCache(context);
 
     if (token != null) {
@@ -84,7 +86,8 @@ class UserBO {
     return null;
   }
 
-  Future<GenericResponse> logout(BuildContext context, UserModel user, String device) async {
+  Future<GenericResponse> logout(
+      BuildContext context, UserModel user, String device) async {
     TokenResponse token = await TokenCacheController.getTokenCache(context);
 
     String url = "${token.webserverUrl}/api/users/logout/";
