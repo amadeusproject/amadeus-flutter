@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-
+import 'package:diacritic/diacritic.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -112,9 +112,14 @@ class ParticipantsPageState extends State<ParticipantsPage> {
         if (participantsResponse.success && participantsResponse.number == 1) {
           setState(() {
             _participants = participantsResponse.data.participants;
-            _participants.sort(
-                (a, b) => a.getDisplayName().compareTo(b.getDisplayName()));
             _participants.sort((a, b) => b.unseenMsgs.compareTo(a.unseenMsgs));
+            _participants.sort((a, b) {
+              int cmp = b.unseenMsgs.compareTo(a.unseenMsgs);
+              if (cmp != 0) return cmp;
+              return compareNatural(
+                  removeDiacritics(a.getDisplayName().toLowerCase()),
+                  removeDiacritics(b.getDisplayName().toLowerCase()));
+            });
           });
         } else if (participantsResponse.title != null &&
             participantsResponse.title.isNotEmpty &&
@@ -147,10 +152,16 @@ class ParticipantsPageState extends State<ParticipantsPage> {
               participantsResponse.number == 1) {
             setState(() {
               _participants = participantsResponse.data.participants;
-              _participants.sort(
-                  (a, b) => a.getDisplayName().compareTo(b.getDisplayName()));
+
               _participants
                   .sort((a, b) => b.unseenMsgs.compareTo(a.unseenMsgs));
+              _participants.sort((a, b) {
+                int cmp = b.unseenMsgs.compareTo(a.unseenMsgs);
+                if (cmp != 0) return cmp;
+                return compareNatural(
+                    removeDiacritics(a.getDisplayName().toLowerCase()),
+                    removeDiacritics(b.getDisplayName().toLowerCase()));
+              });
             });
           } else if (participantsResponse.title != null &&
               participantsResponse.title.isNotEmpty &&
@@ -186,12 +197,8 @@ class ParticipantsPageState extends State<ParticipantsPage> {
             data: Theme.of(context),
             child: new ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                if (!_participants[index].isStaff) {
-                  return ParticipantItem(_participants[index], _subject,
-                      _token.webserverUrl, this, homePageState);
-                } else {
-                  return new Container();
-                }
+                return ParticipantItem(_participants[index], _subject,
+                    _token.webserverUrl, this, homePageState);
               },
               itemCount: _participants.length,
             ),

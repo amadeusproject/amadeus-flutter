@@ -27,18 +27,18 @@ class UserModel {
   int _unseenMsgs;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'username': username,
-    'email': email,
-    'image_url': imageUrl,
-    'last_update': lastUpdate,
-    'date_created': dateCreated,
-    'last_name': lastName,
-    'social_name': socialName,
-    'is_staff': isStaff,
-    'is_active': isActive,
-    'description': description,
-    'unseen_msgs': unseenMsgs
-  };
+        'username': username,
+        'email': email,
+        'image_url': imageUrl,
+        'last_update': lastUpdate,
+        'date_created': dateCreated,
+        'last_name': lastName,
+        'social_name': socialName,
+        'is_staff': isStaff,
+        'is_active': isActive,
+        'description': description,
+        'unseen_msgs': unseenMsgs
+      };
 
   String get email => _email;
   set email(String value) => this._email = value;

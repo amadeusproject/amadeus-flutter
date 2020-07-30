@@ -31,16 +31,18 @@ class ParticipantItem extends StatelessWidget {
       children: <Widget>[
         new GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
+            Navigator.of(context)
+                .push(
               new MaterialPageRoute(
                 settings: const RouteSettings(name: 'chat-page'),
                 builder: (context) => new ChatPage(
-                      userTo: _user,
-                      subject: _subject,
-                      participantsPageState: parent,
-                    ),
+                  userTo: _user,
+                  subject: _subject,
+                  participantsPageState: parent,
+                ),
               ),
-            ).then((onValue) {
+            )
+                .then((onValue) {
               parent.messagingService.configure(ParticipantsPage.tag);
               parent.firebaseMessaging.configure(
                 onMessage: parent.onMessageParticipants,
@@ -94,7 +96,7 @@ class ParticipantItem extends StatelessWidget {
       ),
     );
 
-    if (_user.unseenMsgs == 0) {
+    if (_user.unseenMsgs <= 0) {
       return [
         userAvatarWidget,
         userNameWidget,
