@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:amadeus/localizations.dart';
@@ -42,6 +43,8 @@ class _MyAppState extends State<MyApp> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         const FallbackMaterialLocalisationsDelegate(),
+        GlobalCupertinoLocalizations.delegate,
+        const FallbackCupertinoLocalisationsDelegate()
       ],
       supportedLocales: [
         const Locale('en', 'US'),

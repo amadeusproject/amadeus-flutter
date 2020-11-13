@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 class Translations {
@@ -63,4 +64,17 @@ class FallbackMaterialLocalisationsDelegate extends LocalizationsDelegate<Materi
 
   @override
   bool shouldReload(FallbackMaterialLocalisationsDelegate old) => false;
+}
+
+class FallbackCupertinoLocalisationsDelegate extends LocalizationsDelegate<CupertinoLocalizations> {
+  const FallbackCupertinoLocalisationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => true;
+
+  @override
+  Future<CupertinoLocalizations> load(Locale locale) => DefaultCupertinoLocalizations.load(locale);
+
+  @override
+  bool shouldReload(FallbackCupertinoLocalisationsDelegate old) => false;
 }
