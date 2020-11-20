@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:amadeus/localizations.dart';
 import 'package:amadeus/models/CommentModel.dart';
 import 'package:amadeus/models/UserModel.dart';
 import 'package:amadeus/res/colors.dart';
-import 'package:amadeus/utils/StringUtils.dart';
 import 'package:amadeus/widgets/ClickableImage.dart';
 
 abstract class CommentPageItem {}
@@ -34,6 +36,14 @@ class LoadPostItem extends StatelessWidget implements CommentPageItem {
         ),
       ),
     );
+  }
+}
+
+_launchURL(url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
 
@@ -90,9 +100,16 @@ class CommentItem extends StatelessWidget implements CommentPageItem {
                   child: new Row(
                     children: <Widget>[
                       new Expanded(
-                        child: new Text(
-                          StringUtils.stripTags(comment.comment),
-                          style: new TextStyle(fontSize: 14.0),
+                        child: new Html(
+                          data: comment.comment,
+                          onLinkTap: (url) {
+                            _launchURL(url);
+                          },
+                          style: {
+                            "html": Style(
+                              fontSize: FontSize(14.0)
+                            )
+                          },
                         ),
                       ),
                     ],
