@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>876642846971-mrlbpapi8dr9ricdrbakqpfvuj5l7cuh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.876642846971-mrlbpapi8dr9ricdrbakqpfvuj5l7cuh</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDDqq560qjwVDuOMrru4ldByDOl_5dvh04</string>
+	<key>GCM_SENDER_ID</key>
+	<string>876642846971</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>amadeuslms.amadeus</string>
+	<key>PROJECT_ID</key>
+	<string>amadeus-lms-87cc2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>amadeus-lms-87cc2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:876642846971:ios:c091c7ea31a7f3788ec85e</string>
+	<key>DATABASE_URL</key>
+	<string>https://amadeus-lms-87cc2.firebaseio.com</string>
+</dict>
+</plist>

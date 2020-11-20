@@ -439,6 +439,10 @@ class MuralPageState extends State<MuralPage> {
                   break;
               }
             },
+            icon: new Icon(
+              Icons.more_vert,
+              color: MyColors.primaryWhite,
+            ),
             itemBuilder: (BuildContext context) {
               return <PopupMenuEntry<Commands>>[
                 new CheckedPopupMenuItem(
